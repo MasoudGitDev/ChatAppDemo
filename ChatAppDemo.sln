@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Client", "Presentati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.API", "Presentations\WebApp.API\WebApp.API.csproj", "{C7A86C98-091C-4AD7-8D14-ACCCE6FDF03D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{44C6F96C-9973-4FF3-BB9B-E1D72BD8B474}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared\Shared.csproj", "{14833EFF-3290-483E-B909-80E87181BE7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,10 @@ Global
 		{C7A86C98-091C-4AD7-8D14-ACCCE6FDF03D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7A86C98-091C-4AD7-8D14-ACCCE6FDF03D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7A86C98-091C-4AD7-8D14-ACCCE6FDF03D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14833EFF-3290-483E-B909-80E87181BE7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14833EFF-3290-483E-B909-80E87181BE7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14833EFF-3290-483E-B909-80E87181BE7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14833EFF-3290-483E-B909-80E87181BE7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +72,7 @@ Global
 		{1DA67F7D-B168-403D-914B-B0C201D0CE46} = {1072BB04-D0FE-41C5-84B3-5B76BBF0A963}
 		{1A978B7B-C938-4AB4-9CF2-9DEBF57DBD5F} = {F34B1879-EF2B-46C4-B5ED-5310303B4DDF}
 		{C7A86C98-091C-4AD7-8D14-ACCCE6FDF03D} = {F34B1879-EF2B-46C4-B5ED-5310303B4DDF}
+		{14833EFF-3290-483E-B909-80E87181BE7E} = {44C6F96C-9973-4FF3-BB9B-E1D72BD8B474}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {392A38F1-00CA-41D7-87B6-B933D2D7F7D5}
