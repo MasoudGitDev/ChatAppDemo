@@ -1,0 +1,12 @@
+﻿namespace Infra.EfCore.Auth.Exceptions;
+internal class JweException : Exception {
+    public string Where { get; } = String.Empty;
+    public string Code { get; } = String.Empty;
+    public string Description { get; } = String.Empty;
+
+    public JweException(string where , string code , string description) :
+        base(message : $"Where : {where}{Environment.NewLine}Code : {code}{Environment.NewLine}Description : {description}{Environment.NewLine}") {
+        Where = where ;Code = code ;Description = description ;
+    }
+
+}
