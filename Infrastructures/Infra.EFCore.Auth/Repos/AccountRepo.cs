@@ -22,6 +22,10 @@ internal class AccountRepo(SignInManager<AppUser> signInManager , IJweService jw
     public async Task<AccountResult> RegisterAsync(IRegisterModel model , CancellationToken cancellationToken) {
         await CheckUserNotExistAsync(model.Email , model.UserName);
         string userId = Guid.NewGuid().ToString();
+        var accountResult =  await jweService.GenerateTokenAsync(userId);
+        if(String.IsNullOrWhiteSpace(accountResult.JweToken)) {
+            throw new AccountException("RegisterAsync" , "NullOrWhitespace" , "the <jweToken> can not be null or whitespace");
+        }
         var createUser = new AppUser{Id = userId,Email = model.Email, UserName = model.UserName};
         var creationResult = await userManager.CreateAsync(createUser);
         if (!creationResult.Succeeded) {
@@ -33,7 +37,7 @@ internal class AccountRepo(SignInManager<AppUser> signInManager , IJweService jw
             var firstError = setPasswordResult.Errors.First();
             throw new AccountException("CreateTokenAfterRegisterAsync : On AddPasswordAsync Method." , firstError.Code , firstError.Description);
         }
-        return await jweService.GenerateTokenAsync(userId);      
+        return accountResult;      
     }
 
     public async Task<AccountResult> LoginByModelAsync(ILoginModel model) {
