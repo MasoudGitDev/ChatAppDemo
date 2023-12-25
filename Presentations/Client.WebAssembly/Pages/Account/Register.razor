@@ -1,0 +1,52 @@
+﻿@page "/Register"
+@inject IAccountService _accountService
+@inject AuthenticationStateProvider _authStateProvider
+@inject NavigationManager navManager
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm Enhance Model="_registerModel" OnValidSubmit="OnFormSubmitAsync">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input @bind="_registerModel.Email" type="email" />
+                        </div>
+                        <div class="form-group">
+                            <label>User Name</label>
+                            <input @bind="_registerModel.UserName" type="text" />
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input @bind="_registerModel.Password" type="password" />
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmed Password</label>
+                            <input @bind="_registerModel.PasswordConfirmed" type="password" />
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-outline-primary">Register</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+@code {
+    private RegisterDTO _registerModel = new();
+    private async Task OnFormSubmitAsync() {
+        var accountResult = await _accountService.RegisterAsync(_registerModel);
+        Console.WriteLine(accountResult);
+        await ((AuthStateProvider) _authStateProvider).SetAsync(accountResult);
+        navManager.NavigateTo("/");
+    }
+
+}

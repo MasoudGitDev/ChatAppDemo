@@ -23,9 +23,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{44C6F9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared\Shared.csproj", "{14833EFF-3290-483E-B909-80E87181BE7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.WebAPI", "Presentations\Server.WebAPI\Server.WebAPI.csproj", "{DC9F0667-DE67-42A6-A066-5CE521F70631}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.WebAPI", "Presentations\Server.WebAPI\Server.WebAPI.csproj", "{DC9F0667-DE67-42A6-A066-5CE521F70631}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.WebAssembly", "Presentations\Client.WebAssembly\Client.WebAssembly.csproj", "{73CF2EEA-CEC9-49A3-B1F7-964391D067B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client.WebAssembly", "Presentations\Client.WebAssembly\Client.WebAssembly.csproj", "{73CF2EEA-CEC9-49A3-B1F7-964391D067B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
