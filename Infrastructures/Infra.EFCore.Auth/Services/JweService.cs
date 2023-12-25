@@ -1,7 +1,6 @@
 ﻿using Infra.EfCore.Auth.Constants;
 using Infra.EfCore.Auth.Exceptions;
 using Infra.EfCore.Auth.Extensions;
-using Infra.EfCore.Auth.Services;
 using Jose;
 using Microsoft.Extensions.Configuration;
 using Shared.Models;

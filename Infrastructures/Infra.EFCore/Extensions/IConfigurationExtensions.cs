@@ -4,7 +4,7 @@ using Shared.SystemModels;
 
 namespace Infra.EFCore.Extensions;  
 internal static class IConfigurationExtensions {
-    public static JweSettingsModel GetJwtSettings(this IConfiguration configuration) {
+    public static JweSettingsModel GetJweSettings(this IConfiguration configuration) {
         var jwtSettings = configuration.GetSection(AppSettingNames.JwtSettings).Get<JweSettingsModel>();
         if(jwtSettings == null) {
             throw new ArgumentNullException("JwtSettingsModel is null.");
