@@ -1,7 +1,5 @@
-﻿using Infra.EFCore.Extensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 
 namespace Infra.EFCore.Contexts;  
 internal class AppDbContextDesignFactory : IDesignTimeDbContextFactory<AppDbContext> {
