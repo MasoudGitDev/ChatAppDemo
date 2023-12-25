@@ -5,11 +5,11 @@ using Shared.SystemModels;
 namespace Infra.EFCore.Extensions;  
 internal static class IConfigurationExtensions {
     public static JweSettingsModel GetJweSettings(this IConfiguration configuration) {
-        var jwtSettings = configuration.GetSection(AppSettingNames.JwtSettings).Get<JweSettingsModel>();
-        if(jwtSettings == null) {
+        var jweSettings = configuration.GetSection(AppSettingNames.JweSettings).Get<JweSettingsModel>();
+        if(jweSettings == null) {
             throw new ArgumentNullException("JwtSettingsModel is null.");
         }
-        return jwtSettings;
+        return jweSettings;
     }
     public static string GetDefaultConnectionString(this IConfiguration configuration) {
         var strConn = configuration.GetConnectionString(ConnectionNames.Default);
