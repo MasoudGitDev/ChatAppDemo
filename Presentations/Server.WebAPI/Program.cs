@@ -1,11 +1,23 @@
+using Apps.Auth.Accounts.Repos;
+using Infra.EFCore.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddCors();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalRCore();
+builder.Services.AddMediatR(config => {
+    config.RegisterServicesFromAssemblies(
+        typeof(IAccountRepo).Assembly
+    );
+});
+builder.Services.AddInfrastructureServices(builder.Configuration);
+
+
 
 var app = builder.Build();
 
@@ -14,9 +26,11 @@ if(app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors(opt=> opt.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
