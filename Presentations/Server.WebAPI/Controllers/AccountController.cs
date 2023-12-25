@@ -10,17 +10,17 @@ namespace Server.WebAPI.Controllers;
 public class AccountController(ISender sender) : ControllerBase {
 
     [HttpPost("Login")]
-    public async Task<AccountResult> LoginAsync(LoginCModel loginModel) {
+    public async Task<AccountResult> LoginAsync([FromBody]LoginCModel loginModel) {
         return await sender.Send(loginModel);
     }
 
     [HttpPost("LoginByToken")]
-    public async Task<AccountResult> LoginByTokenAsync(LoginByTokenCModel loginByTokenModel) {
+    public async Task<AccountResult> LoginByTokenAsync([FromBody]LoginByTokenCModel loginByTokenModel) {
         return await sender.Send(loginByTokenModel);
     }
 
     [HttpPost("Register")]
-    public async Task<AccountResult> RegisterAsync(RegisterCModel registerModel) {
+    public async Task<AccountResult> RegisterAsync([FromBody]RegisterCModel registerModel) {
         return await sender.Send(registerModel);
     }
 

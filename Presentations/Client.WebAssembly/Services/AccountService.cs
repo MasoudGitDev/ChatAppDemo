@@ -12,7 +12,7 @@ public interface IAccountService
     Task<AccountResult> LoginByTokenAsync(LoginByTokenDTO model);
 }
 public class AccountService(HttpClient httpClient) : IAccountService {
-    private const string _baseURL = "/api/Accounts";
+    private const string _baseURL = "/api/Account";
     public async Task<AccountResult> RegisterAsync(RegisterDTO model) 
         =>await PostAsync(model , $"{_baseURL}/Register" , nameof(RegisterAsync)); 
 
