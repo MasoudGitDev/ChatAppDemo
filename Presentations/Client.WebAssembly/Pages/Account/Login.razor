@@ -1,0 +1,43 @@
+﻿@page "/Login"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IAccountService _accountService;
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+<h3>Login</h3>
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Enhance method="post" OnValidSubmit="LoginSubmitAsync" Model="LoginModel">
+            <div class="form-group">
+                <label>Login Name</label>
+                <input class="form-control" @bind="LoginModel.LoginName" />
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input class="form-control" @bind="LoginModel.Password" />
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+       </EditForm>
+    </div>
+</div>
+
+@code {
+    public LoginDTO LoginModel { get; set; } = new();
+    private async Task LoginSubmitAsync() {
+        try {            
+            var result = await _accountService.LoginAsync(LoginModel);
+            Console.WriteLine(result);
+            var authState = (AuthStateProvider)authStateProvider;
+            if(authState is null) {
+                throw new Exception("AuthStateProvider is null");
+            }
+            await authState.SetAsync(result);
+            navManager.NavigateTo("/");
+
+        }
+        catch(Exception e) {
+            Console.WriteLine("Err-happened : " + e.Message);
+        }
+    }
+}
