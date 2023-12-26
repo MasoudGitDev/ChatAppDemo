@@ -26,8 +26,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Domains\Domains.Auth\Domains.Auth.csproj" />
+    <ProjectReference Include="..\..\Domains\Domains.Messaging\Domains.Messaging.csproj" />
     <ProjectReference Include="..\..\Shared\Shared\Shared.csproj" />
     <ProjectReference Include="..\Infra.EFCore.Auth\Infra.EFCore.Auth.csproj" />
+    <ProjectReference Include="..\Infra.EFCore.Messaging\Infra.EFCore.Messaging.csproj" />
   </ItemGroup>
 
   <ItemGroup>

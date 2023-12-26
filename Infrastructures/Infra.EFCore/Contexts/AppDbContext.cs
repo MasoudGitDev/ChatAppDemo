@@ -1,5 +1,8 @@
 ﻿using Domains.Auth.RoleEntity;
 using Domains.Auth.UserEntity;
+using Domains.Messaging.GroupEntity;
+using Infra.EFCore.Auth.Configs.Auth;
+using Infra.EFCore.Messaging.Configs;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +17,9 @@ internal class AppDbContext : IdentityDbContext<AppUser , AppRole , string> {
 
     protected override void OnModelCreating(ModelBuilder builder) {
         base.OnModelCreating(builder);
-        builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(AuthConfigs).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(MessagingConfigs).Assembly);
     }
+
+    public DbSet<GroupTbl> GroupTbl { get; set; }
 }
