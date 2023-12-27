@@ -4,11 +4,11 @@ using Shared.Models;
 using Domains.Messaging.GroupEntity.Repo;
 using Apps.Messaging.Groups.Commands.Models;
 namespace Apps.Messaging.Groups.Commands.Handlers;
-internal class CreateHandler(IGroupRepo groupRepo) : IRequestHandler<CreateModel, Result>
+internal class CreateHandler(IGroupUnitOfWork groupUnitOfWork) : IRequestHandler<CreateModel, Result>
 {
 
     public async Task<Result> Handle(CreateModel request, CancellationToken cancellationToken)
-        => await groupRepo.CreateAsync(new GroupTbl
+        => await groupUnitOfWork.GroupRepo.CreateAsync(new GroupTbl
         {
             CreatorId = request.CreatorId,
             Admins = new(),
