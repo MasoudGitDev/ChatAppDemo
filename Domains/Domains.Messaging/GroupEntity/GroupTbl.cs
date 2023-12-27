@@ -1,17 +1,21 @@
 ﻿using Domains.Auth.UserEntity;
+using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.Shared.ValueObjects;
+using Shared.Generics;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domains.Messaging.GroupEntity;
-public record class GroupTbl {
+public record class GroupTbl :IEntity{
     [Key]
-    public string GroupId { get; init; } = string.Empty;
+    public GroupId GroupId { get; init; }
+
     public string DisplayId { get; set; } = string.Empty;
 
     public DateTime CreatedAt {  get; init; }
+
     public string CreatorId { get; set; }
 
-    public string Pictures { get; set; } = string.Empty;
+    public LinkedList<Logo> Logos { get; set; } = new();
     public string Description { get; set; } = string.Empty;
 
 
