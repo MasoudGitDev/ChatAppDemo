@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="Mapster.EFCore" Version="5.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
@@ -29,7 +31,6 @@
     <ProjectReference Include="..\..\Domains\Domains.Messaging\Domains.Messaging.csproj" />
     <ProjectReference Include="..\..\Shared\Shared\Shared.csproj" />
     <ProjectReference Include="..\Infra.EFCore.Auth\Infra.EFCore.Auth.csproj" />
-    <ProjectReference Include="..\Infra.EFCore.Messaging\Infra.EFCore.Messaging.csproj" />
   </ItemGroup>
 
   <ItemGroup>

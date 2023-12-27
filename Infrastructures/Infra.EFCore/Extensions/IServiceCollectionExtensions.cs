@@ -1,7 +1,9 @@
 ﻿using Domains.Auth.RoleEntity;
 using Domains.Auth.UserEntity;
+using Domains.Messaging.GroupEntity.Repo;
 using Infra.EfCore.Auth.Extensions;
 using Infra.EFCore.Contexts;
+using Infra.EFCore.Repositories.Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +18,7 @@ namespace Infra.EFCore.Extensions;
 
 public static class IServiceCollectionExtensions {
     public static void AddInfrastructureServices(this IServiceCollection services , IConfiguration configuration) {
-        services.Add_EFCore_Auth_Services();
+        services.Add_Infra_Auth_Services();
         services.AddDbContext<AppDbContext>(opt => {
             opt.UseSqlServer(configuration.GetDefaultConnectionString());
         });
@@ -41,5 +43,10 @@ public static class IServiceCollectionExtensions {
                 SaveSigninToken = true ,
             };
         });
+
+        // Messaging Services
+        services.AddScoped<IGroupRepo , GroupRepo>();
+        services.AddScoped<IUpdateGroupRepo , UpdateGroupRepo>();
+        services.AddScoped<IGroupUnitOfWork , GroupUnitOfWork>();
     }
 }
