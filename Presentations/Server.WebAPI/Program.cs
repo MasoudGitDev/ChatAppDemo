@@ -1,4 +1,6 @@
 using Apps.Auth.Accounts.Repos;
+using Apps.Messaging;
+
 using Infra.EFCore.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSignalRCore();
 builder.Services.AddMediatR(config => {
     config.RegisterServicesFromAssemblies(
-        typeof(IAccountRepo).Assembly
+        typeof(IAccountRepo).Assembly,
+        typeof(App_Messaging_Assembly).Assembly
     );
 });
 builder.Services.AddInfrastructureServices(builder.Configuration);
