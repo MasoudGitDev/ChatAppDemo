@@ -1,17 +1,18 @@
 ﻿using Domains.Messaging.GroupEntity;
 using Domains.Messaging.GroupEntity.Models;
 using Domains.Messaging.GroupEntity.Repo;
+using Domains.Messaging.GroupMemberEntity;
 using Domains.Messaging.Shared.ValueObjects;
 using Infra.EFCore.Contexts;
 using Infra.EFCore.Repositories.Messaging.Exceptions;
+using Shared.Abstractions.Messaging.Constants;
+using Shared.Enums;
 using Shared.Models;
+using Shared.ValueObjects;
 
-namespace Infra.EFCore.Repositories.Messaging {
+namespace Infra.EFCore.Repositories.Messaging
+{
     internal sealed class UpdateGroupRepo(AppDbContext appDbContext) : IUpdateGroupRepo {
-        public async Task<Result> UpdateAdminsAsync(LinkedList<Admin> admins , GroupTbl mainModel) {
-            mainModel.Admins = admins;
-           return await TryToUpdateAsync(mainModel , nameof(UpdateAdminsAsync));
-        }
 
         public async Task<Result> UpdateInfoAsync(GroupInfoUpdateModel updateModel , GroupTbl mainModel) {
             if(!String.IsNullOrWhiteSpace(updateModel.Description)) {
@@ -21,7 +22,7 @@ namespace Infra.EFCore.Repositories.Messaging {
           return  await TryToUpdateAsync(mainModel , nameof(UpdateInfoAsync));
         }
 
-        public async Task<Result> UpdateMembersAsync(LinkedList<Member> members , GroupTbl mainModel) {
+        public async Task<Result> UpdateMembersAsync(LinkedList<GroupMemberTbl> members , GroupTbl mainModel) {
             mainModel.Members = members;
            return await TryToUpdateAsync(mainModel , nameof(UpdateMembersAsync));
         }
@@ -31,14 +32,18 @@ namespace Infra.EFCore.Repositories.Messaging {
            return await TryToUpdateAsync(mainModel , nameof(UpdatePicturesAsync));
         }
 
+       
+
+        
+
         private async Task<Result> TryToUpdateAsync(GroupTbl updatedModel , string methodName) {
             try {
                 appDbContext.GroupTbl.Update(updatedModel);
                 await appDbContext.SaveChangesAsync();
-                return new Result(true , null);
+                return new Result(ResultStatus.Success , null);
             }
             catch (Exception ex) {
-                return new Result(false , new List<ErrorModel>() { new ErrorModel(methodName ,"OperationFailed",ex.Message) });
+                return new Result(ResultStatus.Failed , new ErrorModel(methodName ,"OperationFailed",ex.Message));
             }
         }
     }

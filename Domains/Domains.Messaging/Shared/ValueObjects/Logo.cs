@@ -4,10 +4,10 @@ using Shared.Extensions;
 namespace Domains.Messaging.Shared.ValueObjects;  
 public record Logo {
     public string Image { get; } = string.Empty;
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     public Logo() { }
-    public Logo(string image , string title = "")
+    public Logo(string image , string? title)
     {
         if(String.IsNullOrWhiteSpace(image)) {
             throw new LogoValueObjException("Constructor" , "NullOrWhiteSpace" , "The <image> can not be NullOrWhiteSpace.");

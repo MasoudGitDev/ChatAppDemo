@@ -11,11 +11,11 @@ using System.Text.Json;
 
 namespace Infra.EfCore.Auth.Services;
 internal class JweService(IConfiguration configuration) : IJweService { 
-    public Task<AccountResult> GenerateTokenAsync(string userIdentifier) {
+    public Task<AccountResult> GenerateTokenAsync(Guid userIdentifier) {
         var jwtSettings = configuration.GetJweSettings();
         var claims = new Dictionary<string, string>()
         {
-            { JweTypes.UserIdentifier, userIdentifier },
+            { JweTypes.UserIdentifier, userIdentifier.ToString() },
             { JweTypes.TokenId ,  Guid.NewGuid().ToString()},
             { "aud", jwtSettings.Audience },
             { "iss", jwtSettings.Issuer },

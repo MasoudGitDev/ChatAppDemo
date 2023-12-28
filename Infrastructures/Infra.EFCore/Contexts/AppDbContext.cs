@@ -1,12 +1,14 @@
 ﻿using Domains.Auth.RoleEntity;
 using Domains.Auth.UserEntity;
 using Domains.Messaging.GroupEntity;
+using Domains.Messaging.GroupMemberEntity;
 using Infra.EFCore.Auth.Configs.Auth;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Shared.ValueObjects;
 
 namespace Infra.EFCore.Contexts;
-internal class AppDbContext : IdentityDbContext<AppUser , AppRole , string> {
+internal class AppDbContext : IdentityDbContext<AppUser , AppRole,EntityId> {
     public AppDbContext(DbContextOptions<AppDbContext> options) :
         base(options) { }
 
@@ -21,4 +23,5 @@ internal class AppDbContext : IdentityDbContext<AppUser , AppRole , string> {
     }
 
     public DbSet<GroupTbl> GroupTbl { get; set; }
+    public DbSet<GroupMemberTbl> AppUserGroupTbl { get; set; }
 }

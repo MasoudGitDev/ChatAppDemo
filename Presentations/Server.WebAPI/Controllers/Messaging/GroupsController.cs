@@ -9,7 +9,7 @@ namespace Server.WebAPI.Controllers.Messaging
     [ApiController]
     public class GroupsController(ISender sender) : ControllerBase {
         [HttpPost("Create")]
-        public async Task<Result> CreateAsync([FromBody]CreateModel createModel) {
+        public async Task<Result> CreateAsync([FromBody]CreateCModel createModel) {
             return await sender.Send(createModel);
         }
     }

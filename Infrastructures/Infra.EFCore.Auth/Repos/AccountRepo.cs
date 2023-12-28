@@ -21,7 +21,7 @@ internal class AccountRepo(SignInManager<AppUser> signInManager , IJweService jw
     }
     public async Task<AccountResult> RegisterAsync(IRegisterModel model , CancellationToken cancellationToken) {
         await CheckUserNotExistAsync(model.Email , model.UserName);
-        string userId = Guid.NewGuid().ToString();
+        Guid userId = Guid.NewGuid();
         var accountResult =  await jweService.GenerateTokenAsync(userId);
         if(String.IsNullOrWhiteSpace(accountResult.JweToken)) {
             throw new AccountException("RegisterAsync" , "NullOrWhitespace" , "the <jweToken> can not be null or whitespace");
