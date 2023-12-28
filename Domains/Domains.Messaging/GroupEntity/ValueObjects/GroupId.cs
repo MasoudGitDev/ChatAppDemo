@@ -1,5 +1,4 @@
-﻿using Domains.Messaging.Shared.Abstractions;
-using Domains.Messaging.Shared.Exceptions;
+﻿using Domains.Messaging.Shared.Exceptions;
 namespace Domains.Messaging.GroupEntity.ValueObjects {
     public record GroupId {
         public Guid Value { get; }
