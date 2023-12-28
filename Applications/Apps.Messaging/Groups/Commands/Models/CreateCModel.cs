@@ -1,14 +1,14 @@
-﻿using Domains.Messaging.GroupEntity.Repo;
-using MediatR;
+﻿using MediatR;
 using Shared.Models;
+using Shared.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
 namespace Apps.Messaging.Groups.Commands.Models;
-public record CreateModel(IGroupRepo groupRepo) : IRequest<Result>
+public record CreateCModel : IRequest<Result>
 {
 
     [Required]
-    public string CreatorId { get; set; } = string.Empty;
+    public EntityId CreatorId { get; set; }
     [Required]
     public string DisplayId { get; set; } = string.Empty;
 
