@@ -1,5 +1,6 @@
-﻿namespace Shared.Models;
+﻿using Shared.Enums;
 
-public record Result(bool Success , List<ErrorModel>? Reports);
-public record Result<T>(bool Success , List<ErrorModel>? Reports , T Content);
-public record ErrorModel(string Where,string Code , string Message);
+namespace Shared.Models;
+
+public record Result(ResultStatus Status , ErrorModel? Error);
+public record Result<T>(ResultStatus Status , ErrorModel? Error , T Content);
