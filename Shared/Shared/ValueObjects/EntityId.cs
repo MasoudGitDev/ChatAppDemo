@@ -4,7 +4,7 @@ namespace Shared.ValueObjects;
 public record EntityId {
     public Guid Value { get; }
     public string EntityName { get;}
-    public EntityId(Guid id , string entityName) {
+    public EntityId(Guid id , string entityName = "Entity") {
         if(String.IsNullOrWhiteSpace(entityName)) {
             throw new EntityIdValueObjException("Constructor" , "NullOrWhiteSpace" , "The <entityName> can not be NullOrWhiteSpace.");
         }

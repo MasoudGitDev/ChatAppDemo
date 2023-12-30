@@ -5,17 +5,17 @@ using Jose;
 using Microsoft.Extensions.Configuration;
 using Shared.Models;
 using Shared.SystemModels;
-using System.Security.Cryptography;
+using Shared.ValueObjects;
 using System.Text;
 using System.Text.Json;
 
 namespace Infra.EfCore.Auth.Services;
 internal class JweService(IConfiguration configuration) : IJweService { 
-    public Task<AccountResult> GenerateTokenAsync(Guid userIdentifier) {
+    public Task<AccountResult> GenerateTokenAsync(EntityId userIdentifier) {
         var jwtSettings = configuration.GetJweSettings();
         var claims = new Dictionary<string, string>()
         {
-            { JweTypes.UserIdentifier, userIdentifier.ToString() },
+            { JweTypes.UserIdentifier, userIdentifier.Value.ToString() },
             { JweTypes.TokenId ,  Guid.NewGuid().ToString()},
             { "aud", jwtSettings.Audience },
             { "iss", jwtSettings.Issuer },
@@ -34,13 +34,6 @@ internal class JweService(IConfiguration configuration) : IJweService {
         var claims = JsonSerializer.Deserialize<Dictionary<string,string>>(payload);
         if(claims is null ) { throw new JweException("GetClaimsByTokenAsync" , "NullObj" , "The <claims> can not be null."); }
         return Task.FromResult(claims);
-    }
-    public async Task<string> GetUserIdentifierClaimByTokenAsync(string jweToken) {
-        var userIdentifierValue = (await GetClaimsByTokenAsync(jweToken)).FirstOrDefault(x=>x.Key == JweTypes.UserIdentifier).Value.ToString();
-        if(String.IsNullOrWhiteSpace(userIdentifierValue)) {
-            throw new JweException("GetUserIdentifierClaimByTokenAsync" , "NullOrWhitespace" , "<JwtTypes.UserIdentifier> value can not be null or empty or whitespace.");
-        }
-        return userIdentifierValue;    
     }
     private Task ValidateClaims(Dictionary<string , string> claims , JweSettingsModel model) {
 

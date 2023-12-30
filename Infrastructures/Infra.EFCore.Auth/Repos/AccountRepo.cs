@@ -6,6 +6,7 @@ using Infra.EfCore.Auth.Services;
 using Microsoft.AspNetCore.Identity;
 using Shared.Enums;
 using Shared.Models;
+using Shared.ValueObjects;
 
 namespace Infra.EfCore.Auth.Repos;  
 internal class AccountRepo(SignInManager<AppUser> signInManager , IJweService jweService) : IAccountRepo {
@@ -14,30 +15,34 @@ internal class AccountRepo(SignInManager<AppUser> signInManager , IJweService jw
     private readonly UserManager<AppUser> userManager = signInManager.UserManager ;
 
     // publics
-    public async Task LogoutAsync(string jweToken) {
-        var findUser = await FindUserByJwtTokenAsync(jweToken);
-        if (findUser == null) { throw new AccountException("LoginByTokenAsync" , "NullObj" , "<findUser> value is null because jwt token is invalid."); }
-        await userManager.RemoveClaimsAsync(findUser , await userManager.GetClaimsAsync(findUser));
+    public Task LogoutAsync(string jweToken) {
+       return Task.CompletedTask;
     }
     public async Task<AccountResult> RegisterAsync(IRegisterModel model , CancellationToken cancellationToken) {
-        await CheckUserNotExistAsync(model.Email , model.UserName);
-        Guid userId = Guid.NewGuid();
-        var accountResult =  await jweService.GenerateTokenAsync(userId);
-        if(String.IsNullOrWhiteSpace(accountResult.JweToken)) {
-            throw new AccountException("RegisterAsync" , "NullOrWhitespace" , "the <jweToken> can not be null or whitespace");
+        try {
+            await CheckUserNotExistAsync(model.Email , model.UserName);
+            EntityId entityId = new EntityId(Guid.NewGuid() , "AspNetUsers");
+            var accountResult =  await jweService.GenerateTokenAsync(entityId);
+            if(String.IsNullOrWhiteSpace(accountResult.JweToken)) {
+                throw new AccountException("RegisterAsync" , "NullOrWhitespace" , "the <jweToken> can not be null or whitespace");
+            }
+            var createUser = new AppUser{Id = entityId,Email = model.Email, UserName = model.UserName};
+            var creationResult = await userManager.CreateAsync(createUser);
+            if(!creationResult.Succeeded) {
+                var firstError = creationResult.Errors.First();
+                throw new AccountException("RegisterAsync : On CreateAsync Method." , firstError.Code , firstError.Description);
+            }
+            var setPasswordResult = await userManager.AddPasswordAsync(createUser, model.Password);
+            if(!setPasswordResult.Succeeded) {
+                var firstError = setPasswordResult.Errors.First();
+                throw new AccountException("RegisterAsync : On AddPasswordAsync Method." , firstError.Code , firstError.Description);
+            }
+            return accountResult;
+        }    
+        catch (Exception ex) {
+            Console.WriteLine(ex.ToString());
+            return new AccountResult(string.Empty , new());
         }
-        var createUser = new AppUser{Id = userId,Email = model.Email, UserName = model.UserName};
-        var creationResult = await userManager.CreateAsync(createUser);
-        if (!creationResult.Succeeded) {
-            var firstError = creationResult.Errors.First();
-            throw new AccountException("CreateTokenAfterRegisterAsync : On CreateAsync Method." , firstError.Code , firstError.Description);
-        }
-        var setPasswordResult = await userManager.AddPasswordAsync(createUser, model.Password);
-        if (!setPasswordResult.Succeeded) {
-            var firstError = setPasswordResult.Errors.First();
-            throw new AccountException("CreateTokenAfterRegisterAsync : On AddPasswordAsync Method." , firstError.Code , firstError.Description);
-        }
-        return accountResult;      
     }
 
     public async Task<AccountResult> LoginByModelAsync(ILoginModel model) {
@@ -55,10 +60,7 @@ internal class AccountRepo(SignInManager<AppUser> signInManager , IJweService jw
     }
 
     // privates
-    private async Task<AppUser?> FindUserByJwtTokenAsync(string jweToken) {
-        var userIdentifier =  await jweService.GetUserIdentifierClaimByTokenAsync(jweToken);
-        return await userManager.FindByIdAsync(userIdentifier);
-    }
+  
     private async Task<AppUser?> FindUserByEmailAsync(string email) => await userManager.FindByEmailAsync(email);
     private async Task<AppUser?> FindUserByUserNameAsync(string userName) => await userManager.FindByNameAsync(userName);
     private async Task CheckUserNotExistAsync(string email, string userName) {

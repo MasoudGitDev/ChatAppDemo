@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Shared.Models;
-using Shared.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
 namespace Apps.Messaging.Groups.Commands.Models;
@@ -8,7 +7,7 @@ public record CreateCModel : IRequest<Result>
 {
 
     [Required]
-    public EntityId CreatorId { get; set; }
+    public Guid CreatorId { get; set; } = Guid.Empty;
     [Required]
     public string DisplayId { get; set; } = string.Empty;
 
