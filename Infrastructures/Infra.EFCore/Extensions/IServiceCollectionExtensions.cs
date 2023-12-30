@@ -1,6 +1,7 @@
 ﻿using Domains.Auth.RoleEntity;
 using Domains.Auth.UserEntity;
 using Domains.Messaging.GroupEntity.Repo;
+using Domains.Messaging.GroupRequesterEntity.Repos;
 using Infra.EfCore.Auth.Extensions;
 using Infra.EFCore.Contexts;
 using Infra.EFCore.Repositories.Messaging;
@@ -48,5 +49,6 @@ public static class IServiceCollectionExtensions {
         services.AddScoped<IGroupRepo , GroupRepo>();
         services.AddScoped<IUpdateGroupRepo , UpdateGroupRepo>();
         services.AddScoped<IGroupUnitOfWork , GroupUnitOfWork>();
+        services.AddScoped<IGroupRequesterRepo , GroupRequesterRepo>();
     }
 }
