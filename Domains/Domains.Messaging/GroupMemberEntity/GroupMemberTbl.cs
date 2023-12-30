@@ -19,8 +19,12 @@ public record class GroupMemberTbl : IEntity
 
     //info
     public DateTime MemberAt { get; init; } = DateTime.UtcNow;
+
     public bool IsAdmin { get; set; } = false;
     public AdminInfo? AdminInfo { get; set; }
+
+    public bool IsBlocked { get; set; }
+    public BlockMemberInfo? BlockMemberInfo { get; set; }
 
 
     // relation ships

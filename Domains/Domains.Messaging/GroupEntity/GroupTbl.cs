@@ -1,5 +1,6 @@
 ﻿using Domains.Auth.UserEntity;
 using Domains.Messaging.GroupMemberEntity;
+using Domains.Messaging.GroupRequesterEntity;
 using Domains.Messaging.Shared.ValueObjects;
 using Shared.Generics;
 using Shared.ValueObjects;
@@ -19,11 +20,14 @@ public record class GroupTbl :IEntity{
     public LinkedList<Logo> Logos { get; set; } = new();
     public string? Description { get; set; }
 
+    public bool CanAcceptAllRequests { get; set; } = false;
+
 
     public LinkedList<GroupMemberTbl> Members { get; set; } = new();
     public byte[] Timestamp { get; set; }
 
     // Relationships
     public AppUser Creator { get; set; }
-   
+    public ICollection<GroupRequesterTbl> Requesters { get; set; }
+
 }
