@@ -15,23 +15,23 @@ using Shared.ValueObjects;
 namespace Infra.EFCore.Repositories.Messaging {
     internal class GroupRepo(AppDbContext appDbContext) : IGroupRepo {
         public async Task<Result> CreateAsync(GroupTbl entity) {
-            await appDbContext.GroupTbl.AddAsync(entity);
+            await appDbContext.Groups.AddAsync(entity);
             await appDbContext.SaveChangesAsync();
             return new Result(ResultStatus.Success , null);
         }
 
         public async Task<Result> DeleteAsync(EntityId entityId) {
-            var entity = await appDbContext.GroupTbl.FindAsync(entityId);
+            var entity = await appDbContext.Groups.FindAsync(entityId);
             if(entity == null) {
                 throw new GroupRepoException("DeleteAsync" , "NullObj" , "Because of invalid <groupTbl.Id> , this entity is null.");
             }
-            appDbContext.GroupTbl.Remove(entity);
+            appDbContext.Groups.Remove(entity);
             await appDbContext.SaveChangesAsync();
             return new Result(ResultStatus.Success , null);
         }
 
         public async Task<Result<GroupTbl>> GetAsync(EntityId entityId) {
-            var findEntity = await appDbContext.GroupTbl.FindAsync(entityId);
+            var findEntity = await appDbContext.Groups.FindAsync(entityId);
             if(findEntity == null) {
                 throw new GroupRepoException(nameof(GetAsync) , "NullObj" , "Because of invalid <groupTbl.GroupId> , this entity is null.");
             }
@@ -39,7 +39,7 @@ namespace Infra.EFCore.Repositories.Messaging {
         }
 
         public async Task<Result> UpdateAsync(GroupTbl entity) {
-            var findEntity = await appDbContext.GroupTbl.FindAsync(entity.GroupId);
+            var findEntity = await appDbContext.Groups.FindAsync(entity.GroupId);
             if(findEntity == null) {
                 throw new GroupRepoException(nameof(UpdateAsync) , "NullObj" , "Because of invalid <groupTbl.GroupId> , this entity is null.");
             }
@@ -52,12 +52,12 @@ namespace Infra.EFCore.Repositories.Messaging {
                 .Ignore(x=>x.Timestamp);
 
 
-            appDbContext.GroupTbl.Update(entity.Adapt(findEntity,config));
+            appDbContext.Groups.Update(entity.Adapt(findEntity,config));
             await appDbContext.SaveChangesAsync();
             return new Result(ResultStatus.Success , null);
         }
         public async Task<Result> UpdateInfoAsync(GroupTbl mainModel , GroupInfoUpdateModel updateModel) {
-            appDbContext.GroupTbl.Update(updateModel.Adapt(mainModel));
+            appDbContext.Groups.Update(updateModel.Adapt(mainModel));
             await appDbContext.SaveChangesAsync();
             return new Result(ResultStatus.Success , null);
         }
@@ -68,7 +68,7 @@ namespace Infra.EFCore.Repositories.Messaging {
             try {
                 var unknownMembers = new List<EntityId>();
                 foreach ( var memberId in memberIds ) {
-                    var findMember = await appDbContext.AppUserGroupTbl
+                    var findMember = await appDbContext.GroupMembers
                         .Where(x=>x.GroupId ==  GroupId)
                         .Where(x=>x.MemberId == memberId)
                         .FirstOrDefaultAsync();
@@ -82,7 +82,7 @@ namespace Infra.EFCore.Repositories.Messaging {
                             AdminAt = DateTime.UtcNow ,
                             AdminModifierId = adminModifierId
                         };
-                        appDbContext.AppUserGroupTbl.Update(findMember);
+                        appDbContext.GroupMembers.Update(findMember);
                     }
                 }
                 await appDbContext.SaveChangesAsync();

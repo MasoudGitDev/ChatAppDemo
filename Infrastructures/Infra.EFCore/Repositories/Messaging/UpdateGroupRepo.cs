@@ -38,7 +38,7 @@ namespace Infra.EFCore.Repositories.Messaging
 
         private async Task<Result> TryToUpdateAsync(GroupTbl updatedModel , string methodName) {
             try {
-                appDbContext.GroupTbl.Update(updatedModel);
+                appDbContext.Groups.Update(updatedModel);
                 await appDbContext.SaveChangesAsync();
                 return new Result(ResultStatus.Success , null);
             }
