@@ -3,8 +3,10 @@ using Domains.Messaging.GroupEntity;
 using Shared.Generics;
 using Shared.ValueObjects;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domains.Messaging.GroupRequesterEntity;
+[Table("GroupRequesters")]
 public record class GroupRequesterTbl :IEntity {
 
     // Ids
@@ -15,6 +17,9 @@ public record class GroupRequesterTbl :IEntity {
 
     // otherProps
     public uint RequestNumbers { get; set; } = 0;
+    public string? Description { get; set; }
+    public DateTime RequestedAt { get; set; }
+    public bool IsBlocked { get; set; }
 
     // Relation ships
     public AppUser Requester { get; set; }

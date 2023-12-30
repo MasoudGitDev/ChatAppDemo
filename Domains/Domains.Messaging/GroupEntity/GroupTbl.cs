@@ -5,8 +5,11 @@ using Domains.Messaging.Shared.ValueObjects;
 using Shared.Generics;
 using Shared.ValueObjects;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domains.Messaging.GroupEntity;
+
+[Table("Groups")]
 public record class GroupTbl :IEntity{
     [Key]
     public EntityId GroupId { get; init; }

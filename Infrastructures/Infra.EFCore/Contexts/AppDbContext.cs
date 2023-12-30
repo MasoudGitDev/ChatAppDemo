@@ -2,6 +2,7 @@
 using Domains.Auth.UserEntity;
 using Domains.Messaging.GroupEntity;
 using Domains.Messaging.GroupMemberEntity;
+using Domains.Messaging.GroupRequesterEntity;
 using Infra.EFCore.Auth.Configs.Auth;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ internal class AppDbContext : IdentityDbContext<AppUser , AppRole,EntityId> {
         builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 
-    public DbSet<GroupTbl> GroupTbl { get; set; }
-    public DbSet<GroupMemberTbl> AppUserGroupTbl { get; set; }
+    public DbSet<GroupTbl> Groups { get; set; }
+    public DbSet<GroupMemberTbl> GroupMembers { get; set; }
+    public DbSet<GroupRequesterTbl> GroupRequesters { get; set; }
 }

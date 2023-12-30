@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domains.Messaging.GroupMemberEntity;
-[Table("GroupMemberTbl")]
+[Table("GroupMembers")]
 public record class GroupMemberTbl : IEntity
 {
 
