@@ -8,4 +8,6 @@ public record CreateGroupRequesterModel : IRequest<Result> {
     public Guid GroupId { get; set; }
     [Required]
     public Guid RequesterId { get; set; }
+
+    public string? Description { get; set; } = String.Empty;
 }
