@@ -3,6 +3,7 @@ using Domains.Messaging.GroupRequesterEntity;
 using Domains.Messaging.GroupRequesterEntity.Repos;
 using MediatR;
 using Shared.Models;
+using Shared.Enums;
 
 namespace Apps.Messaging.GroupRequesters.Commands.Handlers;  
 internal sealed class CreateGroupRequesterHandler(IGroupRequesterRepo groupRequesterRepo)
@@ -18,9 +19,12 @@ internal sealed class CreateGroupRequesterHandler(IGroupRequesterRepo groupReque
                 GroupId = request.GroupId ,
                 RequesterId = request.RequesterId ,
                 Id = Guid.NewGuid() ,
-                RequestNumbers = 1
+                RequestNumbers = 1,
+                IsBlocked = false ,
+                RequestedAt = DateTime.UtcNow,
+                Description = request.Description ,
             });
         }           
-        return new Result(Shared.Enums.ResultStatus.Success , null );
+        return new Result(ResultStatus.Success , null );
     }
 }
