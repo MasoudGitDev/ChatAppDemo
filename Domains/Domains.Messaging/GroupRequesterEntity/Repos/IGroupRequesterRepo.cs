@@ -6,4 +6,5 @@ public interface IGroupRequesterRepo{
     Task CreateAsync(GroupRequesterTbl entity);
     Task<GroupRequesterTbl?> GetAsync(EntityId groupId , EntityId requesterId);
     Task UpdateAsync(GroupRequesterTbl entity);
+    Task RemoveAsync(GroupRequesterTbl entity);
 }
