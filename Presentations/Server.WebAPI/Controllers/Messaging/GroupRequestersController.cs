@@ -1,5 +1,6 @@
 ﻿using Apps.Messaging.GroupRequesters.Commands.Models;
 using Apps.Messaging.GroupRequesters.Queries.Models;
+using Apps.Messaging.GroupRequesters.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
@@ -10,7 +11,7 @@ namespace Server.WebAPI.Controllers.Messaging {
     public class GroupRequestersController(ISender sender) : ControllerBase {
 
         [HttpGet("Get")]
-        public async Task<Result<string>> GetAsync([FromBody] GetGroupRequesterModel getModel) {
+        public async Task<Result<GroupRequesterResult>> GetAsync([FromQuery] GetGroupRequesterModel getModel) {
             return await sender.Send(getModel);
         }
 
