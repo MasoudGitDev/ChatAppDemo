@@ -21,7 +21,7 @@ public record class GroupMemberTbl : IEntity
     public DateTime MemberAt { get; init; } = DateTime.UtcNow;
 
     public bool IsAdmin { get; set; } = false;
-    public AdminInfo? AdminInfo { get; set; }
+    public AdminMemberInfo? AdminInfo { get; set; }
 
     public bool IsBlocked { get; set; }
     public BlockMemberInfo? BlockMemberInfo { get; set; }

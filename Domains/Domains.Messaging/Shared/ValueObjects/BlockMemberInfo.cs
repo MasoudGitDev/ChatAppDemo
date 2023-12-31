@@ -5,16 +5,18 @@ using Shared.ValueObjects;
 namespace Domains.Messaging.Shared.ValueObjects;
 public class BlockMemberInfo {
 
-    public DateTime BlockedAt { get; set; }
-    public EntityId BlockedBy { get; set; }
-    public string? Description { get; set; }
+    public DateTime StartBlockAt { get; set; }
+    public DateTime? EndBlockAt { get; set; }
+    public EntityId BlockedById { get; set; }
+    public string? Reason { get; set; }
 
     public BlockMemberInfo() { }
 
-    public BlockMemberInfo(DateTime blockedAt , EntityId blockedBy , string? description) {
-        BlockedAt = blockedAt;
-        BlockedBy = blockedBy;
-        Description = description;
+    public BlockMemberInfo(DateTime startBlockAt , DateTime? endBlockAt , EntityId blockedById , string? reason) {
+        StartBlockAt = startBlockAt;
+        EndBlockAt = endBlockAt;
+        BlockedById = blockedById;
+        Reason = reason;
     }
 
     public static implicit operator string(BlockMemberInfo groupAdmin)

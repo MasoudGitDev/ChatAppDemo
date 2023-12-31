@@ -1,5 +1,5 @@
 ﻿using Apps.Messaging.GroupRequesters.Commands.Models;
-using Domains.Messaging.GroupRequesterEntity.Repos;
+using Domains.Messaging.GroupRequestEntity.Repos;
 using MediatR;
 using Shared.Models;
 using Shared.Enums;

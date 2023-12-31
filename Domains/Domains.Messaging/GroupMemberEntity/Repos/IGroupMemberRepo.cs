@@ -5,8 +5,11 @@ using Shared.ValueObjects;
 namespace Domains.Messaging.GroupMemberEntity.Repos;
 public interface IGroupMemberRepo
 {
+
     Task RemoveMemberAsync(GroupMemberTbl entity);
 
+
+    //Queries
     Task<GroupMemberTbl?> GetMemberAsync(EntityId groupId , EntityId memberId);
     Task<List<MemberInfo>> GetMembersAsync(EntityId groupId);
     Task<List<GroupInfo>> GetGroupsAsync(EntityId userId);

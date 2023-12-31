@@ -1,9 +1,9 @@
 ﻿using Apps.Messaging.GroupRequesters.Commands.Models;
-using Domains.Messaging.GroupRequesterEntity;
-using Domains.Messaging.GroupRequesterEntity.Repos;
 using MediatR;
 using Shared.Models;
 using Shared.Enums;
+using Domains.Messaging.GroupRequestEntity.Repos;
+using Domains.Messaging.GroupRequestEntity;
 
 namespace Apps.Messaging.GroupRequesters.Commands.Handlers;  
 internal sealed class CreateGroupRequesterHandler(IGroupRequesterRepo groupRequesterRepo)
@@ -15,7 +15,7 @@ internal sealed class CreateGroupRequesterHandler(IGroupRequesterRepo groupReque
             await groupRequesterRepo.UpdateAsync(groupRequester);
         }
         else {
-            await groupRequesterRepo.CreateAsync(new GroupRequesterTbl() {
+            await groupRequesterRepo.CreateAsync(new GroupRequestTbl() {
                 GroupId = request.GroupId ,
                 RequesterId = request.RequesterId ,
                 Id = Guid.NewGuid() ,

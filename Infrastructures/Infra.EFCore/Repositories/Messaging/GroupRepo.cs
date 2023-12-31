@@ -77,10 +77,10 @@ namespace Infra.EFCore.Repositories.Messaging {
                     }
                     else {
                         findMember.IsAdmin = true;
-                        findMember.AdminInfo = new AdminInfo {
+                        findMember.AdminInfo = new AdminMemberInfo {
                             AccessLevel = accessLevel ,
-                            AdminAt = DateTime.UtcNow ,
-                            AdminModifierId = adminModifierId
+                            StartAdminAt = DateTime.UtcNow ,
+                            ByWhomId = adminModifierId
                         };
                         appDbContext.GroupMembers.Update(findMember);
                     }

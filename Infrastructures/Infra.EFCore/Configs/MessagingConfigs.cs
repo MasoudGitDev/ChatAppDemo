@@ -1,6 +1,6 @@
 ﻿using Domains.Messaging.GroupEntity;
 using Domains.Messaging.GroupMemberEntity;
-using Domains.Messaging.GroupRequesterEntity;
+using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -12,7 +12,7 @@ namespace Infra.EFCore.Messaging.Configs;
 public class MessagingConfigs : 
     IEntityTypeConfiguration<GroupTbl> ,
     IEntityTypeConfiguration<GroupMemberTbl> , 
-    IEntityTypeConfiguration<GroupRequesterTbl> {
+    IEntityTypeConfiguration<GroupRequestTbl> {
     public void Configure(EntityTypeBuilder<GroupTbl> builder) {
         builder.HasIndex(p => p.GroupId).IsUnique();
         builder.Property(p => p.GroupId).IsRequired().HasConversion(UseIdConvertor(nameof(GroupTbl)));        
@@ -33,14 +33,14 @@ public class MessagingConfigs :
         builder.Property(x => x.Id).IsRequired().HasConversion(UseIdConvertor(nameof(GroupMemberTbl)));
         builder.Property(x=>x.GroupId).IsRequired().HasConversion(UseIdConvertor(nameof(GroupMemberTbl)));
         builder.Property(x=>x.MemberId).IsRequired().HasConversion(userId => userId.Value , r => new(r, "AppUserGroupTbl"));
-        builder.Property(x=>x.AdminInfo).HasConversion(x=> x == null ? null : x.ToJson()  , r => r == null ? new() : r.FromJsonTo<AdminInfo>());
+        builder.Property(x=>x.AdminInfo).HasConversion(x=> x == null ? null : x.ToJson()  , r => r == null ? new() : r.FromJsonTo<AdminMemberInfo>());
         builder.Property(x => x.BlockMemberInfo).HasConversion(x => x == null ? null : x.ToJson() , r => r == null ? new() : r.FromJsonTo<BlockMemberInfo>());
 
         builder.HasOne(x=>x.Member).WithMany().HasForeignKey(x=>x.MemberId).OnDelete(DeleteBehavior.ClientCascade);
         builder.HasOne(x => x.Group).WithMany(x=>x.Members).HasForeignKey(x => x.MemberId).OnDelete(DeleteBehavior.ClientCascade);
     }
 
-    public void Configure(EntityTypeBuilder<GroupRequesterTbl> builder) {        
+    public void Configure(EntityTypeBuilder<GroupRequestTbl> builder) {        
         builder.HasIndex(x=>x.Id).IsUnique();
         builder.Property(x => x.Id).IsRequired().HasConversion(UseIdConvertor());
         builder.Property(x=>x.GroupId).IsRequired().HasConversion(UseIdConvertor());
