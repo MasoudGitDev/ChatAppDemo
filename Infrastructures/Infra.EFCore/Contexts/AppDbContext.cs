@@ -25,5 +25,5 @@ internal class AppDbContext : IdentityDbContext<AppUser , AppRole,EntityId> {
 
     public DbSet<GroupTbl> Groups { get; set; }
     public DbSet<GroupMemberTbl> GroupMembers { get; set; }
-    public DbSet<GroupRequestTbl> GroupRequesters { get; set; }
+    public DbSet<GroupRequestTbl> GroupRequests { get; set; }
 }
