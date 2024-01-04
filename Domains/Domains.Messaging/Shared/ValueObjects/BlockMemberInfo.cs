@@ -1,27 +1,34 @@
-﻿using Shared.Abstractions.Messaging.Constants;
+﻿using Domains.Messaging.Shared.Exceptions;
 using Shared.Extensions;
 using Shared.ValueObjects;
 
 namespace Domains.Messaging.Shared.ValueObjects;
-public class BlockMemberInfo {
+public class BlockedMemberInfo {
 
-    public DateTime StartBlockAt { get; set; }
-    public DateTime? EndBlockAt { get; set; }
-    public EntityId BlockedById { get; set; }
+    public DateTime StartAt { get; set; }
+    public DateTime? EndAt { get; set; }
+    public EntityId AdminId { get; set; }
     public string? Reason { get; set; }
 
-    public BlockMemberInfo() { }
+    public BlockedMemberInfo() { }
 
-    public BlockMemberInfo(DateTime startBlockAt , DateTime? endBlockAt , EntityId blockedById , string? reason) {
-        StartBlockAt = startBlockAt;
-        EndBlockAt = endBlockAt;
-        BlockedById = blockedById;
+    public BlockedMemberInfo(DateTime startAt , DateTime? endAt , EntityId adminId , string? reason) {
+
+        if(endAt != null && endAt <= startAt) {
+            throw new BlockedMemberException("Constructor" , "DateTimeEquality" , "The <endAt> date time must be grater the the <startAt> date time.");
+        }
+        if(adminId.Value == Guid.Empty) {
+            throw new BlockedMemberException("Constructor" , "WrongGUID" , "The <adminId> must be a guid.");
+        }
+        StartAt = startAt;
+        EndAt = endAt;
+        AdminId = adminId;
         Reason = reason;
     }
 
-    public static implicit operator string(BlockMemberInfo groupAdmin)
+    public static implicit operator string?(BlockedMemberInfo groupAdmin)
         => groupAdmin.ToJson();
-    public static implicit operator BlockMemberInfo(string jsonSource)
-        => jsonSource.FromJsonTo<BlockMemberInfo>() ?? new BlockMemberInfo();
+    public static implicit operator BlockedMemberInfo(string? jsonSource)
+        => jsonSource.FromJsonTo<BlockedMemberInfo>();
 
 }

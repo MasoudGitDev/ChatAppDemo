@@ -6,10 +6,10 @@ public record EntityId {
     public string EntityName { get;}
     public EntityId(Guid id , string entityName = "Entity") {
         if(String.IsNullOrWhiteSpace(entityName)) {
-            throw new EntityIdValueObjException("Constructor" , "NullOrWhiteSpace" , "The <entityName> can not be NullOrWhiteSpace.");
+            throw new EntityIdValueObjException("Constructor" , "NullOrWhiteSpace" , $"The <${entityName}> can not be NullOrWhiteSpace.");
         }
         if(id == Guid.Empty || String.IsNullOrWhiteSpace(id.ToString())) {
-            throw new EntityIdValueObjException($"Constructor" , "NullOrWhiteSpace" , "The <id> can not be NullOrWhiteSpace.");
+            throw new EntityIdValueObjException($"{entityName}-Constructor" , "NullOrWhiteSpace" , "The <id> can not be NullOrWhiteSpace.");
         }
         Value = id;
         EntityName = entityName;

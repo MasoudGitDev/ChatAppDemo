@@ -10,13 +10,13 @@ public record Logo {
     public Logo(string image , string? title)
     {
         if(String.IsNullOrWhiteSpace(image)) {
-            throw new LogoValueObjException("Constructor" , "NullOrWhiteSpace" , "The <image> can not be NullOrWhiteSpace.");
+            throw new LogoException("Constructor" , "NullOrWhiteSpace" , "The <image> can not be NullOrWhiteSpace.");
         }
         Image = image;
         Title = title;
     }
 
-    public static implicit operator Logo(string jsonSource) => jsonSource.FromJsonTo<Logo>() ?? new Logo();
-    public static implicit operator string(Logo picture) => picture.ToJson();
+    public static implicit operator Logo(string? jsonSource) => jsonSource.FromJsonTo<Logo>();
+    public static implicit operator string?(Logo logo) => logo.ToJson();
 
 }

@@ -11,8 +11,4 @@
     <ProjectReference Include="..\Domains.Auth\Domains.Auth.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="GroupMemberEntity\Models\" />
-  </ItemGroup>
-
 </Project>
