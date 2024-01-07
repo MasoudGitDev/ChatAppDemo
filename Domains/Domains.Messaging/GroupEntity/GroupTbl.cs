@@ -4,6 +4,7 @@ using Domains.Messaging.GroupMemberEntity;
 using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.Shared.ValueObjects;
 using Shared.Generics;
+using Shared.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,7 +14,7 @@ namespace Domains.Messaging.GroupEntity;
 public record class GroupTbl :IEntity{
     [Key]
     public GroupId GroupId { get; init; }
-    public AppUserId CreatorId { get; set; }
+    public EntityId CreatorId { get; set; }
 
 
     public string Title { get; set; } = string.Empty;

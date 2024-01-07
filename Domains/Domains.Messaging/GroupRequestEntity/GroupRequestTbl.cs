@@ -2,8 +2,8 @@
 using Domains.Messaging.GroupEntity;
 using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupRequestEntity.ValueObjects;
-using Domains.Messaging.Shared.ValueObjects;
 using Shared.Generics;
+using Shared.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,7 +14,7 @@ public record class GroupRequestTbl :IEntity {
     // Ids
     [Key]
     public GroupRequestId Id { get; set; }
-    public AppUserId RequesterId { get; set; }
+    public EntityId RequesterId { get; set; }
     public GroupId GroupId { get; set; }
 
     // otherProps

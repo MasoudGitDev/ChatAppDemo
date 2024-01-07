@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Shared.ValueObjects;
 
 namespace Infra.EFCore.Contexts;
-internal class AppDbContext : IdentityDbContext<AppUser , AppRole,EntityId> {
+internal class AppDbContext : IdentityDbContext<AppUser,AppRole,EntityId> {
     public AppDbContext(DbContextOptions<AppDbContext> options) :
         base(options) { }
 

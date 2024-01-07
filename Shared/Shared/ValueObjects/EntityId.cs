@@ -1,5 +1,4 @@
 ﻿using Shared.ValueObjects.Exceptions;
-
 namespace Shared.ValueObjects;  
 public record EntityId {
     public Guid Value { get; }

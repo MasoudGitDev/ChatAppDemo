@@ -4,6 +4,7 @@ using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupMemberEntity.ValueObjects;
 using Domains.Messaging.Shared.ValueObjects;
 using Shared.Generics;
+using Shared.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,7 +17,7 @@ public record class GroupMemberTbl : IEntity
     [Key]
     public GroupMemberId Id { get; init; }
     public GroupId GroupId { get; init; }
-    public AppUserId MemberId { get; init; }
+    public EntityId MemberId { get; init; }
 
     //info
     public DateTime MemberAt { get; init; } = DateTime.UtcNow;

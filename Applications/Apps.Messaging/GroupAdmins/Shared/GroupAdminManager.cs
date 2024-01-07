@@ -31,9 +31,9 @@ internal abstract class GroupAdminManager(IGroupAdminRepo groupAdminRepo) {
             return new Result(ResultStatus.Failed , new("" , "NotAccess" , "You Need High Access Level."));
         }
         await groupAdminRepo.Commands.DeleteGroupAsync(
-            await groupAdminRepo.General.Queries.GetGroupAsync(groupId) ,
-            await groupAdminRepo.General.Queries.GetMembersAsync(groupId),
-            await groupAdminRepo.Queries.GetRequestsAsync(groupId));
+            await groupAdminRepo.General.Queries.GetGroupAsync(groupId.Value) ,
+            await groupAdminRepo.General.Queries.GetMembersAsync(groupId.Value),
+            await groupAdminRepo.Queries.GetRequestsAsync(groupId.Value));
         return new Result(ResultStatus.Success , null);
     }
 

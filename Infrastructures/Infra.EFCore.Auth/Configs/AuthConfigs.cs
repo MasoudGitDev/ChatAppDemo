@@ -7,13 +7,13 @@ namespace Infra.EFCore.Auth.Configs.Auth;
 public class AuthConfigs : IEntityTypeConfiguration<AppUser>, IEntityTypeConfiguration<AppRole> {
     public void Configure(EntityTypeBuilder<AppUser> builder) {
         builder.HasIndex(x => x.Id);
-        builder.Property(x => x.Id).IsRequired().HasConversion(entityId => entityId.Value , guid => new(guid , "AspNetUsers"));
+        builder.Property(x => x.Id).IsRequired().HasConversion(x => x.Value , guid => new(guid,"AspNetUsers"));
         builder.Property(x => x.UserName).IsRequired();
         builder.Property(x => x.Email).IsRequired();
     }
 
     public void Configure(EntityTypeBuilder<AppRole> builder) {
         builder.HasIndex(x => x.Id);
-        builder.Property(x => x.Id).IsRequired().HasConversion(entityId => entityId.Value , guid => new(guid , "AspNetRoles"));
+        builder.Property(x => x.Id).IsRequired().HasConversion(entityId => entityId.Value , guid => new(guid, "AspNetRoles"));
     }
 }
