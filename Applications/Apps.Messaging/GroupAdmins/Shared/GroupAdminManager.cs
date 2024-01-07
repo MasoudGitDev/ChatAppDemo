@@ -1,13 +1,13 @@
-﻿using Domains.Messaging.GroupEntity.ValueObjects;
-using Domains.Messaging.GroupMemberEntity;
-using Domains.Messaging.Shared.UnitOfWorks;
+﻿using Domains.Messaging.GroupMemberEntity;
+using Domains.Messaging.GroupMemberEntity.Repos;
 using Domains.Messaging.Shared.ValueObjects;
 using Shared.Abstractions.Messaging.Constants;
 using Shared.Enums;
 using Shared.Models;
+using Shared.ValueObjects;
 
 namespace Apps.Messaging.GroupAdmins.Shared;  
-internal abstract class GroupAdminManager(IGroupUnitOfWork groupUnitOfWork) {
+internal abstract class GroupAdminManager(IGroupAdminRepo groupAdminRepo) {
     protected async Task<Result> TryToDoActionByAdminAsync(
         Guid groupId, Guid adminId , Guid memberId , Func<GroupMemberTbl,AdminAccessLevels,Task> actionAsync ) {
         var findAdmin =await CheckAdminAsync( groupId, adminId );
@@ -22,10 +22,23 @@ internal abstract class GroupAdminManager(IGroupUnitOfWork groupUnitOfWork) {
         return new Result(ResultStatus.Success ,null);
     }
 
-  
+   protected async Task<Result> DeleteGroupAsync(EntityId groupId , EntityId adminId) {
+        var findAdmin =await CheckAdminAsync( groupId, adminId );
+        if(findAdmin.Status == ResultStatus.Failed) {
+            return new Result(findAdmin.Status , findAdmin.Error);
+        }
+        if(findAdmin?.Content?.AccessLevel != AdminAccessLevels.High) {
+            return new Result(ResultStatus.Failed , new("" , "NotAccess" , "You Need High Access Level."));
+        }
+        await groupAdminRepo.Commands.DeleteGroupAsync(
+            await groupAdminRepo.General.Queries.GetGroupAsync(groupId) ,
+            await groupAdminRepo.General.Queries.GetMembersAsync(groupId),
+            await groupAdminRepo.Queries.GetRequestsAsync(groupId));
+        return new Result(ResultStatus.Success , null);
+    }
 
     protected async Task<Result<AdminMemberInfo>> CheckAdminAsync(Guid groupId , Guid adminId) {
-        var findAdmin =await groupUnitOfWork.AdminRepo.GetAdminAsync(groupId,adminId);
+        var findAdmin =await groupAdminRepo.Queries.IsAdminAsync(groupId,adminId);
         if(findAdmin == null) {
             return new Result<AdminMemberInfo>(
                 ResultStatus.Failed , new("CheckIsAdminAsync" , "NotAccess" , "You are not an admin.") , null);
@@ -34,7 +47,7 @@ internal abstract class GroupAdminManager(IGroupUnitOfWork groupUnitOfWork) {
                 ResultStatus.Success , null, findAdmin);
     }
     protected async Task<Result<GroupMemberTbl>>  CheckMemberAsync(Guid groupId, Guid memberId) {
-        var findMember = await groupUnitOfWork.MemberRepo.GetMemberAsync(groupId , memberId);
+        var findMember = await groupAdminRepo.General.Queries.GetMemberAsync(groupId , memberId);
         if(findMember == null) {
             return new Result<GroupMemberTbl>(ResultStatus.Failed ,
                      new("CheckMemberAsync" , "NotFound" , $"Not found any members with this id :{memberId}") , null);

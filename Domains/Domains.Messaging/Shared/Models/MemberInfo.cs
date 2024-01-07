@@ -1,7 +1,9 @@
-﻿namespace Domains.Messaging.Shared.Models;  
+﻿using Shared.Abstractions.Messaging.Constants;
+
+namespace Domains.Messaging.Shared.Models;  
 public record MemberInfo(
     Guid MemberId ,
     DateTime MemberAt ,
-    bool IsAdmin ,
-    bool IsBlocked
+    bool IsAdmin,
+    AdminAccessLevels? AccessLevels
 );

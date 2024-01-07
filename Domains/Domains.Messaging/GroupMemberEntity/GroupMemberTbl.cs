@@ -1,8 +1,9 @@
 ﻿using Domains.Auth.UserEntity;
 using Domains.Messaging.GroupEntity;
+using Domains.Messaging.GroupEntity.ValueObjects;
+using Domains.Messaging.GroupMemberEntity.ValueObjects;
 using Domains.Messaging.Shared.ValueObjects;
 using Shared.Generics;
-using Shared.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,9 +14,9 @@ public record class GroupMemberTbl : IEntity
 
     // Ids
     [Key]
-    public EntityId Id { get; init; }
-    public EntityId GroupId { get; init; }
-    public EntityId MemberId { get; init; }
+    public GroupMemberId Id { get; init; }
+    public GroupId GroupId { get; init; }
+    public AppUserId MemberId { get; init; }
 
     //info
     public DateTime MemberAt { get; init; } = DateTime.UtcNow;
@@ -24,13 +25,12 @@ public record class GroupMemberTbl : IEntity
     public AdminMemberInfo? AdminInfo { get; set; }
 
     public bool IsBlocked { get; set; }
-    public BlockMemberInfo? BlockMemberInfo { get; set; }
+    public BlockedMemberInfo? BlockMemberInfo { get; set; }
 
+    [Timestamp]
+    public byte[] Timestamp { get; set; }
 
     // relation ships
     public AppUser Member { get; set; }
     public GroupTbl Group { get; set; }
-
-
-
 }
