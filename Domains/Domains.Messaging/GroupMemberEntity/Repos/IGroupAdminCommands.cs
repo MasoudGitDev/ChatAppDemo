@@ -6,12 +6,14 @@ namespace Domains.Messaging.GroupMemberEntity.Repos;
 public interface IGroupAdminCommands {
     Task ConfirmedRequest(GroupMemberTbl member , GroupRequestTbl request);
     Task DeleteMemberAsync(GroupMemberTbl member);
+    Task CreateMemberAsync(GroupMemberTbl member);
     Task DeleteGroupAsync(GroupTbl group , List<GroupMemberTbl> members , List<GroupRequestTbl> requests);
     Task UnblockAsync(GroupMemberTbl member);
-    Task BlockAsync(GroupMemberTbl member , EntityId adminId , DateTime startAt , DateTime? endAt , string? reason);
-    Task ToAdminAsync(GroupMemberTbl member , EntityId adminId , DateTime startAt , DateTime? endAt , string? reason);
+    Task BlockAsync(GroupMemberTbl member , AppUserId adminId , DateTime startAt , DateTime? endAt , string? reason);
+    Task ToAdminAsync(GroupMemberTbl member , AppUserId adminId , DateTime startAt , DateTime? endAt , string? reason);
     Task ToNormalMemberAsync(GroupMemberTbl adminMember );
     Task ChangeRequestableStateAsync(GroupTbl group , bool isRequestable);
+    
 
 
     //Task DeleteLogoAsync(GroupTbl group , string);

@@ -21,18 +21,18 @@ internal class AccountRepo(SignInManager<AppUser> signInManager , IJweService jw
     public async Task<AccountResult> RegisterAsync(IRegisterModel model , CancellationToken cancellationToken) {
         try {
             await CheckUserNotExistAsync(model.Email , model.UserName);
-            Guid entityId = Guid.NewGuid();
+            EntityId entityId =new EntityId(Guid.NewGuid(),"AspNetUsers");
             var accountResult =  await jweService.GenerateTokenAsync(entityId);
             if(String.IsNullOrWhiteSpace(accountResult.JweToken)) {
                 throw new AccountException("RegisterAsync" , "NullOrWhitespace" , "the <jweToken> can not be null or whitespace");
             }
-            var createUser = new AppUser{Id = entityId,Email = model.Email, UserName = model.UserName};
-            var creationResult = await userManager.CreateAsync(createUser);
+            AppUser newUser = new AppUser{Id = entityId,Email = model.Email, UserName = model.UserName};
+            var creationResult = await userManager.CreateAsync(newUser);
             if(!creationResult.Succeeded) {
                 var firstError = creationResult.Errors.First();
                 throw new AccountException("RegisterAsync : On CreateAsync Method." , firstError.Code , firstError.Description);
             }
-            var setPasswordResult = await userManager.AddPasswordAsync(createUser, model.Password);
+            var setPasswordResult = await userManager.AddPasswordAsync(newUser,model.Password);
             if(!setPasswordResult.Succeeded) {
                 var firstError = setPasswordResult.Errors.First();
                 throw new AccountException("RegisterAsync : On AddPasswordAsync Method." , firstError.Code , firstError.Description);

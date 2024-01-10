@@ -8,7 +8,7 @@ using Shared.ValueObjects;
 
 namespace Infra.EFCore.Repositories.Messaging.Group;
 internal class GroupAdminCommands(AppDbContext appDbContext) : IGroupAdminCommands {
-    public async Task BlockAsync(GroupMemberTbl member , EntityId adminId , DateTime startAt , DateTime? endAt , string? reason) {
+    public async Task BlockAsync(GroupMemberTbl member , AppUserId adminId , DateTime startAt , DateTime? endAt , string? reason) {
         await TryToDoAsync(async () => {
             member.IsBlocked = true;
             member.BlockMemberInfo = new BlockedMemberInfo() {
@@ -87,7 +87,7 @@ internal class GroupAdminCommands(AppDbContext appDbContext) : IGroupAdminComman
             await Task.CompletedTask;
         });
     }
-    public async Task ToAdminAsync(GroupMemberTbl member , EntityId adminId , DateTime startAt , DateTime? endAt , string? reason) {
+    public async Task ToAdminAsync(GroupMemberTbl member , AppUserId adminId , DateTime startAt , DateTime? endAt , string? reason) {
         await TryToDoAsync(async () => {
             member.IsAdmin = true;
             member.AdminInfo = new() {
@@ -132,5 +132,11 @@ internal class GroupAdminCommands(AppDbContext appDbContext) : IGroupAdminComman
         catch(Exception ex) {
             throw new Exception(ex.ToString());
         }
+    }
+
+    public async Task CreateMemberAsync(GroupMemberTbl member) {
+        await TryToDoAsync(async () => {
+            await appDbContext.GroupMembers.AddAsync(member);
+        });
     }
 }

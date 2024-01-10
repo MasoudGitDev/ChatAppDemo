@@ -25,6 +25,11 @@ namespace Server.WebAPI.Controllers.Messaging
             return await sender.Send(getMembersModel);
         }
 
+        [HttpPost("RequestMembership")]
+        public async Task<Result> RequestMembershipAsync([FromQuery] RequestMembershipModel model) {
+            return await sender.Send(model);
+        }
+
         // Search for Members or ids
         // send a post/comment
 

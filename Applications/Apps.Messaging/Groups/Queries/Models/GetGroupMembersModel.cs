@@ -5,5 +5,5 @@ using Shared.Models;
 namespace Apps.Messaging.Groups.Queries.Models;
 public class GetGroupMembersModel : IRequest<Result<List<MemberInfo>>>
 {
-    public Guid GroupId { get; set; }
+    public string DisplayId { get; set; }
 }
