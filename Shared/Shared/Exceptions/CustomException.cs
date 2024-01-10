@@ -5,7 +5,7 @@ public class CustomException :Exception{
     public string Description { get; } = String.Empty;
 
     public CustomException(string where , string code , string description) :
-        base(message: $"Where : {where}{Environment.NewLine}Code : {code}{Environment.NewLine}Description : {description}{Environment.NewLine}") {
+        base(message: $"{Environment.NewLine}Where : {where}{Environment.NewLine}Code : {code}{Environment.NewLine}Description : {description}{Environment.NewLine}") {
         Where = where;
         Code = code;
         Description = description;

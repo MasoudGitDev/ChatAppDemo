@@ -3,7 +3,7 @@ namespace Shared.ValueObjects;
 public record EntityId {
     public Guid Value { get; }
     public string EntityName { get;}
-    public EntityId(Guid id , string entityName = "Entity") {
+    public EntityId(Guid id , string entityName = "UnknownEntity") {
         if(String.IsNullOrWhiteSpace(entityName)) {
             throw new EntityIdValueObjException("Constructor" , "NullOrWhiteSpace" , $"The <${entityName}> can not be NullOrWhiteSpace.");
         }
@@ -13,6 +13,6 @@ public record EntityId {
         Value = id;
         EntityName = entityName;
     }
-    public static implicit operator Guid(EntityId id) => id.Value;
+    public static implicit operator Guid(EntityId entityId) => entityId.Value;
     public static implicit operator EntityId(Guid id) => new(id);
 }
