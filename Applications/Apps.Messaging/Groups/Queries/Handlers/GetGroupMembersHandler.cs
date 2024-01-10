@@ -1,8 +1,10 @@
 ﻿using Apps.Messaging.Groups.Queries.Models;
 using Domains.Messaging.GroupEntity.Repo;
+using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.Shared.Models;
 using MediatR;
 using Shared.Enums;
+using Shared.Exceptions;
 using Shared.Models;
 
 namespace Apps.Messaging.Groups.Queries.Handlers
@@ -11,8 +13,8 @@ namespace Apps.Messaging.Groups.Queries.Handlers
         : IRequestHandler<GetGroupMembersModel, Result<List<MemberInfo>>>
     {
         public async Task<Result<List<MemberInfo>>> Handle(GetGroupMembersModel request, CancellationToken cancellationToken)
-        {
-            var members = await groupRepo.Queries.GetMembersAsync(request.GroupId);
+        {            
+            var members = await groupRepo.Queries.GetMembersByDisplayIdAsync(request.DisplayId);
             var membersInfo = members.Select(x =>new MemberInfo(x.Id, x.MemberAt, x.IsAdmin ,x.AdminInfo?.AccessLevel)).ToList();
             return new Result<List<MemberInfo>>(ResultStatus.Success, null, membersInfo);
         }

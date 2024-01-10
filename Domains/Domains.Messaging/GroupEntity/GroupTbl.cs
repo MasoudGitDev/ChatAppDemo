@@ -17,8 +17,8 @@ public record class GroupTbl :IEntity{
     public EntityId CreatorId { get; set; }
 
 
-    public string Title { get; set; } = string.Empty;
-    public DisplayId DisplayId { get; set; } = string.Empty;
+    public string Title { get; set; }
+    public DisplayId DisplayId { get; set; }
     public DateTime CreatedAt {  get; init; }      
     public LinkedList<Logo>? Logos { get; set; }
     public string? Description { get; set; }
