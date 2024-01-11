@@ -8,7 +8,7 @@ using Shared.ValueObjects;
 namespace Domains.Messaging.GroupMemberEntity.Repos;
 public interface IGroupAdminQueries {
     Task<List<GroupRequestTbl>> GetRequestsAsync(GroupRequestId requestId);
-    Task<AdminMemberInfo?> IsAdminAsync(GroupId groupId , AppUserId memberId);
+    Task<AdminMemberInfo?> GetAdminMemberAsync(GroupId groupId , AppUserId memberId);
     Task<List<AdminMemberResult>> GetAdminsAsync(GroupId groupId);
     Task<List<BlockMemberResult>> GetBlockedMembersAsync(GroupId groupId);
 }

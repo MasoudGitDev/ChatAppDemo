@@ -29,13 +29,13 @@ namespace Server.WebAPI.Controllers.Messaging {
         }
 
         [HttpPut("Block")]
-        public async Task<Result> BlockAsync([FromBody] BlockModel model) {
+        public async Task<Result> BlockAsync([FromBody] BlockMemberModel model) {
             return await sender.Send(model);
         }
 
 
         [HttpPut("Unblock")]
-        public async Task<Result> UnblockAsync([FromBody] UnblockModel model) {
+        public async Task<Result> UnblockAsync([FromBody] UnblockMemberModel model) {
             return await sender.Send(model);
         }
 

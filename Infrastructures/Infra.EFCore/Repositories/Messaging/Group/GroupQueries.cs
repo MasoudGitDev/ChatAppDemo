@@ -2,7 +2,6 @@
 using Domains.Messaging.GroupEntity.Repo;
 using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupMemberEntity;
-using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.Shared.ValueObjects;
 using Infra.EFCore.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -14,13 +13,6 @@ internal class GroupQueries(AppDbContext appDbContext) : IGroupQueries
     {
         return await appDbContext.GroupMembers.AsNoTracking().ToListAsync();
     }
-
-    public async Task<GroupRequestTbl?> GetRequestAsync(GroupId groupId, AppUserId requestId)
-    {
-        return await appDbContext.GroupRequests.AsNoTracking()
-           .Where(x => x.GroupId == groupId).Where(x => x.RequesterId == requestId).FirstOrDefaultAsync();
-    }
-
     public async Task<GroupTbl?> GetGroupAsync(GroupId groupId)
     {
         return await appDbContext.Groups.AsNoTracking().Where(x => x.GroupId == groupId).FirstOrDefaultAsync();

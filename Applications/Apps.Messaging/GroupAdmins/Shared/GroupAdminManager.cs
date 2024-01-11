@@ -38,7 +38,7 @@ internal abstract class GroupAdminManager(IGroupAdminRepo groupAdminRepo) {
     }
 
     protected async Task<Result<AdminMemberInfo>> CheckAdminAsync(Guid groupId , Guid adminId) {
-        var findAdmin =await groupAdminRepo.Queries.IsAdminAsync(groupId,adminId);
+        var findAdmin =await groupAdminRepo.Queries.GetAdminMemberAsync(groupId,adminId);
         if(findAdmin == null) {
             return new Result<AdminMemberInfo>(
                 ResultStatus.Failed , new("CheckIsAdminAsync" , "NotAccess" , "You are not an admin.") , null);
