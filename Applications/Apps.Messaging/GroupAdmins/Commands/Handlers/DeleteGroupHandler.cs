@@ -1,5 +1,5 @@
 ﻿using Apps.Messaging.GroupAdmins.Commands.Models;
-using Apps.Messaging.GroupAdmins.Shared;
+using Apps.Messaging.Managers;
 using Domains.Messaging.GroupMemberEntity.Repos;
 using MediatR;
 using Shared.Models;

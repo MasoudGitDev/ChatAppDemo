@@ -1,5 +1,6 @@
-﻿using Apps.Messaging.GroupAdmins.Commands.Models;
-using Apps.Messaging.GroupAdmins.Shared;
+﻿using Apps.Messaging.Exceptions;
+using Apps.Messaging.GroupAdmins.Commands.Models;
+using Apps.Messaging.Managers;
 using Domains.Messaging.GroupMemberEntity.Repos;
 using MediatR;
 using Shared.Abstractions.Messaging.Constants;
@@ -14,9 +15,17 @@ internal sealed class ToNormalMemberGroupHandler(IGroupAdminRepo groupAdminRepo)
          request.AdminId ,
          request.MemberId ,
          async (member , accessLevel) => {
-             if(accessLevel == AdminAccessLevels.High) {
-                 await groupAdminRepo.Commands.ToNormalMemberAsync(member);
+             if(request.AdminId.Equals(request.MemberId) && accessLevel == AdminAccessLevels.Owner) {
+                 throw new GroupAdminsException("ToNormalMember" , "NotPossible" , "If owner wants to change him/her admin lever must use another action!");
              }
+             if(request.AdminId.Equals(request.MemberId) && accessLevel != AdminAccessLevels.Owner) {
+                 await groupAdminRepo.Commands.ToNormalMemberAsync(member);
+                 return;
+             }
+             if(accessLevel != AdminAccessLevels.Owner) {
+                 throw new GroupAdminsException("ToNormalMember" , "NotAccess" , "Just owner can do it.");
+             }
+             await groupAdminRepo.Commands.ToNormalMemberAsync(member);
          });
     }
 }
