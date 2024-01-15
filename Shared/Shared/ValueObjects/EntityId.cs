@@ -1,17 +1,17 @@
 ﻿using Shared.ValueObjects.Exceptions;
-namespace Shared.ValueObjects;  
+namespace Shared.ValueObjects;
 public record EntityId {
     public Guid Value { get; }
-    public string EntityName { get;}
-    public EntityId(Guid id , string entityName = "UnknownEntity") {
-        if(String.IsNullOrWhiteSpace(entityName)) {
-            throw new EntityIdValueObjException("Constructor" , "NullOrWhiteSpace" , $"The <${entityName}> can not be NullOrWhiteSpace.");
-        }
-        if(id == Guid.Empty || String.IsNullOrWhiteSpace(id.ToString())) {
-            throw new EntityIdValueObjException($"{entityName}-Constructor" , "NullOrWhiteSpace" , "The <id> can not be NullOrWhiteSpace.");
+
+    public EntityId() {
+        Value = Guid.NewGuid();
+    }
+
+    public EntityId(Guid id) {
+        if(String.IsNullOrWhiteSpace(id.ToString()) || id == Guid.Empty) {
+            throw new EntityIdException($"Constructor" , "NullOrWhiteSpace" , "The <id> can not be NullOrWhiteSpace.");
         }
         Value = id;
-        EntityName = entityName;
     }
     public static implicit operator Guid(EntityId entityId) => entityId.Value;
     public static implicit operator EntityId(Guid id) => new(id);

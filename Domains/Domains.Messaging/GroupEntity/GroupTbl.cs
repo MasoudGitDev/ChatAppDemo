@@ -1,6 +1,7 @@
 ﻿using Domains.Auth.UserEntity;
 using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupMemberEntity;
+using Domains.Messaging.GroupMessageEntity;
 using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.Shared.ValueObjects;
 using Shared.Generics;
@@ -25,7 +26,7 @@ public record class GroupTbl :IEntity{
     public bool IsRequestable { get; set; } = false;
     public LinkedList<string> Categories { get; set; }
 
-
+    public LinkedList<GroupMessageTbl> Messages { get; set; }
 
     [Timestamp]
     public byte[] Timestamp { get; set; }

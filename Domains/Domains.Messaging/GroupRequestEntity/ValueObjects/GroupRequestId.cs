@@ -1,6 +1,16 @@
-﻿using Shared.ValueObjects;
+﻿using Shared.ValueObjects.Exceptions;
 namespace Domains.Messaging.GroupRequestEntity.ValueObjects;
-public record GroupRequestId : EntityId {
-    public GroupRequestId(Guid id) : base(id , "GroupRequests") {}
-    public static implicit operator GroupRequestId(Guid id) => new GroupRequestId(id);
+public record GroupRequestId {
+    public Guid Value { get; }
+    public GroupRequestId() {
+        Value = Guid.NewGuid();
+    }
+    public GroupRequestId(Guid id) {
+        if(String.IsNullOrWhiteSpace(id.ToString()) || id == Guid.Empty) {
+            throw new EntityIdException($"GroupRequestId-Constructor" , "NullOrWhiteSpace" , "The <id> can not be NullOrWhiteSpace.");
+        }
+        Value = id;
+    }
+    public static implicit operator Guid(GroupRequestId groupRequestId) => groupRequestId.Value;
+    public static implicit operator GroupRequestId(Guid id) => new(id);
 }

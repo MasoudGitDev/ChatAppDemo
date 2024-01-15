@@ -10,4 +10,7 @@ public class CustomException :Exception{
         Code = code;
         Description = description;
     }
+    public override string ToString() {
+        return $"Where : {Where} | Code : {Code} | Description : {Description}";
+    }
 }

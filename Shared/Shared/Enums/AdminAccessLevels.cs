@@ -3,5 +3,5 @@ public enum AdminAccessLevels {
     Low = 1,
     Medium = 2,
     High = 3,
-    Creator =4,
+    Owner =4,
 }

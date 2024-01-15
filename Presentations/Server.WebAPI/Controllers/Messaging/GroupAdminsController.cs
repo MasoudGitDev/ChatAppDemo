@@ -1,40 +1,40 @@
 ﻿using Apps.Messaging.GroupAdmins.Commands.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Server.WebAPI.Controllers.Shared;
 using Shared.Models;
-
 namespace Server.WebAPI.Controllers.Messaging {
     [Route("api/[controller]")]
     [ApiController]
-    public class GroupAdminsController(ISender sender) : ControllerBase {
+    public class GroupAdminsController(ISender sender) : BaseAPIController {
 
         [HttpPost("ConfirmRequest")]
         public async Task<Result> ConfirmRequestAsync([FromBody] ConfirmGroupRequestModel model) {
             return await sender.Send(model);
         }
 
-        [HttpPut("ToAdminModel")]
-        public async Task<Result> ToAdminModelAsync([FromBody]ToAdminModel model) {
+        [HttpPut("ToAdminMember")]
+        public async Task<Result> ToAdminModelAsync([FromBody] ToAdminModel model) {
             return await sender.Send(model);
         }
 
-        [HttpPut("ToNormalMemberModel")]
+        [HttpPut("ToNormalMember")]
         public async Task<Result> ToNormalMemberModelAsync([FromBody] ToNormalMemberModel model) {
             return await sender.Send(model);
-        }  
- 
+        }
+
         [HttpPut("ChangeRequestableState")]
         public async Task<Result> ChangeRequestableStateAsync([FromBody] GroupRequestableStateModel model) {
             return await sender.Send(model);
         }
 
-        [HttpPut("Block")]
+        [HttpPut("BlockMember")]
         public async Task<Result> BlockAsync([FromBody] BlockMemberModel model) {
-            return await sender.Send(model);
+            return await MethodResultAsync(async () => await sender.Send(model));
         }
 
 
-        [HttpPut("Unblock")]
+        [HttpPut("UnblockMember")]
         public async Task<Result> UnblockAsync([FromBody] UnblockMemberModel model) {
             return await sender.Send(model);
         }
@@ -53,5 +53,9 @@ namespace Server.WebAPI.Controllers.Messaging {
         public async Task<Result> DeleteGroupAsync([FromBody] RemoveGroupModel model) {
             return await sender.Send(model);
         }
+
+        [HttpGet("GetBlockedMembers")]
+        public async Task<Result> GetBlockedMembersAsync([FromQuery] BlockMemberModel model)
+            => await sender.Send(model);
     }
 }
