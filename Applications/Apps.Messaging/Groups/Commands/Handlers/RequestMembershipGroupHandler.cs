@@ -31,7 +31,7 @@ internal sealed class RequestMembershipGroupHandler(IGroupRepo groupRepo) : IReq
                 RequestNumbers = 1,  
                 Description = "Hi, i like to be a member at this group"
             };
-            await groupRepo.Commands.CreateRequestAsync(newRequest);
+            await groupRepo.GroupRequestRepo.Commands.CreateAsync(newRequest);
         }
         else {
             var newMember = new GroupMemberTbl{

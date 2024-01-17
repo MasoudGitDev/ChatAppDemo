@@ -3,14 +3,11 @@ using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.GroupRequestEntity.Repos;
 using Domains.Messaging.GroupRequestEntity.ValueObjects;
 using Domains.Messaging.Shared.ValueObjects;
-using MediatR;
-using Shared.Enums;
 using Shared.Exceptions;
-using Shared.Models;
 
 namespace Apps.Messaging.GroupRequests.Shared;  
 internal abstract class GroupRequestManager(IGroupRequestRepo groupRequestRepo) {
-
+    
     protected async Task<GroupRequestTbl> GetRequestWithCheckingAsync(GroupId groupId , AppUserId requesterId) {
         var groupRequest = await groupRequestRepo.Queries.GetRequestAsync(groupId , requesterId);
         if(groupRequest == null) {
