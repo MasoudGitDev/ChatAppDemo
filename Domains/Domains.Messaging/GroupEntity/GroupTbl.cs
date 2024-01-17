@@ -28,6 +28,11 @@ public record class GroupTbl :IEntity{
 
     public LinkedList<GroupMessageTbl> Messages { get; set; }
 
+    /// <summary>
+    /// Store as Json
+    /// </summary>
+    public MessageBlocking MessageBlocking { get; set; }
+
     [Timestamp]
     public byte[] Timestamp { get; set; }
 

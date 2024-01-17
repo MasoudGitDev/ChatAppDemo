@@ -1,5 +1,6 @@
 ﻿using Apps.Messaging.Groups.Commands.Models;
 using Domains.Messaging.GroupEntity;
+using Domains.Messaging.GroupEntity.Exceptions;
 using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupMemberEntity;
 using Domains.Messaging.GroupMemberEntity.Repos;
@@ -20,9 +21,9 @@ internal sealed class CreateGroupHandler(IGroupAdminRepo groupAdminRepo) : IRequ
             if(findGroup != null) {
                 return new Result(ResultStatus.Failed , new("GetGroupByDisplayIdAsync" , "Founded" , "Your group must have a unique displayId"));
             }
-            GroupId groupId = new GroupId(Guid.NewGuid());
+            GroupId groupId = new GroupId();
             DateTime startAt = DateTime.UtcNow;
-            EntityId appUserId = new AppUserId(request.CreatorId);
+            EntityId appUserId = request.CreatorId;
             var newGroup = new GroupTbl{
                 GroupId = groupId,
                 DisplayId = new DisplayId(request.DisplayId),
@@ -34,26 +35,28 @@ internal sealed class CreateGroupHandler(IGroupAdminRepo groupAdminRepo) : IRequ
                 Categories = new() ,//
                 Logos = new(),        //   
                 Members = new(),//
-                Requests= new List<GroupRequestTbl>()
+                Requests= new List<GroupRequestTbl>(),
+                MessageBlocking = new(),
             };
             await groupAdminRepo.General.Commands.CreateGroupAsync(newGroup);
 
             
             var creator = new GroupMemberTbl{
-                Id = new GroupMemberId(Guid.NewGuid()),
+                Id = new GroupMemberId(),
                 GroupId = groupId,
                 MemberId = appUserId,
                 IsAdmin =true,
                 MemberAt = DateTime.UtcNow,
                 IsBlocked = false,
                 BlockMemberInfo = null,
-                AdminInfo = new AdminMemberInfo(AdminAccessLevels.Creator,startAt ,null,appUserId.Value, "Group-Creator")
+                AdminInfo = new AdminMemberInfo(AdminAccessLevels.Owner,startAt ,null,appUserId.Value, "Group-Creator")
             };
             await groupAdminRepo.Commands.CreateMemberAsync(creator);
             return new Result(ResultStatus.Success , null);
         }
         catch (Exception ex) {
-            return new Result(ResultStatus.Failed , new("CreateGroupHandler" , ex.Message.ToString() , ""));
+            Console.WriteLine("CreateGroupHandler Exception:" + ex.InnerException?.Message);
+            throw new GroupException("CreateGroupHandler" , ex.GetType().Name , ex.Message.ToString() + " : " + ex.InnerException?.Message);            
         }
     }
 }
