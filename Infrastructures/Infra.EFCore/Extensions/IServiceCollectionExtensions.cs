@@ -2,11 +2,13 @@
 using Domains.Auth.UserEntity;
 using Domains.Messaging.GroupEntity.Repo;
 using Domains.Messaging.GroupMemberEntity.Repos;
+using Domains.Messaging.GroupMessageEntity.Repos;
 using Domains.Messaging.GroupRequestEntity.Repos;
 using Infra.EfCore.Auth.Extensions;
 using Infra.EFCore.Contexts;
 using Infra.EFCore.Repositories.Messaging.Group;
 using Infra.EFCore.Repositories.Messaging.Group.Members;
+using Infra.EFCore.Repositories.Messaging.Group.Messages;
 using Infra.EFCore.Repositories.Messaging.Group.Requests;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -51,13 +53,19 @@ public static class IServiceCollectionExtensions {
         // Messaging Services
         services.AddScoped<IGroupCommands, GroupCommands>();
         services.AddScoped<IGroupQueries , GroupQueries>();
-        services.AddScoped<IGroupRepo , GroupRepo>();       
+        services.AddScoped<IGroupRepo , GroupRepo>();     
+        
         services.AddScoped<IGroupAdminCommands , GroupAdminCommands>();
         services.AddScoped<IGroupAdminQueries , GroupAdminQueries>();
         services.AddScoped<IGroupAdminRepo , GroupAdminRepo>();
+
         services.AddScoped<IGroupRequestRepo,GroupRequestRepo>();
         services.AddScoped<IGroupRequestCommands , GroupRequestCommands>();
         services.AddScoped<IGroupRequestQueries , GroupRequestQueries>();
+
+        services.AddScoped<IGroupMessageCommands , GroupMessageCommands>();
+        services.AddScoped<IGroupMessageQueries , GroupMessageQueries>();
+        services.AddScoped<IGroupMessageRepo , GroupMessageRepo>();
 
     }
 }
