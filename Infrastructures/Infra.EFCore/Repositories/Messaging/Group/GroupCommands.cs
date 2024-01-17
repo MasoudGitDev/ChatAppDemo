@@ -1,56 +1,28 @@
 ﻿using Domains.Messaging.GroupEntity;
+using Domains.Messaging.GroupEntity.Exceptions;
 using Domains.Messaging.GroupEntity.Repo;
 using Domains.Messaging.GroupMemberEntity;
-using Domains.Messaging.GroupRequestEntity;
 using Infra.EFCore.Contexts;
+using Infra.EFCore.Exceptions;
 
 namespace Infra.EFCore.Repositories.Messaging.Group;
 internal class GroupCommands(AppDbContext appDbContext) : IGroupCommands
 {
-    public async Task CreateRequestAsync(GroupRequestTbl request) {
-        await TryToDoAsync(nameof(CreateRequestAsync) , async () => {
-            await appDbContext.GroupRequests.AddAsync(request);
-        });
+    [ConcurrencyTryCatch<GroupCommandException>]
+    public async Task LeaveGroupAsync(GroupMemberTbl member) {
+        appDbContext.GroupMembers.Remove(member);
+        await appDbContext.SaveChangesAsync();
     }
 
-    public async Task LeaveGroupAsync(GroupMemberTbl member)
-    {
-        await TryToDoAsync(nameof(LeaveGroupAsync), async () => {
-            appDbContext.GroupMembers.Remove(member);
-            await Task.CompletedTask;
-        });
-    }
-
-    public Task RemoveRequestAsync(GroupRequestTbl request) {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateRequestAsync(GroupRequestTbl request) {
-        throw new NotImplementedException();
-    }
-
+    [ConcurrencyTryCatch<GroupCommandException>]
     public async Task CreateGroupAsync(GroupTbl group) {
-        await TryToDoAsync(nameof(CreateGroupAsync), async () => {
-            await appDbContext.Groups.AddAsync(group);
-        });       
+        await appDbContext.Groups.AddAsync(group);
+        await appDbContext.SaveChangesAsync();
     }
 
-
-
+    [ConcurrencyTryCatch<GroupCommandException>]
     public async Task CerateMemberAsync(GroupMemberTbl member) {
-        await TryToDoAsync(nameof(RemoveRequestAsync) , async () => {
-            await appDbContext.GroupMembers.AddAsync(member);
-        });
-    }
-
-
-    private async Task TryToDoAsync(string methodName , Func<Task> actions) {
-        try {
-            await actions.Invoke();
-            await appDbContext.SaveChangesAsync();
-        }
-        catch(Exception ex) {
-            Console.WriteLine("Error At :" + methodName +  ex.Message.ToString());
-        }
+        await appDbContext.GroupMembers.AddAsync(member);
+        await appDbContext.SaveChangesAsync();
     }
 }
