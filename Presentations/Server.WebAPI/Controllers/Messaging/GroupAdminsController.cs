@@ -14,12 +14,12 @@ namespace Server.WebAPI.Controllers.Messaging {
         }
 
         [HttpPut("ToAdminMember")]
-        public async Task<Result> ToAdminModelAsync([FromBody] ToAdminMemberModel model) {
+        public async Task<Result> ToAdminMemberAsync([FromBody] ToAdminMemberModel model) {
             return await sender.Send(model);
         }
 
         [HttpPut("ToNormalMember")]
-        public async Task<Result> ToNormalMemberModelAsync([FromBody] ToNormalMemberModel model) {
+        public async Task<Result> ToNormalMemberAsync([FromBody] ToNormalMemberModel model) {
             return await sender.Send(model);
         }
 
@@ -29,13 +29,13 @@ namespace Server.WebAPI.Controllers.Messaging {
         }
 
         [HttpPut("BlockMember")]
-        public async Task<Result> BlockAsync([FromBody] BlockMemberModel model) {
+        public async Task<Result> BlockMemberAsync([FromBody] BlockMemberModel model) {
             return await MethodResultAsync(async () => await sender.Send(model));
         }
 
 
         [HttpPut("UnblockMember")]
-        public async Task<Result> UnblockAsync([FromBody] UnblockMemberModel model) {
+        public async Task<Result> UnblockMemberAsync([FromBody] UnblockMemberModel model) {
             return await sender.Send(model);
         }
 
