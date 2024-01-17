@@ -11,11 +11,25 @@
     <PackageReference Include="Mapster.EFCore" Version="5.1.1" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="Serilog" Version="3.1.2-dev-02097" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.0-dev-00806" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.1-dev-10370" />
+    <PackageReference Include="Serilog.Formatting.Elasticsearch" Version="9.0.3" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Domains\Domains.Messaging\Domains.Messaging.csproj" />
     <ProjectReference Include="..\..\Shared\Shared\Shared.csproj" />   
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="GroupMessages\Commands\Handlers\" />
+    <Folder Include="GroupMessages\Commands\Models\" />
+    <Folder Include="GroupMessages\Queries\Handlers\" />
+    <Folder Include="GroupMessages\Queries\Models\" />
   </ItemGroup>
 
 </Project>
