@@ -14,7 +14,7 @@ namespace Server.WebAPI.Controllers.Messaging {
         }
 
         [HttpPut("ToAdminMember")]
-        public async Task<Result> ToAdminModelAsync([FromBody] ToAdminModel model) {
+        public async Task<Result> ToAdminModelAsync([FromBody] ToAdminMemberModel model) {
             return await sender.Send(model);
         }
 
