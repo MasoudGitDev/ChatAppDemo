@@ -1,28 +1,29 @@
 ﻿using Domains.Messaging.GroupEntity;
 using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupMemberEntity;
+using Domains.Messaging.GroupMessageEntity;
 using Domains.Messaging.GroupRequestEntity;
-using Domains.Messaging.GroupRequestEntity.ValueObjects;
 using Domains.Messaging.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Shared.Extensions;
-using Shared.ValueObjects;
 
 namespace Infra.EFCore.Messaging.Configs;
 public class MessagingConfigs : 
     IEntityTypeConfiguration<GroupTbl> ,
     IEntityTypeConfiguration<GroupMemberTbl> , 
-    IEntityTypeConfiguration<GroupRequestTbl> {
+    IEntityTypeConfiguration<GroupRequestTbl> , 
+    IEntityTypeConfiguration<GroupMessageTbl>{
     public void Configure(EntityTypeBuilder<GroupTbl> builder) {
         builder.HasIndex(p => p.GroupId).IsUnique();
         builder.HasIndex(p => p.DisplayId).IsUnique();
 
         builder.Property(p => p.GroupId).IsRequired().HasConversion(x=> x.Value , r=>new(r));
         builder.Property(p => p.DisplayId).IsRequired().HasConversion(x => x.Value , r => new(r));        
-        builder.Property(x => x.CreatorId).IsRequired().HasConversion(x => x.Value , r => new(r,"AspNetUsers"));          
+        builder.Property(x => x.CreatorId).IsRequired().HasConversion(x => x.Value , r => new(r));          
         builder.Property(x => x.Categories).HasConversion(x => x.ToJson() , r => r.FromJsonTo<LinkedList<string>>());
         builder.Property(p => p.Logos).HasConversion(x => x.ToJson() , r => r.FromJsonTo<LinkedList<Logo>>());
+        builder.Property(x => x.MessageBlocking).HasConversion(x=>x.ToJson() , r => r.FromJsonTo<MessageBlocking>());
 
         builder.Property(p=>p.Timestamp).IsRequired().IsConcurrencyToken().ValueGeneratedOnAddOrUpdate();
         builder.Property(p => p.CreatedAt).IsRequired();
@@ -34,7 +35,7 @@ public class MessagingConfigs :
         builder.HasIndex(x=> x.Id).IsUnique();
         builder.Property(x => x.Id).IsRequired().HasConversion(x => x.Value , r => new(r));
         builder.Property(x=>x.GroupId).IsRequired().HasConversion(x => x.Value , r => new(r));
-        builder.Property(x=>x.MemberId).IsRequired().HasConversion(x => x.Value, r => new(r , "AspNetUsers"));
+        builder.Property(x=>x.MemberId).IsRequired().HasConversion(x => x.Value, r => new(r));
         builder.Property(x=>x.AdminInfo).HasConversion(x=> x.ToJson()  , r => r.FromJsonTo<AdminMemberInfo>());
         builder.Property(x => x.BlockMemberInfo).HasConversion(x => x.ToJson() , r => r.FromJsonTo<BlockedMemberInfo>());
 
@@ -46,10 +47,21 @@ public class MessagingConfigs :
         builder.HasIndex(x=>x.Id).IsUnique();
         builder.Property(x => x.Id).IsRequired().HasConversion(x => x.Value , r => new(r));
         builder.Property(x=>x.GroupId).IsRequired().HasConversion(x => x.Value , r => new(r));
-        builder.Property(x=>x.RequesterId).IsRequired().HasConversion(x => x.Value , r => new(r , "AspNetUsers"));
+        builder.Property(x=>x.RequesterId).IsRequired().HasConversion(x => x.Value , r => new(r));
 
         builder.HasOne(x=>x.Group).WithMany(x=>x.Requests).HasForeignKey(x=>x.GroupId).OnDelete(DeleteBehavior.ClientCascade);
         builder.HasOne(x=>x.Requester).WithMany().HasForeignKey(x=>x.RequesterId).OnDelete(DeleteBehavior.ClientCascade);
+    }
+
+    public void Configure(EntityTypeBuilder<GroupMessageTbl> builder) {
+        builder.HasIndex(x=>x.Id).IsUnique();
+        builder.Property(x => x.Id).IsRequired().HasConversion(x => x.Value , r => new());
+        builder.Property(x=> x.AppUserId).IsRequired().HasConversion(x=>x.Value , r => new(r));
+        builder.Property(x => x.GroupId).IsRequired().HasConversion(x => x.Value , r => new(r));        
+
+        builder.Property(x=>x.Timestamp).IsRequired().IsRowVersion().ValueGeneratedOnAddOrUpdate();
+        builder.HasOne(x=>x.AppUser).WithMany().HasForeignKey(x=>x.AppUserId).OnDelete(DeleteBehavior.ClientNoAction);
+        builder.HasOne(x => x.Group).WithMany(x=>x.Messages).HasForeignKey(x => x.GroupId).OnDelete(DeleteBehavior.ClientCascade);
     }
 }
 
