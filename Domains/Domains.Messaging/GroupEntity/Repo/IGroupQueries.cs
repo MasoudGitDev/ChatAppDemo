@@ -11,4 +11,6 @@ public interface IGroupQueries {
     Task<GroupMemberTbl?> GetMemberAsync(GroupId groupId , AppUserId memberId);
     Task<GroupTbl?> GetGroupAsync(GroupId groupId);
     Task<GroupTbl?> GetGroupByDisplayIdAsync(DisplayId displayId);
+    Task<List<GroupTbl>> GetUserGroupsAsync(AppUserId userId);
+    Task<List<GroupTbl>> GetGroupsBySearchTextAsync(string searchText);
 }

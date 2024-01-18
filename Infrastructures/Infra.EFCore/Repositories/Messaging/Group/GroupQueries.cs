@@ -35,4 +35,14 @@ internal class GroupQueries(AppDbContext appDbContext) : IGroupQueries
         return await appDbContext.GroupMembers.AsNoTracking().Include(x=>x.Group)
                     .Where(x=>x.Group.DisplayId ==displayId && !x.IsBlocked).ToListAsync();
     }
+
+    public async Task<List<GroupTbl>> GetUserGroupsAsync(AppUserId userId) {
+        return await appDbContext.GroupMembers.AsNoTracking().Include(x=>x.Group)
+            .Where(x=>x.MemberId == userId).Select(x=>x.Group).ToListAsync();
+    }
+
+    public async Task<List<GroupTbl>> GetGroupsBySearchTextAsync(string searchText) {
+        return await appDbContext.Groups.AsNoTracking()
+            .Where(x => x.DisplayId.Value.Contains(searchText) || x.Title.Contains(searchText)).ToListAsync();
+    }
 }

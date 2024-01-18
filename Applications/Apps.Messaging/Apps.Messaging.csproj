@@ -26,8 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GroupMessages\Commands\Handlers\" />
-    <Folder Include="GroupMessages\Commands\Models\" />
     <Folder Include="GroupMessages\Queries\Handlers\" />
     <Folder Include="GroupMessages\Queries\Models\" />
   </ItemGroup>

@@ -10,5 +10,5 @@ public record UpdateGroupRequestModel : IRequest<Result> {
     [Required]
     public Guid RequesterId { get; set; }
     [Required]
-    public string Description { get; set; } = string.Empty;
+    public string Description { get; set; }
 }
