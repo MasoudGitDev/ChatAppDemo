@@ -1,21 +1,12 @@
-﻿using MediatR;
-using Shared.Models;
-using Shared.Enums;
+﻿using Shared.Models;
 using Apps.Messaging.GroupRequests.Commands.Models;
 using Domains.Messaging.GroupRequestEntity.Repos;
-using Apps.Messaging.GroupRequests.Shared;
+using Apps.Messaging.Managers;
 
 namespace Apps.Messaging.GroupRequests.Commands.Handlers;
 internal sealed class CreateGroupRequestHandler(IGroupRequestRepo groupRequestRepo)
-    :GroupRequestManager(groupRequestRepo) , IRequestHandler<CreateGroupRequestModel , Result> {
-    public async Task<Result> Handle(CreateGroupRequestModel request , CancellationToken cancellationToken) {
-        var groupRequest = await groupRequestRepo.Queries.GetRequestAsync(request.GroupId , request.RequesterId);
-        if(groupRequest != null) {
-            await UpdateAsync(request.Description , groupRequest); 
-        }
-        else {
-            await CreateAsync(request.GroupId , request.RequesterId , request.Description);
-        }
-        return new Result(ResultStatus.Success , null);
+    : GroupRequestHandler<CreateGroupRequestModel , Result>(groupRequestRepo) {
+    public override async Task<Result> Handle(CreateGroupRequestModel request , CancellationToken cancellationToken) {
+        return await CreateOrUpdateAsync(request.GroupId , request.RequesterId , request.Description);
     }
 }

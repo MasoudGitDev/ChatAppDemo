@@ -2,13 +2,12 @@
 using Apps.Messaging.GroupAdmins.Commands.Models;
 using Apps.Messaging.Managers;
 using Domains.Messaging.GroupMemberEntity.Repos;
-using MediatR;
 using Shared.Abstractions.Messaging.Constants;
 using Shared.Models;
 namespace Apps.Messaging.GroupAdmins.Commands.Handlers;
 internal sealed class BlockMemberGroupHandler(IGroupAdminRepo groupAdminRepo)
-    : GroupAdminManager(groupAdminRepo) , IRequestHandler<BlockMemberModel , Result> {
-    public async Task<Result> Handle(BlockMemberModel request , CancellationToken cancellationToken) {        
+    : GroupAdminHandler<BlockMemberModel , Result>(groupAdminRepo) {
+    public override async Task<Result> Handle(BlockMemberModel request , CancellationToken cancellationToken) {        
         return await TryToDoActionByAdminAsync(
             request.GroupId ,
             request.AdminId ,

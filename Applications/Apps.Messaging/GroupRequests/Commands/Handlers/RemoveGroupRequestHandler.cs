@@ -1,16 +1,12 @@
-﻿using MediatR;
-using Shared.Models;
-using Shared.Enums;
+﻿using Shared.Models;
 using Apps.Messaging.GroupRequests.Commands.Models;
 using Domains.Messaging.GroupRequestEntity.Repos;
-using Apps.Messaging.GroupRequests.Shared;
+using Apps.Messaging.Managers;
 
 namespace Apps.Messaging.GroupRequests.Commands.Handlers;
-internal sealed class RemoveGroupRequestHandler(IGroupRequestRepo groupRequestRepo) 
-    :GroupRequestManager(groupRequestRepo) ,  IRequestHandler<RemoveGroupRequestModel , Result> {
-    public async Task<Result> Handle(RemoveGroupRequestModel request , CancellationToken cancellationToken) {
-        var groupRequest = await GetRequestWithCheckingAsync(request.GroupId,request.RequesterId);
-        await groupRequestRepo.Commands.DeleteAsync(groupRequest);
-        return new Result(ResultStatus.Success , null);
+internal sealed class RemoveGroupRequestHandler(IGroupRequestRepo groupRequestRepo)
+    : GroupRequestHandler<RemoveGroupRequestModel , Result>(groupRequestRepo) {
+    public override async Task<Result> Handle(RemoveGroupRequestModel request , CancellationToken cancellationToken) {
+        return await TryToAsync(request.GroupId , request.RequesterId , RemoveAsync);
     }
 }
