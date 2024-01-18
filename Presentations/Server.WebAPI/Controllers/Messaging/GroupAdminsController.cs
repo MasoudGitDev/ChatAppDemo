@@ -6,7 +6,8 @@ using Shared.Models;
 namespace Server.WebAPI.Controllers.Messaging {
     [Route("api/[controller]")]
     [ApiController]
-    public class GroupAdminsController(ISender sender) : BaseAPIController {
+    [ErrorResult]
+    public class GroupAdminsController(ISender sender) : ControllerBase {
 
         [HttpPost("ConfirmRequest")]
         public async Task<Result> ConfirmRequestAsync([FromBody] ConfirmGroupRequestModel model) {
@@ -28,9 +29,9 @@ namespace Server.WebAPI.Controllers.Messaging {
             return await sender.Send(model);
         }
 
-        [HttpPut("BlockMember")]
+        [HttpPut("BlockMember")]        
         public async Task<Result> BlockMemberAsync([FromBody] BlockMemberModel model) {
-            return await MethodResultAsync(async () => await sender.Send(model));
+            return await sender.Send(model);
         }
 
 
