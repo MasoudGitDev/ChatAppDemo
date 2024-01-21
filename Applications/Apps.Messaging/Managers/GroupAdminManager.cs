@@ -80,7 +80,5 @@ internal abstract class GroupAdminHandler<T,R>(IGroupAdminRepo groupAdminRepo)
         return groupRequest;
     }
 
-    public virtual Task<R> Handle(T request , CancellationToken cancellationToken) {
-        throw new NotImplementedException();
-    }
+    public abstract Task<R> Handle(T request , CancellationToken cancellationToken);
 }

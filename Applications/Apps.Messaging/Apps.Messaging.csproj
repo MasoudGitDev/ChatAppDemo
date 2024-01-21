@@ -25,9 +25,4 @@
     <ProjectReference Include="..\..\Shared\Shared\Shared.csproj" />   
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="GroupMessages\Queries\Handlers\" />
-    <Folder Include="GroupMessages\Queries\Models\" />
-  </ItemGroup>
-
 </Project>

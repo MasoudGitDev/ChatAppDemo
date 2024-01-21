@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Infra.EFCore.Repositories.Messaging.Group.Messages;
 
 internal class GroupMessageQueries(AppDbContext appDbContext) : IGroupMessageQueries {
-    public async Task<List<GroupMessageTbl>> GetGroupMessagesAsync(GroupId groupId) {
-        return await appDbContext.GroupMessages.AsNoTracking().Where(x=>x.GroupId == groupId).ToListAsync();
+    public async Task<List<GroupMessageTbl>> GetGroupMessagesAsync(GroupId groupId, int messageCount = 50) {
+        return await appDbContext.GroupMessages.AsNoTracking().Where(x=>x.GroupId == groupId).Take(messageCount).ToListAsync();
     }
 
     public async Task<List<GroupMessageTbl>> GetMemberMessagesByGroupIdAsync(GroupId groupId , AppUserId memberId) {
@@ -19,5 +19,6 @@ internal class GroupMessageQueries(AppDbContext appDbContext) : IGroupMessageQue
 
     public async Task<GroupMessageTbl?> GetMessageByIdAsync(GroupMessageId messageId) {
         return await appDbContext.GroupMessages.AsNoTracking().Where(x => x.Id == messageId).FirstOrDefaultAsync();
-    }   
+    }  
+
 }

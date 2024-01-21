@@ -12,9 +12,7 @@ namespace Apps.Messaging.Managers;
 internal abstract class GroupRequestHandler<T,R> (IGroupRequestRepo groupRequestRepo)
     : IRequestHandler<T , R> where T : IRequest<R> where R : IResult {
 
-    public virtual Task<R> Handle(T request , CancellationToken cancellationToken) {
-        throw new NotImplementedException("Overwrite this method.");
-    }
+    public abstract Task<R> Handle(T request , CancellationToken cancellationToken);
 
     // Checking
     protected async Task<GroupRequestTbl> GetRequestWithCheckingAsync(GroupId groupId, AppUserId requesterId)

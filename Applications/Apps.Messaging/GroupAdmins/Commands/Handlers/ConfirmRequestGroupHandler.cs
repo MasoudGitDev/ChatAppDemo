@@ -9,7 +9,7 @@ using Shared.Models;
 namespace Apps.Messaging.GroupAdmins.Commands.Handlers;
 internal sealed class ConfirmRequestGroupHandler(IGroupAdminRepo groupAdminRepo)
     : GroupAdminHandler<ConfirmGroupRequestModel , Result>(groupAdminRepo) {
-    public async Task<Result> Handle(ConfirmGroupRequestModel request , CancellationToken cancellationToken) {
+    public override async Task<Result> Handle(ConfirmGroupRequestModel request , CancellationToken cancellationToken) {
         await GetAdminWithCheckingAsync(request.GroupId,request.AdminId);
         var groupRequest = await GetRequestWithCheckingAsync(request.GroupId,request.RequesterId);
         var newMember = new GroupMemberTbl(){

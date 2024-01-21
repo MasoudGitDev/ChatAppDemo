@@ -3,7 +3,10 @@
 namespace Shared.Models;
 public interface IResult {
     ResultStatus Status { get; }
-    ErrorModel? Error { get; }
+    ResultMessage? ResultMessage { get; }
 }
-public record Result(ResultStatus Status , ErrorModel? Error) : IResult;
-public record Result<T>(ResultStatus Status , ErrorModel? Error , T? Content) : IResult;
+public record ResultMessage(string Where , string Code , string Message);
+
+public record Result(ResultStatus Status , ResultMessage? ResultMessage) : IResult;
+public record Result<T>(ResultStatus Status , ResultMessage? ResultMessage , T? Content) : IResult;
+
