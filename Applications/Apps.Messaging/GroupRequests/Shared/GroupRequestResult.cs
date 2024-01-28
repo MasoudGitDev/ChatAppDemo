@@ -3,4 +3,4 @@
 /// If The Result Is For Requester, The Id Is GroupId!
 /// If The Result Is For Group, The Id Is RequesterId!
 /// </summary>
-public record GroupRequestsResult(string? Description , uint RequestNumbers , DateTime RequestedAt , bool IsBlocked , Guid Id);
+public record GroupRequestResult(string? Description , uint RequestNumbers , DateTime RequestedAt , bool IsBlocked , Guid Id);

@@ -33,7 +33,7 @@ internal sealed class CreateGroupHandler(IGroupAdminRepo groupAdminRepo) : IRequ
                 Description = request.Description,
                 IsRequestable = request.IsRequestable,
                 Categories = new() ,//
-                Logos = new(),        //   
+                LogoURLs = new(),        //   
                 Members = new(),//
                 Requests= new List<GroupRequestTbl>(),
                 MessageBlocking = new(),
@@ -52,7 +52,7 @@ internal sealed class CreateGroupHandler(IGroupAdminRepo groupAdminRepo) : IRequ
                 AdminInfo = new AdminMemberInfo(AdminAccessLevels.Owner,startAt ,null,appUserId.Value, "Group-Creator")
             };
             await groupAdminRepo.Commands.CreateMemberAsync(creator);
-            return new Result(ResultStatus.Success , null);
+            return new Result(ResultStatus.Success , new("CreateGroupHandler" , "Created" , "The Group created successfully."));
         }
         catch (Exception ex) {
             Console.WriteLine("CreateGroupHandler Exception:" + ex.InnerException?.Message);
