@@ -1,0 +1,41 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager _navManager
+<div class="dashboard_container">
+    <div class="dashboard_header">
+        <DashboardMenu />
+    </div>
+    <div class="dashboard_body">
+        <div class="dashboard_body_content">
+            @Body
+        </div>
+        <div class="dashboard_body_side_bar">
+            <div class="list_items">
+                <div class="list_item" @onclick="GoToProfile">پروفایل</div>
+                <div class="list_item" @onclick="GoToContacts">دوستان</div>
+                <div class="list_item" @onclick="GoToMyGroups">گروه های من</div>
+                <div class="list_item" @onclick="GoToSearchGroups">جستجو</div>
+                <div class="list_item" @onclick="GoToSettings">تنظیمات</div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="dashboard_footer">
+        <div class="dashboard_footer_actions">
+            <div class="btn btn-outline-primary">تنظیمات</div>           
+            <div class="btn btn-outline-primary">ویترین</div>
+            <div class="btn btn-outline-primary">شخصی</div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private void GoToProfile()
+        => _navManager.NavigateTo("/Profile" , true);
+    private void GoToMyGroups() => _navManager.NavigateTo("/MyGroups" , true);
+    private void GoToContacts() => _navManager.NavigateTo("/ContactsPage" , true);
+    private void GoToSearchGroups()
+        => _navManager.NavigateTo("/" , true);
+    private void GoToSettings()
+        => _navManager.NavigateTo("/" , true);
+}

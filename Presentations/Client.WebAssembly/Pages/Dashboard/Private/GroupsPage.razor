@@ -1,0 +1,51 @@
+﻿@page "/Groups"
+@using Client.WebAssembly.Extensions
+@using Shared.DTOs.Group
+@using Shared.Extensions
+@inject IGroupService _groupService
+@inject NavigationManager _navManager
+@layout DashboardLayout
+
+<div class="group_items mt-1 mb-1">
+    @foreach(var groupItem in MyGroups) {
+        <form method="get">
+            <button class="group_item" @onclick="GoChatGroupPage">
+                <div class="group_logo_col">
+                    <div class="group_logo">Logo</div>
+                </div>
+                <div class="group_info_col">
+                    <div class="group_info_display_id">@groupItem.DisplayId</div>
+                    <div class="group_info_title">@groupItem.Title</div>
+                </div>
+            </button>
+        </form>
+    }
+</div>
+
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+    private async Task<string> GetUserIdAsync() {
+        var user = (await AuthenticationState).User;
+        if(user is null) {
+            Console.WriteLine("User is Null");
+        }
+        if(user != null && user.Identity != null && user.Identity.IsAuthenticated) {
+            Console.WriteLine(user.Claims);
+            return user.Claims.FirstOrDefault(x=>x.Type == "UserIdentifier")?.Value ?? String.Empty;
+        }
+        return String.Empty;
+    }
+
+    protected LinkedList<GroupResultDto> MyGroups = new();
+    protected override async Task OnInitializedAsync() {
+        // var userId = (await GetUserIdAsync()).MustNotNullOrWhiteSpace("GetUserIdAsync_GroupsPages");
+        var result = await _groupService.GetUserGroupsAsync(Guid.Parse("ba6cc063-dbeb-4729-8a8e-668ed6f16675"));
+        Console.WriteLine("result : " + result.ToJson());
+        if(result.Status== ResultStatus.Success) {
+            MyGroups = result.Content ?? new();
+        }     
+    }
+    private void GoChatGroupPage() => _navManager.NavigateTo("/Group/" + "groupId" , true);
+}

@@ -1,0 +1,48 @@
+﻿@page "/Group/{groupId}"
+@using Client.WebAssembly.Models
+@using Domains.Messaging.Shared.ValueObjects
+<div class="card">
+    <div class="card-header">
+        Chat Group
+    </div>
+    <div class="card-body" style="height:550px;overflow-y:auto">
+        @foreach(var item in Messages) {
+            <div style="width:80%;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;">
+                <MessageView MessageModel="item" UseRTL="@(item.DisplayName=="Masoud5" ? true : false)" />
+            </div>
+           
+        }
+    </div>
+    <div class="card-footer" style="background-color:#f6f9f9">
+        <EditForm class="chat_actions" Enhance Model="_messageModel" OnValidSubmit="SendNewMessage">
+            <input class="chat_write" @bind="_messageModel.Message" />
+            <button class="chat_btn btn btn-outline-success">Send</button>
+        </EditForm>
+    </div>
+</div>
+
+
+
+
+@code {
+    private MessageModel _messageModel = new();
+    private LinkedList<MessageModel> Messages { get; set; } = new();
+    protected override async Task OnInitializedAsync() {
+        var id1 = new AppUserId();
+        var id2 = new AppUserId();
+        Messages = new LinkedList<MessageModel>();
+        Messages.AddLast(new MessageModel { SenderId = id1,
+            Message = "Hi 1\n dadad\n ddfasff afssssssssssssssssss fasssssssssssssssssssssssssss afssssssss assssssssssssss asssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss asas faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaas ", DisplayName = "Masoud1" });
+        Messages.AddLast(new MessageModel { SenderId =id2, Message = "Hi 2" , DisplayName = "Masoud2" });
+        Messages.AddLast(new MessageModel { SenderId = id1, Message = "How are you", DisplayName = "Masoud1" });
+        Messages.AddLast(new MessageModel { SenderId = id2 , Message = "Im fine" , DisplayName = "Masoud2" });
+        Messages.AddLast(new MessageModel { SenderId = id2 , Message = "Hi 2" , DisplayName = "Masoud2" });
+        Messages.AddLast(new MessageModel { SenderId = id1 , Message = "How are you" , DisplayName = "Masoud1" });
+        Messages.AddLast(new MessageModel { SenderId = id2 , Message = "Im fine" , DisplayName = "Masoud2" });
+    }
+
+    private async Task SendNewMessage() {
+        Messages.AddLast(new MessageModel{SenderId = Guid.NewGuid() , DisplayName = "Masoud5" , Message = _messageModel.Message });
+       await Task.CompletedTask;
+    }
+}

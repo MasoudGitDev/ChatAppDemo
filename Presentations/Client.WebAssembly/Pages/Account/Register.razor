@@ -1,4 +1,5 @@
 ﻿@page "/Register"
+@using Client.WebAssembly.Extensions
 @inject IAccountService _accountService
 @inject AuthenticationStateProvider _authStateProvider
 @inject NavigationManager navManager
@@ -45,8 +46,8 @@
     private async Task OnFormSubmitAsync() {
         var accountResult = await _accountService.RegisterAsync(_registerModel);
         Console.WriteLine(accountResult);
-        await ((AuthStateProvider) _authStateProvider).SetAsync(accountResult);
-        navManager.NavigateTo("/");
+        await ((AuthStateProvider) _authStateProvider).IfNotNull().SetAuthenticationStateAsync(accountResult);
+        navManager.NavigateTo("/" , true);
     }
 
 }

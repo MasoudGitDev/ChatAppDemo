@@ -1,4 +1,5 @@
 ﻿@page "/Login"
+@using Client.WebAssembly.Extensions
 @using Microsoft.AspNetCore.Components.Authorization
 @inject IAccountService _accountService;
 @inject AuthenticationStateProvider authStateProvider
@@ -29,12 +30,8 @@
             var result = await _accountService.LoginAsync(LoginModel);
             Console.WriteLine(result);
             var authState = (AuthStateProvider)authStateProvider;
-            if(authState is null) {
-                throw new Exception("AuthStateProvider is null");
-            }
-            await authState.SetAsync(result);
+            authState?.IfNotNull().SetAuthenticationStateAsync(result);
             navManager.NavigateTo("/");
-
         }
         catch(Exception e) {
             Console.WriteLine("Err-happened : " + e.Message);

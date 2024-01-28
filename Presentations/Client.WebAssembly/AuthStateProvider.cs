@@ -15,11 +15,11 @@ public class AuthStateProvider(ILocalStorageService localStorageService ,IAccoun
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync() {
         try {
-            var jweTokenFromLocalStorage = await localStorageService.GetItemAsStringAsync(_tokenKeyName);
-            if(String.IsNullOrWhiteSpace(jweTokenFromLocalStorage)) {
+            var authTokenFromLocalStorage = await localStorageService.GetItemAsStringAsync(_tokenKeyName);
+            if(String.IsNullOrWhiteSpace(authTokenFromLocalStorage)) {
                 return new AuthenticationState(_anonymous);
             }
-            return new AuthenticationState(await GetClaimsPrincipalAsync(jweTokenFromLocalStorage));
+            return new AuthenticationState(await GetClaimsPrincipalAsync(authTokenFromLocalStorage));
         }
         catch(Exception ex) {
             // Log the exception here
@@ -27,11 +27,16 @@ public class AuthStateProvider(ILocalStorageService localStorageService ,IAccoun
             return new AuthenticationState(_anonymous);
         }
     }
-    public async Task SetAsync(AccountResult? accountResult) {
+    public async Task SetAuthenticationStateAsync(AccountResult? accountResult) {
         try {
-            ClaimsPrincipal claimsPrincipal = accountResult is null ? _anonymous : new(new ClaimsIdentity(accountResult.Claims.ToClaims()));
-            if(accountResult is null) { await localStorageService.RemoveItemAsync(_tokenKeyName); }
-            else { await localStorageService.SetItemAsStringAsync(_tokenKeyName , accountResult.JweToken); }
+            ClaimsPrincipal claimsPrincipal = accountResult is null ?
+                _anonymous : new(new ClaimsIdentity(accountResult.KeyValueClaims.ToClaims()));
+            if(accountResult is null) {
+                await localStorageService.RemoveItemAsync(_tokenKeyName);
+            }
+            else { 
+                await localStorageService.SetItemAsStringAsync(_tokenKeyName , accountResult.AuthToken);
+            }
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));         
         }
         catch (Exception ex) {
@@ -39,8 +44,8 @@ public class AuthStateProvider(ILocalStorageService localStorageService ,IAccoun
         }
     }
 
-    private async Task<ClaimsPrincipal> GetClaimsPrincipalAsync(string jweToken) {
-        var accountResult = await accountService.LoginByTokenAsync(new LoginByTokenDTO(jweToken));
-        return new(accountResult.Claims is null ? new ClaimsIdentity() : new ClaimsIdentity(accountResult.Claims.ToClaims()));
+    private async Task<ClaimsPrincipal> GetClaimsPrincipalAsync(string authToken) {
+        var accountResult = await accountService.LoginByTokenAsync(new LoginByTokenDTO(authToken));
+        return new(accountResult.KeyValueClaims is null ? new ClaimsIdentity() : new ClaimsIdentity(accountResult.KeyValueClaims.ToClaims()));
     }
 }

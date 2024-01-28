@@ -1,0 +1,17 @@
+﻿@using Client.WebAssembly.Models
+<div class="message_container" dir="@(UseRTL ? "rtl" : "ltr")">
+    <div class="message_col_logo">
+        <div class="message_logo">@MessageModel.Logo</div>
+    </div>
+    <div class="message_col_data">
+        <div class="message_display_name">@MessageModel.DisplayName</div>
+        <div class="message_body">@MessageModel.Message</div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public MessageModel MessageModel { get; set; } = new();
+
+    [Parameter]
+    public bool UseRTL { get; set; } = false;
+}

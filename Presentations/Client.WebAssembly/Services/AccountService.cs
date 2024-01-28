@@ -4,19 +4,18 @@ using Shared.Extensions;
 using Shared.Models;
 using System.Net.Http.Headers;
 
-namespace Client.WebAssembly.Services;  
-public interface IAccountService
-{
+namespace Client.WebAssembly.Services;
+public interface IAccountService {
     Task<AccountResult> RegisterAsync(RegisterDTO model);
     Task<AccountResult> LoginAsync(LoginDTO model);
     Task<AccountResult> LoginByTokenAsync(LoginByTokenDTO model);
 }
 public class AccountService(HttpClient httpClient) : IAccountService {
     private const string _baseURL = "/api/Account";
-    public async Task<AccountResult> RegisterAsync(RegisterDTO model) 
-        =>await PostAsync(model , $"{_baseURL}/Register" , nameof(RegisterAsync)); 
+    public async Task<AccountResult> RegisterAsync(RegisterDTO model)
+        => await PostAsync(model , $"{_baseURL}/Register" , nameof(RegisterAsync));
 
-    public async Task<AccountResult> LoginAsync(LoginDTO model) 
+    public async Task<AccountResult> LoginAsync(LoginDTO model)
         => await PostAsync(model , $"{_baseURL}/Login" , nameof(LoginAsync));
 
     public async Task<AccountResult> LoginByTokenAsync(LoginByTokenDTO model)
@@ -33,9 +32,9 @@ public class AccountService(HttpClient httpClient) : IAccountService {
         var accountResult = (await response.Content.ReadAsStringAsync()).FromJsonTo<AccountResult>();
         if(accountResult is null) {
             throw new AccountServiceException(methodName , "NullOrWhitespace" , "You Not Authenticated.");
-        }   
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer" , accountResult.JweToken);
+        }
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer" , accountResult.AuthToken);
         return accountResult;
-    } 
+    }
 
 }

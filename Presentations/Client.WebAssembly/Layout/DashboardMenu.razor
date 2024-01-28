@@ -1,0 +1,22 @@
+﻿@inject NavigationManager _navManager ;
+<AuthorizeView>
+    <Authorized>
+        <div class="dashboard_menu">
+            <button class="btn btn-outline-primary" @onclick="SignOut">خروج</button>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="dashboard_menu">
+            <button class="btn btn-outline-primary" @onclick="GoToLoginPage">ورود</button>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+    private  void GoToLoginPage(){
+        _navManager.NavigateTo("/Login", true);
+    }
+    private void SignOut() {
+        _navManager.NavigateTo("/SignOut" , true);
+    }
+}

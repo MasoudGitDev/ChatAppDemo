@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
-//BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+builder.Services.AddBlazoredLocalStorage();
+//Default BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7071") });
 builder.Services.AddScoped<IAccountService , AccountService>();
 builder.Services.AddScoped<AuthenticationStateProvider , AuthStateProvider>();
+builder.Services.AddScoped<IGroupService , GroupService>();
 builder.Services.AddAuthorizationCore();
-builder.Services.AddBlazoredLocalStorage();
+
 
 await builder.Build().RunAsync();
