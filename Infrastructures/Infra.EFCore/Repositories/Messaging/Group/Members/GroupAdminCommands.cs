@@ -64,10 +64,10 @@ internal class GroupAdminCommands(AppDbContext appDbContext) : IGroupAdminComman
     [ConcurrencyTryCatch<GroupMemberException>]
     public async Task AddLogoAsync(GroupTbl group, Logo logo)
     {
-        if(group.Logos == null) {
-            group.Logos = new();
+        if(group.LogoURLs == null) {
+            group.LogoURLs = new();
         }
-        group.Logos.AddLast(logo);
+        group.LogoURLs.AddLast(logo);
         appDbContext.Groups.Update(group);
         await appDbContext.SaveChangesAsync();
     }
@@ -75,7 +75,7 @@ internal class GroupAdminCommands(AppDbContext appDbContext) : IGroupAdminComman
     [ConcurrencyTryCatch<GroupMemberException>]
     public async Task DeleteLogosAsync(GroupTbl group)
     {
-        group.Logos = null;
+        group.LogoURLs = null;
         appDbContext.Groups.Update(group);
         await appDbContext.SaveChangesAsync();
     }

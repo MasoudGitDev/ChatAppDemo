@@ -1,7 +1,6 @@
 ﻿using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupMemberEntity;
 using Domains.Messaging.Shared.ValueObjects;
-using Shared.ValueObjects;
 
 namespace Domains.Messaging.GroupEntity.Repo;
 public interface IGroupQueries {

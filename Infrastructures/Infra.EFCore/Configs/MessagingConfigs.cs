@@ -22,7 +22,7 @@ public class MessagingConfigs :
         builder.Property(p => p.DisplayId).IsRequired().HasConversion(x => x.Value , r => new(r));        
         builder.Property(x => x.CreatorId).IsRequired().HasConversion(x => x.Value , r => new(r));          
         builder.Property(x => x.Categories).HasConversion(x => x.ToJson() , r => r.FromJsonTo<LinkedList<string>>());
-        builder.Property(p => p.Logos).HasConversion(x => x.ToJson() , r => r.FromJsonTo<LinkedList<Logo>>());
+        builder.Property(p => p.LogoURLs).HasConversion(x => x.ToJson() , r => r.FromJsonTo<LinkedList<Logo>>());
         builder.Property(x => x.MessageBlocking).HasConversion(x=>x.ToJson() , r => r.FromJsonTo<MessageBlocking>());
 
         builder.Property(p=>p.Timestamp).IsRequired().IsConcurrencyToken().ValueGeneratedOnAddOrUpdate();

@@ -23,7 +23,7 @@ internal class AccountRepo(SignInManager<AppUser> signInManager , IJweService jw
             await CheckUserNotExistAsync(model.Email , model.UserName);
             EntityId entityId =new EntityId(Guid.NewGuid());
             var accountResult =  await jweService.GenerateTokenAsync(entityId);
-            if(String.IsNullOrWhiteSpace(accountResult.JweToken)) {
+            if(String.IsNullOrWhiteSpace(accountResult.AuthToken)) {
                 throw new AccountException("RegisterAsync" , "NullOrWhitespace" , "the <jweToken> can not be null or whitespace");
             }
             AppUser newUser = new AppUser{Id = entityId,Email = model.Email, UserName = model.UserName};

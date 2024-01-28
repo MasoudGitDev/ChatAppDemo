@@ -21,7 +21,7 @@ public record class GroupTbl :IEntity{
     public string Title { get; set; }
     public DisplayId DisplayId { get; set; }
     public DateTime CreatedAt {  get; init; }      
-    public LinkedList<Logo>? Logos { get; set; }
+    public LinkedList<Logo>? LogoURLs { get; set; }
     public string? Description { get; set; }
     public bool IsRequestable { get; set; } = false;
     public LinkedList<string> Categories { get; set; }

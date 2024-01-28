@@ -5,8 +5,6 @@ using Domains.Messaging.GroupMemberEntity.Repos;
 using Domains.Messaging.GroupMemberEntity;
 using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.Shared.ValueObjects;
-using MediatR;
-using Shared.Models;
 
 namespace Apps.Messaging.Managers;
 internal abstract class BaseGroupManager<T,R>(IGroupAdminRepo groupAdminRepo){

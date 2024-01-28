@@ -1,17 +1,21 @@
 ﻿using Apps.Messaging.Groups.Queries.Models;
-using Apps.Messaging.Shared.ResultModels;
 using Domains.Messaging.GroupEntity.Repo;
+using Domains.Messaging.Shared.ValueObjects;
 using Mapster;
 using MediatR;
+using Shared.DTOs.Group;
 using Shared.Enums;
+using Shared.Extensions;
 using Shared.Models;
 
 namespace Apps.Messaging.Groups.Queries.Handlers;
 internal sealed class GetUserGroupsHandler(IGroupRepo groupRepo)
-    : IRequestHandler<GetUserGroupsModel , Result<List<GroupResultModel>>> {
-    public async Task<Result<List<GroupResultModel>>> Handle(GetUserGroupsModel request , CancellationToken cancellationToken) {
+    : IRequestHandler<GetUserGroupsModel , Result<LinkedList<GroupResultDto>>> {
+    public async Task<Result<LinkedList<GroupResultDto>>> Handle(GetUserGroupsModel request , CancellationToken cancellationToken) {
         var groups = (await groupRepo.Queries.GetUserGroupsAsync(request.AppUserId));
-        var groupDTOs = groups.Adapt<List<GroupResultModel>>();
-        return new Result<List<GroupResultModel>>(ResultStatus.Success , null , groupDTOs);
+        TypeAdapterConfig<DisplayId , string>.NewConfig().MapWith(x => x.Value);
+        TypeAdapterConfig<LinkedList<Logo> , string>.NewConfig().MapWith(x => x.ToJson() ?? string.Empty);
+        var groupDTOs =  groups.Adapt<LinkedList<GroupResultDto>>();
+        return new Result<LinkedList<GroupResultDto>>(ResultStatus.Success , null , groupDTOs);
     }
 }
