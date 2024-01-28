@@ -1,6 +1,6 @@
 ﻿using Apps.Messaging.Exceptions;
 using Apps.Messaging.GroupAdmins.Commands.Models;
-using Apps.Messaging.Managers;
+using Apps.Messaging.GroupAdmins.Manager;
 using Domains.Messaging.GroupMemberEntity.Repos;
 using Shared.Abstractions.Messaging.Constants;
 using Shared.Models;

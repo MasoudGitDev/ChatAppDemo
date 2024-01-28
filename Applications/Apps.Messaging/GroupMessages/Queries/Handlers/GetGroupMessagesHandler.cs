@@ -1,6 +1,6 @@
-﻿using Apps.Messaging.GroupMessages.Queries.Models;
+﻿using Apps.Messaging.GroupMessages.Manager;
+using Apps.Messaging.GroupMessages.Queries.Models;
 using Apps.Messaging.GroupMessages.Shared;
-using Apps.Messaging.Managers;
 using Domains.Messaging.GroupMemberEntity.Repos;
 using Mapster;
 using Shared.Enums;

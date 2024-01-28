@@ -1,13 +1,12 @@
 ﻿using Apps.Messaging.Exceptions;
-using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupEntity;
-using Domains.Messaging.GroupMemberEntity.Repos;
+using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupMemberEntity;
 using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.Shared.ValueObjects;
 
-namespace Apps.Messaging.Managers;
-internal abstract class BaseGroupManager<T,R>(IGroupAdminRepo groupAdminRepo){
+namespace Apps.Messaging.GroupAdmins.Manager;
+internal abstract partial class GroupAdminHandler<T, R> {
     protected async Task<AdminMemberInfo> GetAdminWithCheckingAsync(GroupId groupId , AppUserId adminId) {
         var findAdmin = await groupAdminRepo.Queries.GetAdminMemberAsync(groupId, adminId);
         if(findAdmin == null) {
@@ -30,12 +29,10 @@ internal abstract class BaseGroupManager<T,R>(IGroupAdminRepo groupAdminRepo){
         return group;
     }
     protected async Task<GroupRequestTbl> GetRequestWithCheckingAsync(GroupId groupId , AppUserId requesterId) {
-        var groupRequest = await groupAdminRepo.RequestRepo.Queries.GetRequestAsync(groupId,requesterId);
+        var groupRequest = await groupAdminRepo.RequestRepo.Queries.GetRequestAsync(groupId, requesterId);
         if(groupRequest == null) {
             throw new GroupAdminManagerException("GetRequestAsync" , "NotFound" , "NotFound any request with that Id.");
         }
         return groupRequest;
     }
-
-    public abstract Task<R> Handle(T request , CancellationToken cancellationToken);
 }

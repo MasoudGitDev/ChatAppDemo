@@ -1,9 +1,10 @@
 ﻿using Apps.Messaging.GroupAdmins.Commands.Models;
-using Apps.Messaging.Managers;
+using Apps.Messaging.GroupAdmins.Manager;
 using Domains.Messaging.GroupMemberEntity.Repos;
 using Shared.Abstractions.Messaging.Constants;
 using Shared.Models;
-namespace Apps.Messaging.GroupAdmins.Commands.Handlers {
+namespace Apps.Messaging.GroupAdmins.Commands.Handlers
+{
     internal sealed class RemoveMemberGroupHandler(IGroupAdminRepo groupAdminRepo)
         : GroupAdminHandler<RemoveMemberModel , Result>(groupAdminRepo) {
         public override async Task<Result> Handle(RemoveMemberModel request , CancellationToken cancellationToken) {
