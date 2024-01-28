@@ -1,2 +1,2 @@
 ﻿namespace Shared.Models;
-public record AccountResult(string JweToken , Dictionary<string,string> Claims);
+public record AccountResult(string AuthToken , Dictionary<string,string> KeyValueClaims);
