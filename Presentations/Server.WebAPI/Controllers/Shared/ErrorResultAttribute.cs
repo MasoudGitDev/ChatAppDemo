@@ -11,7 +11,7 @@ namespace Server.WebAPI.Controllers.Shared {
             string where = context.ExceptionDispatchInfo?.SourceException.GetType().Name ?? "Unknown";
             switch(context.Exception) {
                 case CustomException ex:
-                    context.Result = await CreateErrorResult(ex.Where , ex.Code , ex.Description);
+                    context.Result = await CreateErrorResult(ex.Where , ex.Code , ex.Message);
                     return;
                 case Exception ex:
                     context.Result = await CreateErrorResult(where , ex.GetType().Name , ex.Message);

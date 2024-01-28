@@ -5,6 +5,7 @@ using Domains.Messaging.Shared.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Server.WebAPI.Controllers.Shared;
+using Shared.DTOs.Group;
 using Shared.Models;
 
 namespace Server.WebAPI.Controllers.Messaging
@@ -19,7 +20,7 @@ namespace Server.WebAPI.Controllers.Messaging
             => await sender.Send(new GetGroupsBySearchTextModel { SearchText = searchText });
 
         [HttpGet("GetUserGroups")]
-        public async Task<Result<List<GroupResultModel>>> GetUserGroupsAsync(Guid userId)
+        public async Task<Result<LinkedList<GroupResultDto>>> GetUserGroupsAsync(Guid userId)
          => await sender.Send(new GetUserGroupsModel { AppUserId = userId });
 
         [HttpPost("CreateGroup")]
