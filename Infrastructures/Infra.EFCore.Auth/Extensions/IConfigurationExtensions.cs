@@ -8,7 +8,7 @@ public static class IConfigurationExtensions {
     public static JweSettingsModel GetJweSettings(this IConfiguration configuration) {
         var jwtSettings = configuration.GetSection(AppSettingNames.JweSettings).Get<JweSettingsModel>();
         if(jwtSettings is null) {
-            throw new JweException(nameof(GetJweSettings) , "NullObj" , $"The <{nameof(JweSettingsModel)}> can not be null." );
+            throw new JweException("NullObj" , $"The <{nameof(JweSettingsModel)}> can not be null." );
         }
         return jwtSettings;
     }

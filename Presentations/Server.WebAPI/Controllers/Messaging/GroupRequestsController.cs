@@ -2,6 +2,7 @@
 using Apps.Messaging.GroupRequests.Queries.Models;
 using Apps.Messaging.GroupRequests.Shared;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.WebAPI.Controllers.Shared;
 using Shared.Models;
@@ -10,6 +11,7 @@ namespace Server.WebAPI.Controllers.Messaging {
     [Route("api/[controller]")]
     [ApiController]
     [ErrorResult]
+    [Authorize]
     public class GroupRequestsController(ISender sender) : ControllerBase {
 
         [HttpGet("GetGroupRequests")]        

@@ -56,7 +56,7 @@ internal sealed class CreateGroupHandler(IGroupAdminRepo groupAdminRepo) : IRequ
         }
         catch (Exception ex) {
             Console.WriteLine("CreateGroupHandler Exception:" + ex.InnerException?.Message);
-            throw new GroupException("CreateGroupHandler" , ex.GetType().Name , ex.Message.ToString() + " : " + ex.InnerException?.Message);            
+            throw new GroupException( ex.GetType().Name , ex.Message.ToString() + " : " + ex.InnerException?.Message);            
         }
     }
 }

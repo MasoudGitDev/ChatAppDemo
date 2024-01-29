@@ -7,7 +7,9 @@ using Shared.Models;
 namespace Apps.Messaging.GroupRequests.Queries.Handlers;
 internal sealed class GetGroupRequestsHandler(IGroupRequestRepo groupRequestRepo)
     : GroupRequestHandler<GetGroupRequestsModel , Result<List<GroupRequestResult>>>(groupRequestRepo) {
-    public override async Task<Result<List<GroupRequestResult>>> Handle(GetGroupRequestsModel request , CancellationToken cancellationToken) {
+    public override async Task<Result<List<GroupRequestResult>>> Handle(
+        GetGroupRequestsModel request ,
+        CancellationToken cancellationToken) {
         return await GetGroupRequestsResultAsync(request.GroupId);
     }
 }

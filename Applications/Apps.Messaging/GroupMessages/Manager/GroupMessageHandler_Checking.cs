@@ -13,14 +13,14 @@ internal abstract partial class GroupMessageHandler<T, R> {
         if(group.MessageBlocking.IsBlocked) {
             var findAdmin = GetAdminWithCheckingAsync(groupId, memberId);
             if(findAdmin != null) {
-                throw new GroupMessageHandlerException(nameof(CreateAsync) , "BlockMessage" , "Just Admins can send any messages.");
+                throw new GroupMessageHandlerException("BlockMessage" , "Just Admins can send any messages.");
             }
         }
     }
     protected async Task<GroupMessageTbl> GetMessageWithCheckingAsync(GroupMessageId groupMessageId) {
         var findMessage = await groupAdminRepo.MessageRepo.Queries.GetMessageByIdAsync(groupMessageId);
         if(findMessage == null) {
-            throw new GroupMessageHandlerException("GetMessageByIdAsync" , "NotFound" , "There is no any messages with this groupMessageId");
+            throw new GroupMessageHandlerException("NotFound" , "There is no any messages with this groupMessageId");
         }
         return findMessage;
     }

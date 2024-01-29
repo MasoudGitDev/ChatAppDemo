@@ -5,7 +5,7 @@ public record DisplayId {
     public DisplayId(string displayId)
     {
         if(String.IsNullOrWhiteSpace(displayId)) {
-            throw new DisplayIdException("Constructor" , "NullOrWhiteSpace" , "The <displayId> can not be NullOrWhiteSpace.");
+            throw new DisplayIdException("NullOrWhiteSpace" , "The <displayId> can not be NullOrWhiteSpace.");
         }
         Value = displayId;
     }

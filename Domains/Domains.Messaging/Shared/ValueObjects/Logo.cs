@@ -10,7 +10,7 @@ public record Logo {
     public Logo(string image , string? title)
     {
         if(String.IsNullOrWhiteSpace(image)) {
-            throw new LogoException("Constructor" , "NullOrWhiteSpace" , "The <image> can not be NullOrWhiteSpace.");
+            throw new LogoException("NullOrWhiteSpace" , "The <image> can not be NullOrWhiteSpace.");
         }
         Image = image;
         Title = title;

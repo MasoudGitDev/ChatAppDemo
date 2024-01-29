@@ -16,10 +16,10 @@ public record AdminMemberInfo
                      Guid byWhomId ,
                      string? reason) {
         if(endAt != null && endAt <= startAt) {
-            throw new AdminInfoException("Constructor" , "DateTimeEquality" , "The <endAt> date time must be grater the the <startAt> date time.");
+            throw new AdminInfoException("DateTimeEquality" , "The <endAt> date time must be grater the the <startAt> date time.");
         }
         if(byWhomId == Guid.Empty) {
-            throw new AdminInfoException("Constructor" , "WrongGUID" , "The <byWhomId> must be a guid.");
+            throw new AdminInfoException("WrongGUID" , "The <byWhomId> must be a guid.");
         }
         AccessLevel = accessLevel;
         StartAt = startAt;

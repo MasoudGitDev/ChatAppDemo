@@ -32,7 +32,7 @@ internal class JweService(IConfiguration configuration) : IJweService {
         var secretKey = Encoding.UTF8.GetBytes(configuration.GetJweSettings().SecretKey.PadRight(64,'0')); 
         string payload = JWT.Decode(jweToken, secretKey , JweAlgorithm.DIR , JweEncryption.A256CBC_HS512);
         var claims = JsonSerializer.Deserialize<Dictionary<string,string>>(payload);
-        if(claims is null ) { throw new JweException("GetClaimsByTokenAsync" , "NullObj" , "The <claims> can not be null."); }
+        if(claims is null ) { throw new JweException("NullObj" , "The <claims> can not be null."); }
         return Task.FromResult(claims);
     }
     private Task ValidateClaims(Dictionary<string , string> claims , JweSettingsModel model) {

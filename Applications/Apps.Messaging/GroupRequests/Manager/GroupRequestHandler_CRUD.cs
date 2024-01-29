@@ -5,7 +5,7 @@ using Domains.Messaging.Shared.ValueObjects;
 
 namespace Apps.Messaging.Managers;
 
-// GroupRequest CRUD
+// GroupRequest Create , Update , Delete
 internal abstract partial class GroupRequestHandler<T,R>{
     protected async Task CreateAsync(Guid groupId , Guid requesterId , string? description)
         => await groupRequestRepo.Commands.CreateAsync(new GroupRequestTbl() {

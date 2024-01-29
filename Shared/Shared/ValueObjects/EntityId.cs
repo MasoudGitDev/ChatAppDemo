@@ -1,4 +1,5 @@
-﻿using Shared.ValueObjects.Exceptions;
+﻿using Shared.Models;
+using Shared.ValueObjects.Exceptions;
 namespace Shared.ValueObjects;
 public record EntityId {
     public Guid Value { get; }
@@ -9,7 +10,8 @@ public record EntityId {
 
     public EntityId(Guid id) {
         if(String.IsNullOrWhiteSpace(id.ToString()) || id == Guid.Empty) {
-            throw new EntityIdException($"Constructor" , "NullOrWhiteSpace" , "The <id> can not be NullOrWhiteSpace.");
+            throw new EntityIdException(new ExceptionModel(nameof(EntityId) , "Constructor" , "NullOrWhiteSpace" ,
+                "The <id> can not be NullOrWhiteSpace."));
         }
         Value = id;
     }

@@ -1,23 +1,34 @@
-﻿using Shared.Models;
+﻿using Shared.Extensions;
+using Shared.Models;
 
 namespace Shared.Exceptions;  
 public class CustomException :Exception{
-    public string Where { get; } = "UnDefined";
-    public string Code { get; } = "UnDefined";
+    public string ClassName { get; } = "<UnDefined>";
+    public string MethodName { get; } = "<Undefined>";
+    public string Code { get; } = "<UnDefined>";
+    public string Description { get; } = "<UnDefined>";
 
     public CustomException():base() {}
     public CustomException(string message) : base(message) { }
-    public CustomException(string where , string code , string message) :
-        base(message: $"{Environment.NewLine}Where : {where}{Environment.NewLine}Code : {code}{Environment.NewLine}Description : {message}{Environment.NewLine}") {
-        Where = where;
+
+    //// must be delete later
+    //public CustomException(string where , string code , string description) 
+    //    : base($"{nL}{where}{nL}{code}{nL}{description}{nL}") {
+    //    Code = code;   
+    //    Description = description;
+    //}
+
+    public CustomException(string code,  string description) 
+        : base($"{nL}Code: {code}{nL}Message: {description}{nL}") {
         Code = code;
+        Description = description;
     }
-    public CustomException(ExceptionModel model):
-        base(message: $"{Environment.NewLine}Where : {model.Where}{Environment.NewLine}Code : {model.Code}{Environment.NewLine}Description : {model.Message}{Environment.NewLine}") {
-        Where = model.Where;
-        Code = model.Code;            
+   
+    public CustomException(ExceptionModel model): base(message: model.ToJson()) {
+        ClassName = model.ClassName;
+        MethodName = model.MethodName;
+        Code = model.Code;
+        Description = model.Description;
     }
-    public override string ToString() {
-        return $"Where : {Where} | Code : {Code} | Description : {Message}";
-    }
+    private static string nL => Environment.NewLine ;
 }

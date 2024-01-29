@@ -12,14 +12,14 @@ internal sealed class ToNormalMemberGroupHandler(IGroupAdminRepo groupAdminRepo)
         return await TryToDoActionByAdminAsync( request.GroupId , request.AdminId , request.MemberId ,
          async (member , accessLevel) => {
              if(request.AdminId.Equals(request.MemberId) && accessLevel == AdminAccessLevels.Owner) {
-                 throw new GroupAdminsException("ToNormalMember" , "NotPossible" , "If owner wants to change him/her admin lever must use another action!");
+                 throw new GroupAdminsException("NotPossible" , "If owner wants to change him/her admin lever must use another action!");
              }
              if(request.AdminId.Equals(request.MemberId) && accessLevel != AdminAccessLevels.Owner) {
                  await groupAdminRepo.Commands.ToNormalMemberAsync(member);
                  return;
              }
              if(accessLevel != AdminAccessLevels.Owner) {
-                 throw new GroupAdminsException("ToNormalMember" , "NotAccess" , "Just owner can do it.");
+                 throw new GroupAdminsException("NotAccess" , "Just owner can do it.");
              }
              await groupAdminRepo.Commands.ToNormalMemberAsync(member);
          });

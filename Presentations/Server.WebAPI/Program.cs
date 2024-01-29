@@ -2,6 +2,8 @@ using Apps.Auth.Accounts.Repos;
 using Apps.Messaging;
 
 using Infra.EFCore.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +12,6 @@ builder.Services.AddCors();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddSignalRCore();
 builder.Services.AddMediatR(config => {
     config.RegisterServicesFromAssemblies(
@@ -19,7 +20,29 @@ builder.Services.AddMediatR(config => {
     );
 });
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddSwaggerGen(c => {
+    c.SwaggerDoc("v1" , new OpenApiInfo { Title = "JWEToken" , Version = "v1" });
 
+    // Include 'SecurityScheme' to use JWT Authentication
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+        {
+        Scheme = "bearer",
+        BearerFormat = "JWE",
+        Name = "JWE Authentication",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Description = "Put **_ONLY_** your JWE Bearer token on textbox below!",
+        Reference = new OpenApiReference
+         {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+    c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id , jwtSecurityScheme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+        { jwtSecurityScheme, Array.Empty<string>() }
+     });
+});
 
 
 var app = builder.Build();

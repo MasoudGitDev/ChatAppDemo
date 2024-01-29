@@ -14,10 +14,10 @@ internal sealed class BlockMemberGroupHandler(IGroupAdminRepo groupAdminRepo)
             request.MemberId , 
             async (member,accessLevel) => {
                 if(request.AdminId.Equals(request.MemberId)) {
-                    throw new GroupAdminsException("BlockMemberAsync" , "NotPossible" , "You can not block yourself");
+                    throw new GroupAdminsException( "NotPossible" , "You can not block yourself");
                 }
                 if(member.IsAdmin && accessLevel != AdminAccessLevels.Owner) {
-                    throw new GroupAdminsException("BlockMemberAsync" , "NotPossible" , "You can not block other admins.");
+                    throw new GroupAdminsException("NotPossible" , "You can not block other admins.");
                 }
                 await groupAdminRepo.Commands.BlockMemberAsync(member , request.AdminId ,
                  request.StartBlockAt , request.EndBlockAt , request.Reason);

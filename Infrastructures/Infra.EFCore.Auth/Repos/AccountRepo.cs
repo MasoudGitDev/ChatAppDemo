@@ -24,18 +24,18 @@ internal class AccountRepo(SignInManager<AppUser> signInManager , IJweService jw
             EntityId entityId =new EntityId(Guid.NewGuid());
             var accountResult =  await jweService.GenerateTokenAsync(entityId);
             if(String.IsNullOrWhiteSpace(accountResult.AuthToken)) {
-                throw new AccountException("RegisterAsync" , "NullOrWhitespace" , "the <jweToken> can not be null or whitespace");
+                throw new AccountException("NullOrWhitespace" , "the <jweToken> can not be null or whitespace");
             }
             AppUser newUser = new AppUser{Id = entityId,Email = model.Email, UserName = model.UserName};
             var creationResult = await userManager.CreateAsync(newUser);
             if(!creationResult.Succeeded) {
                 var firstError = creationResult.Errors.First();
-                throw new AccountException("RegisterAsync : On CreateAsync Method." , firstError.Code , firstError.Description);
+                throw new AccountException(firstError.Code , firstError.Description);
             }
             var setPasswordResult = await userManager.AddPasswordAsync(newUser,model.Password);
             if(!setPasswordResult.Succeeded) {
                 var firstError = setPasswordResult.Errors.First();
-                throw new AccountException("RegisterAsync : On AddPasswordAsync Method." , firstError.Code , firstError.Description);
+                throw new AccountException( firstError.Code , firstError.Description);
             }
             return accountResult;
         }    
@@ -65,16 +65,16 @@ internal class AccountRepo(SignInManager<AppUser> signInManager , IJweService jw
     private async Task<AppUser?> FindUserByUserNameAsync(string userName) => await userManager.FindByNameAsync(userName);
     private async Task CheckUserNotExistAsync(string email, string userName) {
         var findUser = await FindUserByEmailAsync(email);
-        if(findUser != null) { throw new AccountException("CheckUserNotExist" , "ExistEmail" , "Your <email> must be unique.");}
+        if(findUser != null) { throw new AccountException( "ExistEmail" , "Your <email> must be unique.");}
         findUser = await FindUserByUserNameAsync(userName);
-        if(findUser != null) { throw new AccountException("CheckUserNotExist" , "ExistUserName" , "Your <userName> must be unique."); }
+        if(findUser != null) { throw new AccountException("ExistUserName" , "Your <userName> must be unique."); }
     }      
     private async Task<AccountResult> TryToLoginAsync(AppUser? findUser , string password, LoginTypes loginType) {
         if(findUser != null && ( await signInManager.CheckPasswordSignInAsync(findUser , password , false) ).Succeeded) {            
             return await jweService.GenerateTokenAsync(findUser.Id);
         }
         string chooseName = LoginTypes.ByUserName == loginType ? "userName" : "email"; 
-        throw new AccountException("TryToLoginAsync" , "UnknownUser" , $"<{chooseName}> or <password> is wrong.");
+        throw new AccountException("UnknownUser" , $"<{chooseName}> or <password> is wrong.");
     }
 
     public async Task<AccountResult> LoginByTokenAsync(string jweToken) {

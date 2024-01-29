@@ -24,14 +24,14 @@ public class AccountService(HttpClient httpClient) : IAccountService {
     private async Task<AccountResult> PostAsync<T>(T model , string url , string methodName) {
         var response =  await httpClient.PostAsync(url, model.ToStringContent());
         if(response == null) {
-            throw new AccountServiceException(methodName , "NullObj" , $"The <accountResult> object of {methodName} operation can not be null.");
+            throw new AccountServiceException( "NullObj" , $"The <accountResult> object of {methodName} operation can not be null.");
         }
         if(!response.IsSuccessStatusCode) {
-            throw new AccountServiceException(methodName , response.StatusCode.ToString() , response.Content.ToString() ?? "The Operation is not successful.");
+            throw new AccountServiceException(response.StatusCode.ToString() , response.Content.ToString() ?? "The Operation is not successful.");
         }
         var accountResult = (await response.Content.ReadAsStringAsync()).FromJsonTo<AccountResult>();
         if(accountResult is null) {
-            throw new AccountServiceException(methodName , "NullOrWhitespace" , "You Not Authenticated.");
+            throw new AccountServiceException("NullOrWhitespace" , "You Not Authenticated.");
         }
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer" , accountResult.AuthToken);
         return accountResult;

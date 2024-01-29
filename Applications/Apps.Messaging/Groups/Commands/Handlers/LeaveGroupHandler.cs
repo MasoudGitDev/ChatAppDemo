@@ -14,10 +14,10 @@ internal sealed class LeaveGroupHandler(IGroupRepo groupRepo)
         var findMember = await groupRepo.Queries.GetMemberAsync(request.GroupId, request.MemberId);
         if (findMember == null)
         {
-            throw new GroupsException("GetMemberAsync", "NotFound", "<GroupId> or <MemberId> or both are invalid.");
+            throw new GroupsException("NotFound", "<GroupId> or <MemberId> or both are invalid.");
         }
         if(findMember.IsAdmin && findMember.AdminInfo != null && findMember.AdminInfo.AccessLevel == AdminAccessLevels.Owner) {
-            throw new GroupsException("LeaveGroupAsync" , "NotPossible" , "A group creator can not leave him/her groups but you can Delete the group.");
+            throw new GroupsException("NotPossible" , "A group creator can not leave him/her groups but you can Delete the group.");
         }
         await groupRepo.Commands.LeaveGroupAsync(findMember);
         return new Result(ResultStatus.Success, null);

@@ -12,7 +12,7 @@ internal sealed class GetGroupsBySearchTextHandler (IGroupRepo groupRepo)
     : IRequestHandler<GetGroupsBySearchTextModel , Result<List<GroupResultModel>>> {
     public async Task<Result<List<GroupResultModel>>> Handle(GetGroupsBySearchTextModel request , CancellationToken cancellationToken) {
         if(String.IsNullOrWhiteSpace(request.SearchText.Trim())) {
-            throw new GroupException("GetGroupsBySearchTextHandler" , "NullOrWhiteSpace" , "<searchText> can not be null or white space!");
+            throw new GroupException("NullOrWhiteSpace" , "<searchText> can not be null or white space!");
         }
         var groups = (await groupRepo.Queries.GetGroupsBySearchTextAsync(request.SearchText));
         var groupDTOs = groups.Adapt<List<GroupResultModel>>();

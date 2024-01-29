@@ -15,10 +15,10 @@ public class BlockedMemberInfo {
     public BlockedMemberInfo(DateTime startAt , DateTime? endAt , EntityId adminId , string? reason) {
 
         if(endAt != null && endAt <= startAt) {
-            throw new BlockedMemberException("Constructor" , "DateTimeEquality" , "The <endAt> date time must be grater the the <startAt> date time.");
+            throw new BlockedMemberException("DateTimeEquality" , "The <endAt> date time must be grater the the <startAt> date time.");
         }
         if(adminId.Value == Guid.Empty) {
-            throw new BlockedMemberException("Constructor" , "WrongGUID" , "The <adminId> must be a guid.");
+            throw new BlockedMemberException("WrongGUID" , "The <adminId> must be a guid.");
         }
         StartAt = startAt;
         EndAt = endAt;

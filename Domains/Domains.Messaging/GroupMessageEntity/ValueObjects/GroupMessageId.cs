@@ -1,4 +1,5 @@
-﻿using Shared.ValueObjects.Exceptions;
+﻿using Shared.Models;
+using Shared.ValueObjects.Exceptions;
 
 namespace Domains.Messaging.GroupMessageEntity.ValueObjects;  
 public record GroupMessageId {
@@ -10,7 +11,7 @@ public record GroupMessageId {
     public GroupMessageId(Guid id)
     {
         if(String.IsNullOrWhiteSpace(id.ToString()) || id == Guid.Empty) {
-            throw new EntityIdException("GroupMessageId-Constructor" , "NotValidGUID" , "");
+            throw new EntityIdException(new ExceptionModel("GroupMessageId", "Constructor" , "NotValidGUID" , ""));
         }
         Value = id;
     }
