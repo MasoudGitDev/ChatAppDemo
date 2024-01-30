@@ -5,10 +5,10 @@ using Shared.SystemModels;
 
 namespace Infra.EfCore.Auth.Extensions;
 public static class IConfigurationExtensions {
-    public static JweSettingsModel GetJweSettings(this IConfiguration configuration) {
-        var jwtSettings = configuration.GetSection(AppSettingNames.JweSettings).Get<JweSettingsModel>();
+    public static AuthTokenSettingsModel GetJweSettings(this IConfiguration configuration) {
+        var jwtSettings = configuration.GetSection(AppSettingNames.JweSettings).Get<AuthTokenSettingsModel>();
         if(jwtSettings is null) {
-            throw new JweException("NullObj" , $"The <{nameof(JweSettingsModel)}> can not be null." );
+            throw new JweException("NullObj" , $"The <{nameof(AuthTokenSettingsModel)}> can not be null." );
         }
         return jwtSettings;
     }

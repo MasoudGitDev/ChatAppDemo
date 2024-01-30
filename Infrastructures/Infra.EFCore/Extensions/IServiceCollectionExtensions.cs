@@ -15,7 +15,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Extensions;
 using System.Text;
 
 namespace Infra.EFCore.Extensions;
@@ -36,18 +38,21 @@ public static class IServiceCollectionExtensions {
             opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(opt => {
-            var jweSettings = configuration.GetJweSettings();
+            var authTokenSettings = configuration.GetAuthTokenSettings();
+            Console.WriteLine(authTokenSettings.ToJson());
             opt.TokenValidationParameters = new TokenValidationParameters {
                 ValidateIssuerSigningKey = true ,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jweSettings.SecretKey)) ,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authTokenSettings.SecretKey)) ,
                 ValidateIssuer = true ,
-                ValidIssuer = jweSettings.Issuer ,
+                ValidIssuer = authTokenSettings.Issuer ,
                 ValidateAudience = true ,
-                ValidAudience = jweSettings.Audience ,
+                ValidAudience = authTokenSettings.Audience ,
                 RequireExpirationTime = true ,
                 ClockSkew = TimeSpan.Zero ,
                 SaveSigninToken = true ,
+                TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authTokenSettings.SecretKey))
             };
+           
         });
 
         // Messaging Services

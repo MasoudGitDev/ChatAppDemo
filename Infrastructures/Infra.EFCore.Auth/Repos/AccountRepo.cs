@@ -9,7 +9,7 @@ using Shared.Models;
 using Shared.ValueObjects;
 
 namespace Infra.EfCore.Auth.Repos;  
-internal class AccountRepo(SignInManager<AppUser> signInManager , IJweService jweService) : IAccountRepo {
+internal class AccountRepo(SignInManager<AppUser> signInManager , IAuthTokenService jweService) : IAccountRepo {
  
     // fields or props
     private readonly UserManager<AppUser> userManager = signInManager.UserManager ;

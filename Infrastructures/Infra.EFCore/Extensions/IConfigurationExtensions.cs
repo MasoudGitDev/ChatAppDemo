@@ -4,12 +4,12 @@ using Shared.SystemModels;
 
 namespace Infra.EFCore.Extensions;  
 internal static class IConfigurationExtensions {
-    public static JweSettingsModel GetJweSettings(this IConfiguration configuration) {
-        var jweSettings = configuration.GetSection(AppSettingNames.JweSettings).Get<JweSettingsModel>();
-        if(jweSettings == null) {
-            throw new ArgumentNullException("JwtSettingsModel is null.");
+    public static AuthTokenSettingsModel GetAuthTokenSettings(this IConfiguration configuration) {
+        var authTokenSettings = configuration.GetSection(AppSettingNames.JweSettings).Get<AuthTokenSettingsModel>();
+        if(authTokenSettings == null) {
+            throw new ArgumentNullException("AuthTokenSettingsModel is null.");
         }
-        return jweSettings;
+        return authTokenSettings;
     }
     public static string GetDefaultConnectionString(this IConfiguration configuration) {
         var strConn = configuration.GetConnectionString(ConnectionNames.Default);

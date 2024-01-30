@@ -14,7 +14,8 @@ internal abstract partial class GroupRequestHandler<T, R> {
             .IfIsNull(new ExceptionModel(
                 "GroupRequestHandler" ,
                 "GetRequestWithCheckingAsync" ,
-                "NotFound" , $"The request with groupId = {groupId} and requesterId = {requesterId} was not found"));
+                "NotFound" ,
+                $"The request with groupId = {groupId} and requesterId = {requesterId} was not found"));
     }
     // CompareRequestDescriptionWithSource
     protected void CheckDescriptionValue(string? description , string? groupRequestDescription) {
