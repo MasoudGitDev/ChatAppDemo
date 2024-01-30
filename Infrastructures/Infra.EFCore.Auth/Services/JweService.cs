@@ -11,7 +11,7 @@ using System.Text.Json;
 namespace Infra.EfCore.Auth.Services;
 internal class JweService(IConfiguration configuration) : IAuthTokenService {
     public Task<AccountResult> GenerateTokenAsync(EntityId userIdentifier) {
-        var jwtSettings = configuration.GetJweSettings();
+        var jwtSettings = configuration.GetAuthSettings();
         var claims = new Dictionary<string, string>()
         {
             { JweTypes.UserIdentifier, userIdentifier.Value.ToString() },
@@ -28,7 +28,7 @@ internal class JweService(IConfiguration configuration) : IAuthTokenService {
 
 
     public Task<Dictionary<string , string>> GetClaimsByTokenAsync(string jweToken) {
-        var secretKey = Encoding.UTF8.GetBytes(configuration.GetJweSettings().SecretKey.PadRight(64,'0'));
+        var secretKey = Encoding.UTF8.GetBytes(configuration.GetAuthSettings().SecretKey.PadRight(64,'0'));
         string payload = JWT.Decode(jweToken, secretKey , JweAlgorithm.DIR , JweEncryption.A256CBC_HS512);
         var claims = JsonSerializer.Deserialize<Dictionary<string,string>>(payload);
         if(claims is null) { throw new JweException("NullObj" , "The <claims> can not be null."); }
