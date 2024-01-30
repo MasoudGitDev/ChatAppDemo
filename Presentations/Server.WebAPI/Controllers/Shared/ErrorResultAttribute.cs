@@ -6,10 +6,9 @@ using Shared.Exceptions;
 using Shared.Models;
 
 namespace Server.WebAPI.Controllers.Shared {
-    public class ErrorResultAttribute : Attribute, IAsyncExceptionFilter {       
-
-        public async Task OnExceptionAsync(ExceptionContext context) {
-            string where = context.ExceptionDispatchInfo?.SourceException.GetType().Name ?? "Unknown";
+    public class ErrorResultAttribute : Attribute, IAsyncExceptionFilter {
+           
+        public async Task OnExceptionAsync(ExceptionContext context) {          
             switch(context.Exception) {
                 case CustomException ex:
                     context.Result = await CreateErrorResult(new ExceptionModel(ex.ClassName , ex.MethodName ,
