@@ -1,6 +1,5 @@
 using Apps.Auth.Accounts.Repos;
 using Apps.Messaging;
-
 using Infra.EFCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
@@ -15,7 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSignalRCore();
 builder.Services.AddMediatR(config => {
     config.RegisterServicesFromAssemblies(
-        typeof(IAccountRepo).Assembly,
+        typeof(IAccountRepo).Assembly ,
         typeof(App_Messaging_Assembly).Assembly
     );
 });
@@ -44,16 +43,15 @@ builder.Services.AddSwaggerGen(c => {
      });
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if(app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
- 
+
 }
-app.UseCors(opt=> opt.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseHttpsRedirection();
 

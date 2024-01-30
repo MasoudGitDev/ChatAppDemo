@@ -3,6 +3,7 @@ using Apps.Messaging.Groups.Queries.Models;
 using Apps.Messaging.Shared.ResultModels;
 using Domains.Messaging.Shared.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.WebAPI.Controllers.Shared;
 using Shared.DTOs.Group;
@@ -13,6 +14,7 @@ namespace Server.WebAPI.Controllers.Messaging
     [Route("Api/Messaging/[controller]")]
     [ApiController]
     [ErrorResult]
+    [Authorize]
     public class GroupsController(ISender sender , ILogger<GroupsController> logger) : ControllerBase {
 
         [HttpGet("GetGroupsBySearchText")]
@@ -21,7 +23,7 @@ namespace Server.WebAPI.Controllers.Messaging
 
         [HttpGet("GetUserGroups")]
         public async Task<Result<LinkedList<GroupResultDto>>> GetUserGroupsAsync(Guid userId)
-         => await sender.Send(new GetUserGroupsModel { AppUserId = userId });
+            => await sender.Send(new GetUserGroupsModel { AppUserId = userId });
 
         [HttpPost("CreateGroup")]
         public async Task<Result> CreateGroupAsync([FromBody]CreateGroupModel createModel) {
