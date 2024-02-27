@@ -1,24 +1,29 @@
-﻿using Domains.Messaging.GroupEntity;
+﻿using Domains.Messaging.GroupMemberEntity.Entity;
 using Domains.Messaging.GroupRequestEntity;
-using Domains.Messaging.Shared.ValueObjects;
-using Shared.Abstractions.Messaging.Constants;
-namespace Domains.Messaging.GroupMemberEntity.Repos;  
+namespace Domains.Messaging.GroupMemberEntity.Repos;
 public interface IGroupAdminCommands {
-    Task ConfirmedRequest(GroupMemberTbl member , GroupRequestTbl request);
-    Task DeleteMemberAsync(GroupMemberTbl member);
-    Task CreateMemberAsync(GroupMemberTbl member);
-    Task DeleteGroupAsync(GroupTbl group , List<GroupMemberTbl> members , List<GroupRequestTbl> requests);
-    Task UnblockMemberAsync(GroupMemberTbl member);
-    Task BlockMemberAsync(GroupMemberTbl member , AppUserId adminId , DateTime? startAt , DateTime? endAt , string? reason);
-    Task ToAdminMemberAsync(GroupMemberTbl member , AppUserId byWhomAdminId , AdminAccessLevels levelToAssign , DateTime? startAt , DateTime? endAt , string? reason);
-    Task ToNormalMemberAsync(GroupMemberTbl adminMember );
-    Task ChangeRequestableStateAsync(GroupTbl group , bool isRequestable);
-    
+
+    //Task CreateGroupAsync(GroupTbl group);
+    //void LeaveGroup(GroupMemberTbl member);
 
 
+    Task ConfirmRequest(GroupMemberTbl member , GroupRequestTbl request);
+    //   void DeleteMember(GroupMemberTbl member);
+    //  Task CreateMemberAsync(GroupMemberTbl member);
+    //   Task DeleteGroupAsync(GroupTbl group , List<GroupMemberTbl> members , List<GroupRequestTbl> requests);
+
+    //  void UnblockMember(GroupMemberTbl member);
+    //  void BlockMember(GroupMemberTbl member , AppUserId adminId , DateTime? startAt , DateTime? endAt , string? reason);
+    // void ToAdminMember(GroupMemberTbl member , AppUserId byWhomAdminId , AdminType levelToAssign , DateTime? startAt , DateTime? endAt , string? reason);
+
+    //void ToNormalMember(GroupMemberTbl adminMember );
+    // void ChangeRequestableState(GroupTbl group , bool isRequestable);  
     //Task DeleteLogoAsync(GroupTbl group , string);
-    Task AddLogoAsync(GroupTbl group,Logo logo);
-    Task DeleteLogosAsync(GroupTbl group);
-    Task ChangeDisplayIdAsync(GroupTbl group , DisplayId newDisplayId);
-    Task ChangeInfoAsync(GroupTbl group , string title , string description);
+    //void AddLogo(GroupTbl group,Logo logo);
+    //void DeleteLogos(GroupTbl group);
+    //void DeleteLogo();
+    // void ChangeDisplayId(GroupTbl group , DisplayId newDisplayId);
+    // void ChangeInfo(GroupTbl group , string title , string description);
+
+    // void Update(GroupTbl group);
 }

@@ -3,7 +3,7 @@ using Shared.ValueObjects.Exceptions;
 namespace Domains.Messaging.GroupMemberEntity.ValueObjects;  
 public record GroupMemberId {
     public Guid Value { get; }
-    public GroupMemberId() {
+    private GroupMemberId() {
         Value = Guid.NewGuid();
     }
     public GroupMemberId(Guid id) {
@@ -12,6 +12,7 @@ public record GroupMemberId {
         }
         Value = id;
     }
+    public static GroupMemberId Create() => new();
     public static implicit operator Guid(GroupMemberId groupMemberId) => groupMemberId.Value;
     public static implicit operator GroupMemberId(Guid id) => new(id);
 }
