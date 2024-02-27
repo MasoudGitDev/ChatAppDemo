@@ -1,7 +1,7 @@
 ﻿using Shared.Models;
 
 namespace Shared.Exceptions;
-internal class NullOrEmptyException : CustomException {
+public class NullOrEmptyException : CustomException {
     public NullOrEmptyException() {
     }
 
