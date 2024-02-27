@@ -12,6 +12,20 @@ public record GroupId  {
         }
         Value = id;
     }
+    public GroupId(string id) {
+        if(String.IsNullOrWhiteSpace(id)) {
+            throw new EntityIdException(new ExceptionModel("GroupId" , "Constructor" , "NullOrWhiteSpace" , "The <id> can not be NullOrWhiteSpace."));
+        }
+        if(!Guid.TryParse(id , out Guid result)) {
+            throw new EntityIdException(new ExceptionModel("GroupId" , "Constructor" , "StringToGUID" , "This string <id> can not convert to guid."));
+        }
+        Value = result;
+    }
+
+    public static GroupId Create() => new GroupId();
+
     public static implicit operator Guid(GroupId groupId) => groupId.Value;
     public static implicit operator GroupId(Guid id) => new(id);
+    public static implicit operator GroupId(string id) => new(id);
+    public static implicit operator string(GroupId groupId) => groupId.Value.ToString();
 }
