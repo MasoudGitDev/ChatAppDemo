@@ -5,11 +5,10 @@ using Domains.Messaging.GroupMessageEntity.Aggregate;
 using Domains.Messaging.GroupMessageEntity.ValueObjects;
 using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.Shared.ValueObjects;
-using MediatR;
 using Shared.Enums;
 using Shared.Extensions;
 
-namespace Apps.Messaging.GroupAdmins.Manager;
+namespace Apps.Messaging.Shared.Manager;
 internal abstract partial class GroupManager<T, R> {
 
     protected async Task<(AdminMemberInfo, GroupMemberTbl)> GetAdminAndMemberWithCheckingAsync(
@@ -29,7 +28,7 @@ internal abstract partial class GroupManager<T, R> {
     protected async Task<GroupTbl?> GetGroupByDisplayIdAsync(DisplayId displayId)
         => await _unitOfWork.MemberQueries.GetGroupByDisplayIdAsync(displayId);
 
-    protected async Task<List<GroupTbl>> FindGroupsByTitleAsync(string  title)
+    protected async Task<List<GroupTbl>> FindGroupsByTitleAsync(string title)
         => await _unitOfWork.MemberQueries.FindGroupsByTitleAsync(title);
 
     protected async Task<AdminMemberInfo?> GetAdminMemberInfoAsync(GroupId groupId , AppUserId adminId)
@@ -53,12 +52,12 @@ internal abstract partial class GroupManager<T, R> {
     protected async Task<List<GroupRequestTbl>> GetGroupRequestsAsync(
         GroupId groupId ,
         Visibility visible = Visibility.Visible)
-        => await _unitOfWork.RequestQueries.GetGroupRequestsAsync(groupId,visible);    
+        => await _unitOfWork.RequestQueries.GetGroupRequestsAsync(groupId , visible);
 
     protected async Task<List<GroupRequestTbl>> GetUserRequestsAsync(
         AppUserId requesterId ,
         Visibility visible = Visibility.Visible)
-       => await _unitOfWork.RequestQueries.GetUserRequestsAsync(requesterId,visible);
+       => await _unitOfWork.RequestQueries.GetUserRequestsAsync(requesterId , visible);
 
     #endregion
 

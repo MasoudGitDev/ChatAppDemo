@@ -1,5 +1,5 @@
 ﻿using Apps.Messaging.GroupAdmins.Commands.Models;
-using Apps.Messaging.GroupAdmins.Manager;
+using Apps.Messaging.Shared.Manager;
 using Domains.Messaging.GroupMemberEntity.Entity;
 using Domains.Messaging.UnitOfWorks;
 using Shared.Abstractions.Messaging.Constants;
@@ -50,7 +50,10 @@ internal sealed class ToAdminMemberHandler(IGroupMessagingUOW _unitOfWork)
           changeOwnerWhenDeputyNeeded: () => {
               admin.ToAdmin(admin.MemberId.Value , levelToAssign , startAt , endAt , reason);
           } ,
-          doFinally: _unitOfWork.SaveChangesAsync ,
+          doFinally: async () => {
+              targetMember.ToAdmin(admin.MemberId.Value ,levelToAssign , startAt , endAt , reason);
+              await _unitOfWork.SaveChangesAsync();
+          } ,
           levelToAssign: levelToAssign
       );
     }

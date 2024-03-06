@@ -1,4 +1,4 @@
-﻿using Apps.Messaging.GroupAdmins.Commands.Strategies;
+﻿using Apps.Messaging.Shared.Strategies;
 using Domains.Messaging.GroupMemberEntity.Entity;
 using Domains.Messaging.UnitOfWorks;
 using MediatR;
@@ -6,7 +6,7 @@ using Shared.Abstractions.Messaging.Constants;
 using Shared.Enums;
 using Shared.Models;
 
-namespace Apps.Messaging.GroupAdmins.Manager;
+namespace Apps.Messaging.Shared.Manager;
 /// <summary>
 /// Manage Group operations
 /// </summary>

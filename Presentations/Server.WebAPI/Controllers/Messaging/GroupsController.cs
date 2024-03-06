@@ -11,7 +11,8 @@ using Server.WebAPI.DTOs;
 using Shared.DTOs.Group;
 using Shared.Models;
 
-namespace Server.WebAPI.Controllers.Messaging {
+namespace Server.WebAPI.Controllers.Messaging
+{
     [Route("Api/Messaging/[controller]")]
     [ApiController]
     [ErrorResult]

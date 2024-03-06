@@ -1,5 +1,5 @@
 ﻿using Apps.Messaging.Group.Commands.Models;
-using Apps.Messaging.GroupAdmins.Manager;
+using Apps.Messaging.Shared.Manager;
 using Domains.Messaging.GroupEntity.Entity;
 using Domains.Messaging.GroupEntity.Models;
 using Domains.Messaging.GroupEntity.ValueObjects;
@@ -25,7 +25,7 @@ internal sealed class CreateGroupHandler(IGroupMessagingUOW _unitOfWork)
 
         await SaveChangesAsync();
 
-        return new Result(ResultStatus.Success ,new("Created" , 
+        return new Result(ResultStatus.Success , new("Created" ,
             $"The Group with Display-Id : <{request.DisplayId}> has been created successfully."));
     }
 

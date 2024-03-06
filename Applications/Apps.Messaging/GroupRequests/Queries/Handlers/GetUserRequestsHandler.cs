@@ -1,6 +1,6 @@
-﻿using Apps.Messaging.GroupAdmins.Manager;
-using Apps.Messaging.GroupRequests.Queries.Models;
+﻿using Apps.Messaging.GroupRequests.Queries.Models;
 using Apps.Messaging.GroupRequests.Shared;
+using Apps.Messaging.Shared.Manager;
 using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.Shared.ValueObjects;
 using Domains.Messaging.UnitOfWorks;
@@ -14,7 +14,7 @@ internal sealed class GetUserRequestsHandler(IGroupMessagingUOW _unitOfWork)
     public override async Task<Result<List<GroupRequestResult>>> Handle(
         GetUserRequestsModel request ,
         CancellationToken cancellationToken) {
-        return await GetUserRequestsResultAsync(request.RequesterId,request.Visibility);
+        return await GetUserRequestsResultAsync(request.RequesterId , request.Visibility);
     }
 
     private async Task<Result<List<GroupRequestResult>>> GetUserRequestsResultAsync(AppUserId requesterId , Visibility visibility) {

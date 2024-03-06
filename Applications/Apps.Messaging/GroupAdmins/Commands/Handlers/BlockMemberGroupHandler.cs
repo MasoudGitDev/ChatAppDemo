@@ -1,6 +1,5 @@
 ﻿using Apps.Messaging.GroupAdmins.Commands.Models;
-using Apps.Messaging.GroupAdmins.Commands.Strategies;
-using Apps.Messaging.GroupAdmins.Manager;
+using Apps.Messaging.Shared.Manager;
 using Domains.Messaging.GroupMemberEntity.Entity;
 using Domains.Messaging.Shared.ValueObjects;
 using Domains.Messaging.UnitOfWorks;
@@ -36,7 +35,7 @@ internal sealed class BlockMemberGroupHandler(IGroupMessagingUOW _unitOfWork)
         return await UseStrategyAsync(
           admin: admin ,
           targetMember: targetMember ,
-          successResultMessage: CreateResultMessage() ,          
+          successResultMessage: CreateResultMessage() ,
           doFinally: async () => {
               targetMember.Block(admin.MemberId.Value , startAt , endAt , reason);
               await _unitOfWork.SaveChangesAsync();

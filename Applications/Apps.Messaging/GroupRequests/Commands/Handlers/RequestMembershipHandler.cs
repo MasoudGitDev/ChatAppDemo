@@ -1,5 +1,5 @@
-﻿using Apps.Messaging.GroupAdmins.Manager;
-using Apps.Messaging.GroupRequests.Commands.Models;
+﻿using Apps.Messaging.GroupRequests.Commands.Models;
+using Apps.Messaging.Shared.Manager;
 using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.Shared.ValueObjects;

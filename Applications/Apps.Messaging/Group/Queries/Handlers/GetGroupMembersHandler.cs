@@ -1,5 +1,5 @@
 ﻿using Apps.Messaging.Group.Queries.Models;
-using Apps.Messaging.GroupAdmins.Manager;
+using Apps.Messaging.Shared.Manager;
 using Domains.Messaging.GroupMemberEntity.Entity;
 using Domains.Messaging.Shared.Models;
 using Domains.Messaging.Shared.ValueObjects;

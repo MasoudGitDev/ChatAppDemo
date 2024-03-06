@@ -1,5 +1,5 @@
 ﻿using Apps.Messaging.GroupAdmins.Commands.Models;
-using Apps.Messaging.GroupAdmins.Manager;
+using Apps.Messaging.Shared.Manager;
 using Domains.Messaging.UnitOfWorks;
 using Shared.Extensions;
 using Shared.Helpers;
