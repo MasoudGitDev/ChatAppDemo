@@ -8,7 +8,6 @@ using Moq;
 using Shared.Abstractions.Messaging.Constants;
 using Shared.Enums;
 using Shared.Exceptions;
-using Shared.Models;
 
 namespace Tests.App.Messaging.GroupAdmins;
 public class ToAdminHandlerTests {
@@ -19,7 +18,7 @@ public class ToAdminHandlerTests {
         _unitOfWork = new Mock<IGroupMessagingUOW>();
         _handler = new ToAdminMemberHandler(_unitOfWork.Object);
     }
-       
+
     /// <summary>
     /// Each admins Should Not Make Any One or itself To Same admin level or higher!
     /// </summary>
@@ -38,7 +37,7 @@ public class ToAdminHandlerTests {
 
     [InlineData(AdminLevel.Owner , AdminLevel.Owner)]
     public async Task ShouldNotPass_When_LevelToAssign_EqualOrGreaterThan_AdminLevel(
-        AdminLevel adminLevel ,AdminLevel levelToAssign        
+        AdminLevel adminLevel , AdminLevel levelToAssign
         ) {
 
         var (model, adminMember, targetMember) = SharedArrange(adminLevel , levelToAssign , true);
@@ -55,7 +54,7 @@ public class ToAdminHandlerTests {
         _unitOfWork.Verify(q => q.MemberQueries.GetMemberAsync(model.GroupId , model.MemberId) , Times.Once());
         _unitOfWork.Verify(q => q.MemberQueries.GetAdminMemberAsync(model.GroupId , model.AdminId) , Times.Once());
 
-        ((int) levelToAssign ).Should().BeGreaterThanOrEqualTo((int) adminLevel);
+        ( (int) levelToAssign ).Should().BeGreaterThanOrEqualTo((int) adminLevel);
         _unitOfWork.Verify(c => c.SaveChangesAsync() , Times.Never());
     }
 
@@ -69,7 +68,10 @@ public class ToAdminHandlerTests {
     public async Task EachAdminsExceptOwner_Should_Decrease_ItsAdminLevel(
          AdminLevel adminLevel , AdminLevel levelToAssign) {
 
+        //Arrange
         var (model, adminMember, targetMember) = SharedArrange(adminLevel , levelToAssign , true);
+        targetMember.AdminInfo?.AdminLevel.Should().NotBe(levelToAssign); // must be check before any action
+
 
         //Act 
         var result = await _handler.Handle(model, CancellationToken.None);
@@ -79,19 +81,18 @@ public class ToAdminHandlerTests {
         result.Should().NotBeNull();
         _unitOfWork.Verify(q => q.MemberQueries.GetMemberAsync(model.GroupId , model.MemberId) , Times.Once());
         _unitOfWork.Verify(q => q.MemberQueries.GetAdminMemberAsync(model.GroupId , model.AdminId) , Times.Once());
-        adminMember.MemberId.Should().Be(targetMember.MemberId); // must same Id
-        levelToAssign.Should().NotBe(adminLevel);
         ( (int) levelToAssign ).Should().BeLessThan((int) adminLevel);
-
         adminMember.IsAdmin.Should().BeTrue();
+
+        adminMember.MemberId.Should().Be(targetMember.MemberId); // must same Id
         targetMember.IsAdmin.Should().BeTrue();
         adminMember.AdminInfo?.AdminLevel.Should().NotBe(AdminLevel.Owner);
+        adminMember.AdminInfo?.AdminLevel.Should().NotBe(AdminLevel.Regular);
         targetMember.AdminInfo?.AdminLevel.Should().Be(levelToAssign);
 
         _unitOfWork.Verify(c => c.SaveChangesAsync() , Times.Once());
         result.Status.Should().Be(ResultStatus.Success);
-        await _handler.Invoking(c => c.Handle(model , CancellationToken.None))
-            .Should().NotThrowAsync<Exception>();
+        result.ResultMessage!.Code.Should().Be("ToAdminMember");
     }
 
     //===================== Owner Should  ...  
@@ -99,7 +100,7 @@ public class ToAdminHandlerTests {
     [Theory]
     [InlineData(AdminLevel.Regular)]
     [InlineData(AdminLevel.Trusted)]
-    [InlineData( AdminLevel.Deputy)]
+    [InlineData(AdminLevel.Deputy)]
     public async Task Owner_ShouldMake_Itself_To_LowerAdminLevel_When_DeputyExist(AdminLevel levelToAssign) {
         //Arrange
         var ownerLevel = AdminLevel.Owner;
@@ -109,6 +110,7 @@ public class ToAdminHandlerTests {
         deputyMember.ToAdmin(adminMember.MemberId.Value , AdminLevel.Deputy);
         _unitOfWork.Setup(q => q.MemberQueries.GetDeputyAdminAsync(model.GroupId)).ReturnsAsync(deputyMember);
         deputyMember.AdminInfo?.AdminLevel.Should().Be(AdminLevel.Deputy);
+        adminMember.AdminInfo?.AdminLevel.Should().Be(AdminLevel.Owner);
 
 
         //Act
@@ -137,6 +139,7 @@ public class ToAdminHandlerTests {
         //Arrange
         var (model, adminMember, targetMember) = SharedArrange(adminLevel , levelToAssign , false);
         targetMember.ToAdmin(adminMember.MemberId.Value , targetAdminLevel);
+        targetMember.AdminInfo!.AdminLevel.Should().NotBe(levelToAssign); // before any call method
 
         //Act
         var result = await _handler.Handle(model,CancellationToken.None);
@@ -146,19 +149,18 @@ public class ToAdminHandlerTests {
         adminMember.Should().NotBeNull();
         targetMember.Should().NotBeNull();
         adminMember.IsAdmin.Should().BeTrue();
-        targetMember.IsAdmin.Should().BeTrue();
-        adminMember.MemberId.Value.Should().NotBe(targetMember.MemberId.Value);
-        ( (int) levelToAssign ).Should().BeLessThan((int)adminLevel);
-        ((int)targetMember.AdminInfo!.AdminLevel).Should().BeLessThan((int)adminLevel);
 
+        targetMember.IsAdmin.Should().BeTrue();
+        adminMember.MemberId.Value.Should().NotBe(targetMember.MemberId.Value); // Other admin
+        ( (int) levelToAssign ).Should().BeLessThan((int) adminLevel);
+        ( (int) targetMember.AdminInfo!.AdminLevel ).Should().BeLessThan((int) adminLevel); // important
+        adminMember.AdminInfo!.AdminLevel.Should().NotBe(AdminLevel.Regular);
         targetAdminLevel.Should().NotBe(levelToAssign);
-        ((int)targetAdminLevel).Should().BeLessThan((int)adminLevel);
+        ( (int) targetAdminLevel ).Should().BeLessThan((int) adminLevel);
+        targetMember.AdminInfo!.AdminLevel.Should().Be(levelToAssign);
 
         result.Status.Should().Be(ResultStatus.Success);
         _unitOfWork.Verify(c => c.SaveChangesAsync() , Times.Once);
-
-
-
     }
 
 
@@ -166,24 +168,25 @@ public class ToAdminHandlerTests {
     // ==================================================== private methods
 
 
-    private (ToAdminMemberModel model, GroupMemberTbl admin, GroupMemberTbl member) SharedArrange(
+    private (ToAdminMemberModel model, GroupMemberTbl admin, GroupMemberTbl targetMember) SharedArrange(
         AdminLevel adminLevel ,
         AdminLevel levelToAssign ,
         bool isAdminAndMemberEqual = false) {
+
         var sameId = Guid.NewGuid();
         var model = new ToAdminMemberModel {
             GroupId = GroupId.Create() ,
             MemberId = sameId,
-            AdminId = isAdminAndMemberEqual ?  sameId : Guid.NewGuid(),
+            AdminId = isAdminAndMemberEqual ?  sameId : Guid.NewGuid(), // check isAdminAndMemberEqual
             StartAt = DateTime.Now ,
             EndAt = null ,
             Reason = "" ,
             LevelToAssign = levelToAssign ,
         };
 
-        var member = GroupMemberTbl.Create(model.GroupId,model.MemberId);
+        var targetMember = GroupMemberTbl.Create(model.GroupId,model.MemberId);
         _unitOfWork.Setup(q => q.MemberQueries
-            .GetMemberAsync(member.GroupId , member.MemberId.Value)).ReturnsAsync(member);
+            .GetMemberAsync(targetMember.GroupId , targetMember.MemberId.Value)).ReturnsAsync(targetMember);
 
         var adminMember = GroupMemberTbl.Create(model.GroupId,model.AdminId,adminLevel);
         adminMember.ToAdmin(Guid.NewGuid() , adminLevel);
@@ -191,9 +194,9 @@ public class ToAdminHandlerTests {
             .GetAdminMemberAsync(adminMember.GroupId , adminMember.MemberId.Value)).ReturnsAsync(adminMember);
 
         if(isAdminAndMemberEqual) {
-            member.ToAdmin(Guid.NewGuid() , adminLevel);
+            targetMember.ToAdmin(Guid.NewGuid() , adminLevel);
         }
-        return (model, adminMember, member);
+        return (model, adminMember, targetMember);
     }
 
     private void SharedAssert(ParamData data) {
