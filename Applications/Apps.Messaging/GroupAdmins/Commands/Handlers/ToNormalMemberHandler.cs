@@ -17,7 +17,7 @@ internal sealed class ToNormalMemberHandler(IGroupMessagingUOW _unitOfWork)
         var admin = (await GetAdminMemberAsync(request.GroupId, request.AdminId))
             .ThrowIfNull("You are not admin!");
 
-        //very important
+        // for ensure
         if(targetAdmin.IsAdmin is false) {
             throw new NotPossibleException(
                 "ToNormal methods available when the <target-member> is an admin too.");
@@ -38,7 +38,10 @@ internal sealed class ToNormalMemberHandler(IGroupMessagingUOW _unitOfWork)
           targetMember: targetMember ,
           successResultMessage: CreateResultMessage() ,
           changeOwnerWhenDeputyNeeded: () => { admin.ToNormal(); } ,
-          doFinally: _unitOfWork.SaveChangesAsync ,
+          doFinally: async () => {
+              targetMember.ToNormal();
+              await _unitOfWork.SaveChangesAsync();
+          } ,
           levelToAssign: null
       );
     }

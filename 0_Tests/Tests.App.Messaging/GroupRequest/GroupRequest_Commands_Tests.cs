@@ -4,7 +4,6 @@ using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupMemberEntity.Entity;
 using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.UnitOfWorks;
-using Elasticsearch.Net;
 using FluentAssertions;
 using Moq;
 using Shared.Enums;
@@ -14,8 +13,7 @@ namespace Tests.App.Messaging.GroupRequest;
 public class GroupRequest_Commands_Tests {
 
     private readonly Mock<IGroupMessagingUOW> _unitOfWork;
-    public GroupRequest_Commands_Tests()
-    {
+    public GroupRequest_Commands_Tests() {
         _unitOfWork = new Mock<IGroupMessagingUOW>();
     }
 
@@ -25,11 +23,11 @@ public class GroupRequest_Commands_Tests {
     public async Task RequestMembershipHandler_Should_CreateRequest() {
         //Arrange   
         (
-            RequestMembershipModel model ,
+            RequestMembershipModel model,
             GroupMemberTbl? member,
             GroupRequestTbl? request,
             RequestMembershipHandler handler
-        ) 
+        )
             = FakeDataForRequestMemberShip(true , true);
 
         var createRequest = GroupRequestTbl.Create(model.GroupId,model.UserId,model.Description);
@@ -52,8 +50,8 @@ public class GroupRequest_Commands_Tests {
         result.ResultMessage.Should().NotBeNull();
         result.ResultMessage?.Code.Should().Be("Create");
 
-       await handler.Invoking(c => c.Handle(model , CancellationToken.None))
-            .Should().NotThrowAsync<Exception>();
+        await handler.Invoking(c => c.Handle(model , CancellationToken.None))
+             .Should().NotThrowAsync<Exception>();
 
     }
 
@@ -63,7 +61,7 @@ public class GroupRequest_Commands_Tests {
         (
             RequestMembershipModel model,
             GroupMemberTbl? member,
-            GroupRequestTbl? request  ,
+            GroupRequestTbl? request,
             RequestMembershipHandler handler
         )
             = FakeDataForRequestMemberShip(false , true);
@@ -113,7 +111,7 @@ public class GroupRequest_Commands_Tests {
 
         _unitOfWork.Verify(c => c.CreateAsync(It.IsAny<GroupRequestTbl>()) , Times.Never);
         _unitOfWork.Verify(c => c.SaveChangesAsync() , Times.Never);
-        
+
     }
 
 
@@ -137,7 +135,7 @@ public class GroupRequest_Commands_Tests {
         result.ResultMessage!.Should().NotBeNull();
         result.Status.Should().Be(ResultStatus.Success);
         result.ResultMessage?.Code.Should().Be("Delete");
-        _unitOfWork.Verify(c=>c.SaveChangesAsync(), Times.Once);
+        _unitOfWork.Verify(c => c.SaveChangesAsync() , Times.Once);
         await handler.Invoking(c => c.Handle(model , CancellationToken.None))
          .Should().NotThrowAsync<Exception>();
     }
@@ -173,9 +171,9 @@ public class GroupRequest_Commands_Tests {
 
     // Fake Data
     private (
-        RequestMembershipModel ,
-        GroupMemberTbl?, 
-        GroupRequestTbl? ,
+        RequestMembershipModel,
+        GroupMemberTbl?,
+        GroupRequestTbl?,
         RequestMembershipHandler
         ) FakeDataForRequestMemberShip(bool isRequestNull = false , bool isMemberNull = true) {
         var model = new RequestMembershipModel{
@@ -189,7 +187,7 @@ public class GroupRequest_Commands_Tests {
         var request = isRequestNull ? null : new GroupRequestTbl();
         _unitOfWork.Setup(q => q.RequestQueries.GetRequestAsync(model.GroupId , model.UserId)).ReturnsAsync(request);
         var handler = new RequestMembershipHandler(_unitOfWork.Object);
-        return (model , member, request,handler);
+        return (model, member, request, handler);
     }
 
     private (RemoveRequestModel, GroupRequestTbl?, RemoveRequestHandler) FakeDataForRemove() {
@@ -201,6 +199,6 @@ public class GroupRequest_Commands_Tests {
         _unitOfWork.Setup(q => q.RequestQueries.GetRequestAsync(model.GroupId , model.RequesterId)).ReturnsAsync(request);
         var handler = new RemoveRequestHandler(_unitOfWork.Object);
 
-        return(model , request ,handler);
+        return (model, request, handler);
     }
 }

@@ -18,9 +18,9 @@ internal abstract partial class GroupManager<T, R>(IGroupMessagingUOW _unitOfWor
     protected async Task<Result> UseStrategyAsync(
         GroupMemberTbl admin ,
         GroupMemberTbl targetMember ,
-        ResultMessage successResultMessage ,        
+        ResultMessage successResultMessage ,
         Func<Task> doFinally ,
-        Action? changeOwnerWhenDeputyNeeded =null ,
+        Action? changeOwnerWhenDeputyNeeded = null ,
         AdminLevel? levelToAssign = null) {
         var strategyResult =CheckConditions(admin , targetMember , levelToAssign);
         if(strategyResult is StrategyResult.NeedDeputy) {
@@ -34,5 +34,3 @@ internal abstract partial class GroupManager<T, R>(IGroupMessagingUOW _unitOfWor
         return new Result(ResultStatus.Failed , new(successResultMessage.Code , "Some thing is wrong."));
     }
 }
-
-
