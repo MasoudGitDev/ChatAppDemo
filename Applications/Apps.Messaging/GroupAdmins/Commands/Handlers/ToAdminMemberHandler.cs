@@ -51,7 +51,7 @@ internal sealed class ToAdminMemberHandler(IGroupMessagingUOW _unitOfWork)
               admin.ToAdmin(admin.MemberId.Value , levelToAssign , startAt , endAt , reason);
           } ,
           doFinally: async () => {
-              targetMember.ToAdmin(admin.MemberId.Value ,levelToAssign , startAt , endAt , reason);
+              targetMember.ToAdmin(admin.MemberId.Value , levelToAssign , startAt , endAt , reason);
               await _unitOfWork.SaveChangesAsync();
           } ,
           levelToAssign: levelToAssign
