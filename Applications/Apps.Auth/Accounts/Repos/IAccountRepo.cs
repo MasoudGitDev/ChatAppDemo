@@ -1,5 +1,6 @@
 ﻿using Apps.Auth.Accounts.Abstractions.Models;
 using Shared.Models;
+using Shared.ValueObjects;
 
 namespace Apps.Auth.Accounts.Repos;
 
@@ -19,7 +20,7 @@ public interface IAccountRepo
 
 
     /// <exception cref="AccountException"></exception>
-    Task<AccountResult> LoginByTokenAsync(string jweToken);
+    Task<AccountResult> LoginByTokenAsync(IAuthToken authToken);
 
-    Task LogoutAsync(string jweToken);
+    Task LogoutAsync(IAuthToken authToken);
 }

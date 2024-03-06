@@ -1,30 +1,28 @@
 ﻿using Domains.Messaging.Shared.Exceptions;
 using Shared.Extensions;
-using Shared.ValueObjects;
 
 namespace Domains.Messaging.Shared.ValueObjects;
-public class BlockedMemberInfo {
+public record BlockedMemberInfo {
 
-    public DateTime StartAt { get; set; }
+    public DateTime? StartAt { get; set; }
     public DateTime? EndAt { get; set; }
-    public EntityId AdminId { get; set; }
+    public AppUserId AdminId { get; set; } = "<unknown-id>";
     public string? Reason { get; set; }
 
-    public BlockedMemberInfo() { }
+    private BlockedMemberInfo() { }
 
-    public BlockedMemberInfo(DateTime startAt , DateTime? endAt , EntityId adminId , string? reason) {
-
-        if(endAt != null && endAt <= startAt) {
-            throw new BlockedMemberException("DateTimeEquality" , "The <endAt> date time must be grater the the <startAt> date time.");
+    private BlockedMemberInfo(DateTime? startAt , DateTime? endAt , AppUserId adminId , string? reason) {
+        if(endAt != null && startAt != null && endAt < startAt.Value.AddMinutes(1) ) {
+            throw new BlockedMemberInfoException("DateTimeError" , "The <endAt> value must be atleast 1 min greater than the <startAt> value.");
         }
-        if(adminId.Value == Guid.Empty) {
-            throw new BlockedMemberException("WrongGUID" , "The <adminId> must be a guid.");
-        }
-        StartAt = startAt;
-        EndAt = endAt;
+        StartAt = startAt ?? DateTime.UtcNow;
+        EndAt = endAt; // null == forever.
         AdminId = adminId;
         Reason = reason;
     }
+
+    public static BlockedMemberInfo Create(DateTime? startAt , DateTime? endAt , AppUserId adminId , string? reason)
+        => new(startAt , endAt , adminId , reason);
 
     public static implicit operator string?(BlockedMemberInfo groupAdmin)
         => groupAdmin.ToJson();

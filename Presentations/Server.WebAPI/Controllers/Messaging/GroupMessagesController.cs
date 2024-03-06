@@ -20,7 +20,7 @@ namespace Server.WebAPI.Controllers.Messaging {
         public async Task<Result> SendAsync([FromBody]CreateMessageModel model) => await sender.Send(model);
 
         [HttpPut("Update")]
-        public async Task<Result> UpdateAsync([FromBody]UpdateMessageModel model) => await sender.Send(model);
+        public async Task<Result> UpdateAsync([FromBody]EditMessageModel model) => await sender.Send(model);
 
         [HttpDelete("Remove")]
         public async Task<Result> RemoveAsync([FromBody] RemoveMessageModel model) => await sender.Send(model);

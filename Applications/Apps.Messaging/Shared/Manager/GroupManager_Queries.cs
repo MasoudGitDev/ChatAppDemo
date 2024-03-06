@@ -1,6 +1,8 @@
 ﻿using Domains.Messaging.GroupEntity.Entity;
 using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupMemberEntity.Entity;
+using Domains.Messaging.GroupMessageEntity.Aggregate;
+using Domains.Messaging.GroupMessageEntity.ValueObjects;
 using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.Shared.ValueObjects;
 using MediatR;
@@ -70,5 +72,17 @@ internal abstract partial class GroupManager<T, R> {
     protected async Task<GroupRequestTbl?> GetGroupRequestAsync(GroupId groupId , AppUserId requesterId)
        => await _unitOfWork.RequestQueries.GetRequestAsync(groupId , requesterId);
 
+    #region Messages
+    protected async Task<List<GroupMessageTbl>> GetGroupMessagesAsync(GroupId groupId , int messageCount = 50) {
+        return await _unitOfWork.MessageQueries.GetGroupMessagesAsync(groupId , messageCount);
+    }
 
+    protected async Task<List<GroupMessageTbl>> GetMemberMessagesAsync(GroupId groupId , AppUserId memberId) {
+        return await _unitOfWork.MessageQueries.GetMemberMessagesAsync(groupId , memberId);
+    }
+    protected async Task<GroupMessageTbl?> GetCurrentMessageAsync(GroupMessageId messageId) {
+        return await _unitOfWork.MessageQueries.GetCurrentMessageAsync(messageId);
+    }
+
+    #endregion
 }

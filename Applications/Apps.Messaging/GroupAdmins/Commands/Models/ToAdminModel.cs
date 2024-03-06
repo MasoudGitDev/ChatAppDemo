@@ -10,5 +10,5 @@ public record ToAdminMemberModel:IRequest<Result> {
     public DateTime? StartAt { get; set; }
     public DateTime? EndAt { get; set; }
     public string? Reason { get; set; }
-    public AdminAccessLevels? LevelToAssign { get; set; }
+    public AdminLevel LevelToAssign { get; set; } = AdminLevel.Regular;
 }

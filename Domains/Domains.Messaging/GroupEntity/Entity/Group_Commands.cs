@@ -18,7 +18,7 @@ public partial record class GroupTbl
         LogoURLs = model.LogoURLs ,
         Members = new() ,
         Requests = new() ,
-        MessageBlocking = new() ,
+        MessageLocking = new() ,
     };
 
     public GroupTbl AddLogo(Logo logo) {
@@ -47,6 +47,13 @@ public partial record class GroupTbl
     public GroupTbl ChangeCategories(LinkedList<string> categories) {
         Categories = categories;
         return this;
+    }
+
+
+    public void ChangeMessageLockingTo(bool isLock , DateTime? startAt , DateTime? endAt) {
+        MessageLocking.IsLock = isLock;
+        MessageLocking.StartAt = startAt;
+        MessageLocking.EndAt = endAt;
     }
 
 

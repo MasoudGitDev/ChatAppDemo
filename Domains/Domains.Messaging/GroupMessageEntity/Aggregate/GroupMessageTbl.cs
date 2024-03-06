@@ -1,5 +1,5 @@
 ﻿using Domains.Auth.UserEntity;
-using Domains.Messaging.GroupEntity;
+using Domains.Messaging.GroupEntity.Entity;
 using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupMessageEntity.ValueObjects;
 using Shared.Generics;
@@ -7,10 +7,11 @@ using Shared.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domains.Messaging.GroupMessageEntity;
+namespace Domains.Messaging.GroupMessageEntity.Aggregate;
 
 [Table("GroupMessages")]
-public record class GroupMessageTbl :IEntity {
+public partial record class GroupMessageTbl : Entity
+{
     //ids
     [Key]
     public GroupMessageId Id { get; init; }
@@ -21,7 +22,7 @@ public record class GroupMessageTbl :IEntity {
     public string Message { get; set; }
     public bool FirstChecked { get; set; }
     public bool LastChecked { get; set; }
-    public string? FilePath { get; set; }
+    public string? FileUrl { get; set; }
 
 
     public byte[] Timestamp { get; set; }
@@ -29,5 +30,7 @@ public record class GroupMessageTbl :IEntity {
     // Relationships
     public AppUser AppUser { get; set; }
     public GroupTbl Group { get; set; }
+
+
 
 }

@@ -1,8 +1,8 @@
 ﻿using Domains.Auth.RoleEntity;
 using Domains.Auth.UserEntity;
-using Domains.Messaging.GroupEntity;
-using Domains.Messaging.GroupMemberEntity;
-using Domains.Messaging.GroupMessageEntity;
+using Domains.Messaging.GroupEntity.Entity;
+using Domains.Messaging.GroupMemberEntity.Entity;
+using Domains.Messaging.GroupMessageEntity.Aggregate;
 using Domains.Messaging.GroupRequestEntity;
 using Infra.EFCore.Auth.Configs.Auth;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

@@ -2,16 +2,16 @@
 using Shared.Models;
 
 namespace Domains.Messaging.Shared.Exceptions;
-internal class BlockedMemberException : CustomException {
-    public BlockedMemberException() {
+internal class BlockedMemberInfoException : CustomException {
+    public BlockedMemberInfoException() {
     }
 
-    public BlockedMemberException(string message) : base(message) {
+    public BlockedMemberInfoException(string message) : base(message) {
     }
 
-    public BlockedMemberException(ExceptionModel model) : base(model) {
+    public BlockedMemberInfoException(ExceptionModel model) : base(model) {
     }
 
-    public BlockedMemberException(string code , string description) : base(code , description) {
+    public BlockedMemberInfoException(string code , string description) : base(code , description) {
     }
 }

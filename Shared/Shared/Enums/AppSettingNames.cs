@@ -1,4 +1,4 @@
 ﻿namespace Shared.Enums;
 public class AppSettingNames {
-    public static readonly string JweSettings = "JweSettings";
+    public static readonly string AuthTokenSettingsModel = "AuthTokenSettingsModel";
 }

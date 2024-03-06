@@ -1,7 +1,7 @@
 ﻿using Domains.Auth.UserEntity;
 using Domains.Messaging.GroupEntity.ValueObjects;
 using Domains.Messaging.GroupMemberEntity.Entity;
-using Domains.Messaging.GroupMessageEntity;
+using Domains.Messaging.GroupMessageEntity.Aggregate;
 using Domains.Messaging.GroupRequestEntity;
 using Domains.Messaging.Shared.ValueObjects;
 using Shared.ValueObjects;
@@ -31,7 +31,7 @@ public partial record class GroupTbl : Generics.Entity {
     /// <summary>
     /// Store as Json
     /// </summary>
-    public MessageBlocking MessageBlocking { get; private set; }
+    public MessageLocking MessageLocking { get; private set; }
 
     [Timestamp]
     public byte[] Timestamp { get; private set; }

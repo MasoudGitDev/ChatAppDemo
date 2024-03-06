@@ -1,4 +1,6 @@
-﻿namespace Domains.Messaging.GroupMessageEntity.Repos;  
+﻿using Domains.Messaging.GroupMessageEntity.Aggregate;
+
+namespace Domains.Messaging.GroupMessageEntity.Repos;
 public interface IGroupMessageCommands {
     Task CreateAsync(GroupMessageTbl message);
     Task UpdateAsync(GroupMessageTbl message);

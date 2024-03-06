@@ -20,6 +20,9 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="Tests.App.Messaging" />
+	</ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domains\Domains.Messaging\Domains.Messaging.csproj" />
     <ProjectReference Include="..\..\Shared\Shared\Shared.csproj" />   

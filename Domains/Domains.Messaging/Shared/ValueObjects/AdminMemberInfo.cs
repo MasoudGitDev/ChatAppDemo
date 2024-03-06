@@ -4,7 +4,7 @@ using Shared.Extensions;
 namespace Domains.Messaging.Shared.ValueObjects;
 public record AdminMemberInfo
 {
-    public AdminAccessLevels AccessLevel { get; set; } = AdminAccessLevels.Low;
+    public AdminLevel AdminLevel { get; set; } = AdminLevel.Regular;
     public DateTime StartAt { get; init; }
     public DateTime? EndAt { get; set; }
     public Guid ByWhomId { get; set; }
@@ -12,7 +12,7 @@ public record AdminMemberInfo
 
     public AdminMemberInfo() { }
 
-    public AdminMemberInfo(AdminAccessLevels accessLevel , DateTime startAt , DateTime? endAt ,
+    public AdminMemberInfo(AdminLevel accessLevel , DateTime startAt , DateTime? endAt ,
                      Guid byWhomId ,
                      string? reason) {
         if(endAt != null && endAt <= startAt) {
@@ -21,7 +21,7 @@ public record AdminMemberInfo
         if(byWhomId == Guid.Empty) {
             throw new AdminInfoException("WrongGUID" , "The <byWhomId> must be a guid.");
         }
-        AccessLevel = accessLevel;
+        AdminLevel = accessLevel;
         StartAt = startAt;
         EndAt = endAt;
         ByWhomId = byWhomId;

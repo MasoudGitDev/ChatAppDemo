@@ -1,8 +1,9 @@
-﻿using Domains.Messaging.GroupEntity;
+﻿using Domains.Messaging.GroupEntity.Entity;
 using Domains.Messaging.GroupEntity.ValueObjects;
-using Domains.Messaging.GroupMemberEntity;
-using Domains.Messaging.GroupMessageEntity;
+using Domains.Messaging.GroupMemberEntity.Entity;
+using Domains.Messaging.GroupMessageEntity.Aggregate;
 using Domains.Messaging.GroupRequestEntity;
+using Domains.Messaging.GroupRequestEntity.ValueObjects;
 using Domains.Messaging.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -23,7 +24,7 @@ public class MessagingConfigs :
         builder.Property(x => x.CreatorId).IsRequired().HasConversion(x => x.Value , r => new(r));          
         builder.Property(x => x.Categories).HasConversion(x => x.ToJson() , r => r.FromJsonTo<LinkedList<string>>());
         builder.Property(p => p.LogoURLs).HasConversion(x => x.ToJson() , r => r.FromJsonTo<LinkedList<Logo>>());
-        builder.Property(x => x.MessageBlocking).HasConversion(x=>x.ToJson() , r => r.FromJsonTo<MessageBlocking>());
+        builder.Property(x => x.MessageLocking).HasConversion(x=>x.ToJson() , r => r.FromJsonTo<MessageLocking>());
 
         builder.Property(p=>p.Timestamp).IsRequired().IsConcurrencyToken().ValueGeneratedOnAddOrUpdate();
         builder.Property(p => p.CreatedAt).IsRequired();
@@ -48,7 +49,7 @@ public class MessagingConfigs :
         builder.Property(x => x.Id).IsRequired().HasConversion(x => x.Value , r => new(r));
         builder.Property(x=>x.GroupId).IsRequired().HasConversion(x => x.Value , r => new(r));
         builder.Property(x=>x.RequesterId).IsRequired().HasConversion(x => x.Value , r => new(r));
-
+        builder.Property(x => x.Visibility).IsRequired().HasConversion(x => x.ToJson() , r => r.FromJsonTo<RequestVisibility>());
         builder.HasOne(x=>x.Group).WithMany(x=>x.Requests).HasForeignKey(x=>x.GroupId).OnDelete(DeleteBehavior.ClientCascade);
         builder.HasOne(x=>x.Requester).WithMany().HasForeignKey(x=>x.RequesterId).OnDelete(DeleteBehavior.ClientCascade);
     }

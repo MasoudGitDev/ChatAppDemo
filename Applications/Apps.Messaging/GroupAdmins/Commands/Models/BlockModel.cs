@@ -6,7 +6,7 @@ public record BlockMemberModel : IRequest<Result> {
     public Guid GroupId { get; set; }
     public Guid MemberId { get; set; }
     public Guid AdminId { get; set; }
-    public DateTime StartBlockAt { get; set; } = DateTime.UtcNow;
-    public DateTime? EndBlockAt { get; set; }
+    public DateTime? StartAt { get; set; } = DateTime.UtcNow;
+    public DateTime? EndAt { get; set; }
     public string? Reason { get; set; }
 }

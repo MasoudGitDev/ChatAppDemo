@@ -1,7 +1,7 @@
 ﻿namespace Shared.Abstractions.Messaging.Constants;  
-public enum AdminAccessLevels {
-    Low = 1,
-    Medium = 2,
-    High = 3,
-    Owner =4,
+public enum AdminLevel {
+    Regular = 0,
+    Trusted = 1,
+    Deputy = 2,
+    Owner =3,
 }

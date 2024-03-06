@@ -29,3 +29,22 @@ internal sealed class ConcurrencyTryCatchAttribute<T> : Attribute, IAsyncActionF
         }
     }
 }
+
+internal sealed class ConcurrencyTryCatchAttribute : Attribute, IAsyncActionFilter {
+    public async Task OnActionExecutionAsync(ActionExecutingContext context , ActionExecutionDelegate next) {
+        string where = $"{context.Controller.GetType().Name} : {context.ActionDescriptor.DisplayName}";
+        try {
+            await next();
+        }
+        catch(DbUpdateConcurrencyException ex) {
+            AppDbContext appDbContext = context.HttpContext.RequestServices.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>();
+            var entry = ex.Entries.Single();
+            await entry.ReloadAsync();
+            await appDbContext.SaveChangesAsync();
+            throw new CustomException(ex.GetType().Name , ex.Message);
+        }
+        catch(Exception ex) {
+            throw new CustomException(ex.GetType().Name , ex.Message);
+        }
+    }
+}

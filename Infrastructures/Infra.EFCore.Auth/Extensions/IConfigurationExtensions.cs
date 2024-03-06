@@ -1,15 +1,15 @@
-﻿using Infra.EfCore.Auth.Exceptions;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Shared.Enums;
+using Shared.Extensions;
 using Shared.SystemModels;
 
 namespace Infra.EfCore.Auth.Extensions;
 public static class IConfigurationExtensions {
-    public static AuthTokenSettingsModel GetAuthSettings(this IConfiguration configuration) {
-        var jwtSettings = configuration.GetSection(AppSettingNames.JweSettings).Get<AuthTokenSettingsModel>();
-        if(jwtSettings is null) {
-            throw new JweException("NullObj" , $"The <{nameof(AuthTokenSettingsModel)}> can not be null." );
-        }
-        return jwtSettings;
+    public static AuthTokenSettingsModel GetAuthTokenSettingsModel(this IConfiguration configuration) {        
+        return configuration
+            .ThrowIfNull("configuration is null.")
+            .GetSection(AppSettingNames.AuthTokenSettingsModel)
+            .Get<AuthTokenSettingsModel>()
+            .ThrowIfNull("AuthTokenSettingsModel is null.");
     }
 }

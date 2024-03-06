@@ -35,7 +35,7 @@ public class AuthStateProvider(ILocalStorageService localStorageService ,IAccoun
                 await localStorageService.RemoveItemAsync(_tokenKeyName);
             }
             else { 
-                await localStorageService.SetItemAsStringAsync(_tokenKeyName , accountResult.AuthToken);
+                await localStorageService.SetItemAsStringAsync(_tokenKeyName , accountResult.AuthToken.Value);
             }
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));         
         }

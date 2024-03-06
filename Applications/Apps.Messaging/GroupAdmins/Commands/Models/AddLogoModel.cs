@@ -1,10 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Shared.Models;
-using System.ComponentModel.DataAnnotations;
-namespace Apps.Messaging.GroupAdmins.Commands.Models;  
-public record AddLogoModel :IRequest<Result> {
-    [Required]
+namespace Apps.Messaging.GroupAdmins.Commands.Models;
+public record AddLogoModel : IRequest<Result> {
     public Guid GroupId { get; set; }
-    [Required]
-    public string Logo { get; set; } = String.Empty;
+    public Guid AdminId { get; set; }
+    public IFormFile Logo { get; set; }
+
+  
 }

@@ -5,7 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
+	<ItemGroup>
+		<InternalsVisibleTo Include="Tests.Infra.EFCore.Auth" />
+	</ItemGroup>
+	
   <ItemGroup>
     <PackageReference Include="jose-jwt" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />

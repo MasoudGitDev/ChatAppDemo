@@ -1,26 +1,57 @@
-﻿using Apps.Messaging.Exceptions;
-using Apps.Messaging.GroupAdmins.Commands.Models;
+﻿using Apps.Messaging.GroupAdmins.Commands.Models;
+using Apps.Messaging.GroupAdmins.Commands.Strategies;
 using Apps.Messaging.GroupAdmins.Manager;
-using Domains.Messaging.GroupMemberEntity.Repos;
-using Shared.Abstractions.Messaging.Constants;
+using Domains.Messaging.GroupMemberEntity.Entity;
+using Domains.Messaging.Shared.ValueObjects;
+using Domains.Messaging.UnitOfWorks;
+using Shared.Exceptions;
+using Shared.Extensions;
 using Shared.Models;
 namespace Apps.Messaging.GroupAdmins.Commands.Handlers;
-internal sealed class BlockMemberGroupHandler(IGroupAdminRepo groupAdminRepo)
-    : GroupAdminHandler<BlockMemberModel , Result>(groupAdminRepo) {
-    public override async Task<Result> Handle(BlockMemberModel request , CancellationToken cancellationToken) {        
-        return await TryToDoActionByAdminAsync(
-            request.GroupId ,
-            request.AdminId ,
-            request.MemberId , 
-            async (member,accessLevel) => {
-                if(request.AdminId.Equals(request.MemberId)) {
-                    throw new GroupAdminsException( "NotPossible" , "You can not block yourself");
-                }
-                if(member.IsAdmin && accessLevel != AdminAccessLevels.Owner) {
-                    throw new GroupAdminsException("NotPossible" , "You can not block other admins.");
-                }
-                await groupAdminRepo.Commands.BlockMemberAsync(member , request.AdminId ,
-                 request.StartBlockAt , request.EndBlockAt , request.Reason);
-            });      
+internal sealed class BlockMemberGroupHandler(IGroupMessagingUOW _unitOfWork)
+    : GroupManager<BlockMemberModel , Result>(_unitOfWork.ThrowIfNull()) {
+    public override async Task<Result> Handle(BlockMemberModel request , CancellationToken cancellationToken) {
+
+        var targetMember = (await GetMemberAsync(request.GroupId, request.MemberId))
+            .ThrowIfNull($"Not found any members with id :{request.MemberId}");
+
+        var admin = (await GetAdminMemberAsync(request.GroupId, request.AdminId))
+            .ThrowIfNull("You are not admin!");
+
+        return await BlockAsync(admin , targetMember , request.StartAt , request.EndAt , request.Reason);
     }
+
+
+    private ResultMessage CreateResultMessage()
+       => new("BlockMember" ,
+               $"The <member> has been blocked successfully.");
+
+    private async Task<Result> BlockAsync(
+        GroupMemberTbl admin ,
+        GroupMemberTbl targetMember ,
+        DateTime? startAt ,
+        DateTime? endAt ,
+        string? reason
+        ) {
+        return await UseStrategyAsync(
+          admin: admin ,
+          targetMember: targetMember ,
+          successResultMessage: CreateResultMessage() ,          
+          doFinally: async () => {
+              targetMember.Block(admin.MemberId.Value , startAt , endAt , reason);
+              await _unitOfWork.SaveChangesAsync();
+          } ,
+          changeOwnerWhenDeputyNeeded: null ,
+          levelToAssign: null
+        );
+    }
+
+    protected override StrategyResult CheckUserIdsEquality(GroupMemberTbl admin , AppUserId targetMemberId) {
+        if(admin.MemberId.Value == targetMemberId.Value) {
+            throw new NotPossibleException("You can not block yourself");
+        }
+        return StrategyResult.NotSameIds;
+    }
+
 }
+

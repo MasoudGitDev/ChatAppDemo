@@ -33,7 +33,7 @@ public class AccountService(HttpClient httpClient) : IAccountService {
         if(accountResult is null) {
             throw new AccountServiceException("NullOrWhitespace" , "You Not Authenticated.");
         }
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer" , accountResult.AuthToken);
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer" , accountResult.AuthToken.Value);
         return accountResult;
     }
 

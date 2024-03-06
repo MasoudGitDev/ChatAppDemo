@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.WebAPI.Controllers.Shared;
+using Shared.Enums;
 using Shared.Models;
 
 namespace Server.WebAPI.Controllers.Messaging {
@@ -12,31 +13,36 @@ namespace Server.WebAPI.Controllers.Messaging {
     [ApiController]
     [ErrorResult]
     [Authorize]
-    public class GroupRequestsController(ISender sender) : ControllerBase {
+    public class GroupRequestsController(ISender sender) : AuthController {       
 
-        [HttpGet("GetGroupRequests")]        
-        public async Task<Result<List<GroupRequestResult>>> GetGroupRequestsAsync([FromQuery] GetGroupRequestsModel model) {
-            return await sender.Send(model);
+        [HttpPost("RequestMembership/{groupId:guid}")]
+        public async Task<Result> RequestMembershipAsync([FromRoute] Guid groupId) {
+            return await sender.Send(new RequestMembershipModel { GroupId = groupId , UserId = GetUserId() });
         }
 
-        [HttpGet("GetUserRequests")]        
-        public async Task<Result<List<GroupRequestResult>>> GetUserRequestsAsync([FromQuery] GetUserRequestsModel model) {
-            return await sender.Send(model);
+        [HttpDelete("Remove/{groupId:guid}")]
+        public async Task<Result> RemoveAsync([FromRoute] Guid groupId) {
+            return await sender.Send(new RemoveRequestModel { GroupId = groupId , RequesterId = GetUserId() });
         }
 
-        [HttpPost("Create")]        
-        public async Task<Result> CreateAsync([FromBody] CreateRequestModel createModel) {
-            return await sender.Send(createModel);
+        [HttpGet("GetGroupRequests/{groupId:guid}")]
+        public async Task<Result<List<GroupRequestResult>>> GetGroupRequestsAsync([FromRoute] Guid groupId) {
+            return await sender.Send(new GetGroupRequestsModel { GroupId = groupId , IsVisible = Visibility.Visible });
         }
 
-        [HttpPut("Update")]        
-        public async Task<Result> UpdateAsync([FromBody] UpdateRequestModel updateModel) {
-            return await sender.Send(updateModel);
+        [HttpGet("GetHiddenGroupRequests/{groupId:guid}")]
+        public async Task<Result<List<GroupRequestResult>>> GetHiddenGroupRequestsAsync([FromRoute] Guid groupId) {
+            return await sender.Send(new GetGroupRequestsModel { GroupId = groupId , IsVisible = Visibility.Hidden });
         }
 
-        [HttpDelete("Remove")]        
-        public async Task<Result> RemoveAsync([FromBody] RemoveRequestModel removeModel) {
-            return await sender.Send(removeModel);
+        [HttpGet("GetUserRequests/{requesterId:guid}")]
+        public async Task<Result<List<GroupRequestResult>>> GetUserRequestsAsync([FromRoute] Guid requesterId) {
+            return await sender.Send(new GetUserRequestsModel { RequesterId = requesterId , Visibility = Visibility.Visible });
+        }
+
+        [HttpGet("GetHiddenUserRequests/{requesterId:guid}")]
+        public async Task<Result<List<GroupRequestResult>>> GetHiddenUserRequestsAsync([FromRoute] Guid requesterId) {
+            return await sender.Send(new GetUserRequestsModel { RequesterId = requesterId , Visibility = Visibility.Hidden });
         }
 
     }

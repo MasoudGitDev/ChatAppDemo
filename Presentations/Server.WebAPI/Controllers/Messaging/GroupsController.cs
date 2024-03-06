@@ -1,48 +1,56 @@
-﻿using Apps.Messaging.Groups.Commands.Models;
-using Apps.Messaging.Groups.Queries.Models;
+﻿using Apps.Messaging.Group.Commands.Models;
+using Apps.Messaging.Group.Queries.Models;
 using Apps.Messaging.Shared.ResultModels;
 using Domains.Messaging.Shared.Models;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.WebAPI.Controllers.Shared;
+using Server.WebAPI.DTOs;
 using Shared.DTOs.Group;
 using Shared.Models;
 
-namespace Server.WebAPI.Controllers.Messaging
-{
+namespace Server.WebAPI.Controllers.Messaging {
     [Route("Api/Messaging/[controller]")]
     [ApiController]
     [ErrorResult]
     [Authorize]
-    public class GroupsController(ISender sender , ILogger<GroupsController> logger) : ControllerBase {
+    public class GroupsController(ISender sender , ILogger<GroupsController> logger) : AuthController {
 
-        [HttpGet("GetGroupsBySearchText")]
-        public async Task<Result<List<GroupResultModel>>> GetGroupsBySearchTextAsync(string searchText) 
-            => await sender.Send(new GetGroupsBySearchTextModel { SearchText = searchText });
+        // ============================== Commands
 
-        [HttpGet("GetUserGroups")]
-        public async Task<Result<LinkedList<GroupResultDto>>> GetUserGroupsAsync(Guid userId)
-            => await sender.Send(new GetUserGroupsModel { AppUserId = userId });
-
-        [HttpPost("CreateGroup")]
-        public async Task<Result> CreateGroupAsync([FromBody]CreateGroupModel createModel) {
-            return await sender.Send(createModel);
+        [HttpPost("Create")]
+        public async Task<Result> CreateAsync([FromForm] CreateGroupDto createDto) {
+            var newGroup = createDto.Adapt<CreateGroupModel>();
+            newGroup.CreatorId = GetUserId();
+            return await sender.Send(newGroup);
         }
 
-        [HttpDelete("LeaveGroup")]
-        public async Task<Result> LeaveGroupAsync([FromBody]LeaveGroupModel leaveModel) {
-            return await sender.Send(leaveModel);
+        [HttpDelete("Leave/{groupId:guid}")]
+        public async Task<Result> LeaveAsync([FromRoute] Guid groupId) {
+            return await sender.Send(new LeaveGroupModel { GroupId = groupId , MemberId = GetUserId() });
         }
 
-        [HttpGet("GetMembers")]
-        public async Task<Result<List<MemberInfo>>> GetMembersAsync([FromQuery] GetGroupMembersModel getMembersModel) {
-            return await sender.Send(getMembersModel);
+        // ==================== Queries
+
+        [HttpGet]
+        public async Task<Result<LinkedList<GroupResultDto>>> GetMyGroupsAsync()
+         => await sender.Send(new GetUserGroupsModel { AppUserId = GetUserId() });
+
+        [HttpGet("FindByDisplayId/{displayId}")]
+        public async Task<Result<GroupResultModel>> FindByDisplayIdAsync([FromRoute] string displayId)
+            => await sender.Send(new FindGroupByDisplayIdModel { DisplayId = displayId });
+
+        [HttpGet("FindByTitle/{title}")]
+        public async Task<Result<List<GroupResultModel>>> FindByTitleAsync([FromRoute] string title)
+           => await sender.Send(new FindGroupsByTitleModel { Title = title });
+
+        [HttpGet("Members/{groupId:guid}")]
+        public async Task<Result<List<MemberInfo>>> GetMembersAsync([FromRoute] Guid groupId) {
+            return await sender.Send(new GetGroupMembersModel { GroupId = groupId });
         }
 
-        [HttpPost("RequestMembership")]
-        public async Task<Result> RequestMembershipAsync([FromQuery] RequestMembershipModel model) {
-            return await sender.Send(model);
-        }
+
     }
 }

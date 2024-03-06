@@ -5,5 +5,5 @@ public record MemberInfo(
     Guid MemberId ,
     DateTime MemberAt ,
     bool IsAdmin,
-    AdminAccessLevels? AccessLevels
+    AdminLevel? AdminType
 );
