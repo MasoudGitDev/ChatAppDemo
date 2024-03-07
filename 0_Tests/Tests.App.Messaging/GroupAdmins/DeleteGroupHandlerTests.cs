@@ -73,7 +73,6 @@ public class DeleteGroupHandlerTests {
 
 
     //====================== privates
-    private (UnblockMemberModel model, GroupMemberTbl admin, GroupMemberTbl targetMember) SharedArrange(
         AdminLevel adminLevel) {
 
         var model = new UnblockMemberModel {
