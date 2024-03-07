@@ -70,33 +70,4 @@ public class DeleteGroupHandlerTests {
         _unitOfWork.Verify(x => x.SaveChangesAsync() , Times.Once());
 
     }
-
-
-    //====================== privates
-        AdminLevel adminLevel) {
-
-        var model = new UnblockMemberModel {
-            GroupId = GroupId.Create() ,
-            MemberId =  Guid.NewGuid(),
-            AdminId = Guid.NewGuid(),
-        };
-
-        var adminMember = GroupMemberTbl.Create(model.GroupId,model.AdminId,adminLevel);
-        var targetMember = GroupMemberTbl.Create(model.GroupId,model.MemberId);
-
-        _unitOfWork.Setup(q => q.MemberQueries
-            .GetAdminMemberAsync(adminMember.GroupId , adminMember.MemberId.Value)).ReturnsAsync(adminMember);
-        _unitOfWork.Setup(q => q.MemberQueries
-            .GetMemberAsync(targetMember.GroupId , targetMember.MemberId.Value)).ReturnsAsync(targetMember);
-
-        adminMember.ToAdmin(Guid.NewGuid() , adminLevel);
-
-        //Shared Asserts <before> calling ToNormal() method:
-        model.Should().NotBeNull();
-        adminMember.Should().NotBeNull();
-        targetMember.Should().NotBeNull();
-        adminMember.IsAdmin.Should().BeTrue();
-        targetMember.IsAdmin.Should().BeFalse();
-        return (model, adminMember, targetMember);
-    }
 }
