@@ -5,13 +5,9 @@ using Shared.Exceptions;
 namespace Domains.Messaging.GroupMemberEntity.Entity;
 public partial record class GroupMemberTbl {
 
-    // #Solve , use startAt 
-    public void UnBlock(DateTime? startAt = null) {
-        if(IsBlocked) {
-            IsBlocked = false;
-            BlockMemberInfo = null;
-        }
-        throw new NotPossibleException("You can not unblock some one when he/she was not blocked.");
+    public void UnBlock() {
+        IsBlocked = false;
+        BlockMemberInfo = null;
     }
 
     /// <summary>

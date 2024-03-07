@@ -13,14 +13,10 @@ internal sealed class UnblockMemberHandler(IGroupMessagingUOW _unitOfWork)
 
         var targetMember = (await GetMemberAsync(request.GroupId, request.MemberId))
             .ThrowIfNull($"Not found any members with id :{request.MemberId}");
+
         // very important
         if(targetMember.IsBlocked is false) {
             throw new NotPossibleException("System can just unblock those members that was blocked before!");
-        }
-
-        //not need but for ensure
-        if(targetMember.IsAdmin) {
-            throw new NotPossibleException("An unblock member can not be an admin");
         }
 
         ( await GetAdminMemberAsync(request.GroupId , request.AdminId) )
@@ -29,7 +25,7 @@ internal sealed class UnblockMemberHandler(IGroupMessagingUOW _unitOfWork)
         targetMember.UnBlock();
         await SaveChangesAsync();
 
-        return new Result(ResultStatus.Success , new("Unblock" , "The member has been unblocked successfully."));
+        return new Result(ResultStatus.Success , new("UnblockMember" , "The member has been unblocked successfully."));
 
     }
 }
