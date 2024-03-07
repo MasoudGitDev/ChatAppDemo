@@ -17,6 +17,10 @@ internal sealed class BlockMemberGroupHandler(IGroupMessagingUOW _unitOfWork)
         var admin = (await GetAdminMemberAsync(request.GroupId, request.AdminId))
             .ThrowIfNull("You are not admin!");
 
+        if(targetMember.IsBlocked) {
+            throw new NotPossibleException("This member has been blocked before.");
+        }
+
         return await BlockAsync(admin , targetMember , request.StartAt , request.EndAt , request.Reason);
     }
 
