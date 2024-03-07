@@ -17,17 +17,17 @@ internal sealed class DeleteGroupHandler(IGroupMessagingUOW _unitOfWork)
         var currentGroup = await GetGroupIfExistAsync(request.GroupId);
         await CheckIsOwnerAsync(request.GroupId , request.OwnerId);
         await DeleteGroupAsync(currentGroup);
-        return new Result(ResultStatus.Success , new("Delete" , $"The group has been removed successfully."));
+        return new Result(ResultStatus.Success , new("DeleteGroup" , $"The group has been removed successfully."));
     }
 
     private async Task<GroupTbl> GetGroupIfExistAsync(GroupId groupId)
        => ( await GetGroupAsync(groupId) )
            .ThrowIfNull($"Not found any group with groupId : <{groupId}> .");
     private async Task CheckIsOwnerAsync(GroupId groupId , AppUserId userId) {
-        var findAdminInfo = (await GetAdminMemberInfoAsync(groupId,userId))
+        var findAdmin = (await GetAdminMemberAsync(groupId,userId))
             .ThrowIfNull("You are not admin!");
 
-        if(findAdminInfo.AdminLevel is not AdminLevel.Owner) {
+        if(findAdmin.AdminInfo!.AdminLevel is not AdminLevel.Owner) {
             throw new NotAccessException("Just the <owner> can <delete> the group.");
         }
     }
