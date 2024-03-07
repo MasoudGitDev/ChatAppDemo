@@ -17,7 +17,7 @@ public partial record class GroupMemberTbl {
     /// <summary>
     ///  When you intend to block a member , The IsAdmin is Changing to false also. 
     /// </summary>
-    public void Block(AppUserId adminId , DateTime? startAt , DateTime? endAt , string? reason) {
+    public void Block(AppUserId adminId , DateTime? startAt = null , DateTime? endAt = null , string? reason = null) {
         AdminInfo = null;
         IsAdmin = false;
         IsBlocked = true;

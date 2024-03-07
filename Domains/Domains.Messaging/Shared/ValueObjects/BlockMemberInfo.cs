@@ -6,7 +6,7 @@ public record BlockedMemberInfo {
 
     public DateTime? StartAt { get; set; }
     public DateTime? EndAt { get; set; }
-    public AppUserId AdminId { get; set; } = "<unknown-id>";
+    public AppUserId AdminId { get; set; }
     public string? Reason { get; set; }
 
     private BlockedMemberInfo() { }
